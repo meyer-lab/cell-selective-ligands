@@ -61,7 +61,7 @@ coverage.xml: venv
 	. venv/bin/activate; pytest --junitxml=junit.xml --cov=lineage --cov-report xml:coverage.xml
 
 pylint.log: venv
-	. venv/bin/activate && (pylint --rcfile=./common/pylintrc lineage > pylint.log || echo "pylint exited with $?")
+	. venv/bin/activate && (pylint --rcfile=./common/pylintrc selecv > pylint.log || echo "pylint exited with $?")
 
 clean:
 	mv output/requests-cache.sqlite requests-cache.sqlite || true
