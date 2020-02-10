@@ -1,3 +1,7 @@
+"""
+Implementation of a simple multivalent binding model.
+"""
+
 import numpy as np
 from scipy.optimize import root
 
@@ -8,7 +12,7 @@ def Req_func(Req, Rtot, L0fA, AKxStar, f):
     return Req + L0fA * Req * (1 + Phisum)**(f - 1) - Rtot
 
 
-def polyfc(L0, KxStar, f, Rtot, IgGC, Kav, ActV=None):
+def polyfc(L0, KxStar, f, Rtot, IgGC, Kav):
     """
     The main function. Generate all info for heterogenenous binding case
     L0: concentration of ligand.
