@@ -21,7 +21,6 @@ def polyfc(L0, KxStar, f, Rtot, IgGC, Kav):
     Rtot: numbers of each receptor appearing on the cell.
     IgGC: the composition of the mixture IgGC used.
     Kav: a matrix of Ka values. row = IgG's, col = FcgR's
-    (Optional: the activity indices ActV)
     """
     # Data consistency check
     Kav = np.array(Kav)
@@ -44,9 +43,8 @@ def polyfc(L0, KxStar, f, Rtot, IgGC, Kav):
     Phisum = np.sum(Phi[:, :nr])
 
     Lbound = L0 / KxStar * ((1 + Phisum)**f - 1)
-    Rbound = L0 / KxStar * f * Phisum * (1 + Phisum)**(f - 1)
 
-    return Lbound, Rbound
+    return Lbound
 
 
 def Req_Regression(L0, KxStar, f, Rtot, IgGC, Kav):
