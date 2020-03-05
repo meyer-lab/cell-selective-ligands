@@ -13,8 +13,8 @@ def getSetup(figsize, gridd, mults=None, multz=None, empts=None):
             font_scale=0.7,
             color_codes=True,
             palette="colorblind",
-            rc={'grid.linestyle':'dotted',
-                'axes.linewidth':0.6})
+            rc={'grid.linestyle': 'dotted',
+                'axes.linewidth': 0.6})
 
     # Setup plotting space
     f = plt.figure(figsize=figsize)
