@@ -1,6 +1,12 @@
 """
 Data and file imports.
 """
+from os.path import join, dirname
+from scipy.stats import gmean
+import pandas as pds
+
+
+path_here = dirname(dirname(__file__))
 
 
 def import_Rexpr():
