@@ -17,7 +17,7 @@ def import_Rexpr():
 
 
 mutaff = {
-    'WT IL-2': [10.0, 144.0]
+    'WT IL-2': [10.0, 144.0],
     'WT N-term': [0.19, 5.296],
     'WT C-term': [0.54, 3.043],
     'V91K C-term': [0.69, 7.5586],
