@@ -1,17 +1,20 @@
 """
 Figure 1. Introduce the model system.
 """
+import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..imports import import_Rexpr, getPopDict
-import pandas as pds
-import seaborn as sns
 
 
 def makeFigure():
     """ Make figure 1. """
     # Get list of axis objects
     ax, f = getSetup((7, 6), (2, 2))
-    data, npdata, cell_names = import_Rexpr()
+
+    for ii, item in enumerate(ax):
+        subplotLabel(item, string.ascii_uppercase[ii])
+
+    _, npdata, cell_names = import_Rexpr()
     _, populations = getPopDict()
     plotCellpops(ax[0:2], npdata, cell_names, populations)
 
@@ -19,6 +22,7 @@ def makeFigure():
 
 
 def plotCellpops(ax, data, names, df):
+    "Plot both theoretical and real receptor abundances"
     for ii, cell in enumerate(names):
         ax[0].scatter(data[ii, 0], data[ii, 1], label=cell)
     ax[0].set(ylabel='IL2Ra Abundance', xlabel='IL2Rb/gc Abundance', xscale='log', yscale='log')
