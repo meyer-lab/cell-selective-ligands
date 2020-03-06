@@ -36,3 +36,22 @@ mutaff = {
 def getAffDict():
     """Returns a dictionary containing mutant dissociation constants for 2Ra and BGc"""
     return mutaff
+
+
+theoreticalpops = {
+    'Pop1': [100, 100],
+    'Pop2': [1000, 100],
+    'Pop3': [10000, 100],
+    'Pop4': [100, 10000],
+    'Pop5': [3000, 5000],
+    'Pop6': [5000, 3000],
+    'Pop7': [10000, 10000]
+}
+
+
+def getPopDict():
+    """Returns dictionary and dataframe containt theoretical populations"""
+    populationdf = pds.DataFrame.from_dict(data=theoreticalpops, orient='index', columns=['Receptor_1', 'Receptor_2'])
+    populationdf = populationdf.reset_index()
+    populationdf.columns = ['Population', 'Receptor_1', 'Receptor_2']
+    return theoreticalpops, populationdf
