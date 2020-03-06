@@ -1,6 +1,8 @@
 """
 Figure 1. Introduce the model system.
 """
+
+import string
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..imports import import_Rexpr, getPopDict
