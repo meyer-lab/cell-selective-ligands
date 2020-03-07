@@ -1,11 +1,23 @@
 ---
-title: "Cell selectivity"
+title: "Strategies for engineering cell-selective therapies"
 keywords:
-  - A
-  - B
-  - C
+  - bioengineering
+  - protein therapies
+  - systems biology
 lang: en-US
 authors:
+  -
+    github: borcuttjahns
+    name: Brian Orcutt-Jahns
+    initials: BOJ
+    affiliations:
+      - Department of Bioengineering, University of California, Los Angeles
+  -
+    github: cyrillustan
+    name: Cyrillus Tan
+    initials: CT
+    affiliations:
+      - Department of Bioinformatics, University of California, Los Angeles
   -
     github: aarmey
     name: Aaron S. Meyer
