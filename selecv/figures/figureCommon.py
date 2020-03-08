@@ -1,38 +1,28 @@
 """
 Contains utilities and functions that are commonly used in the figure creation files.
 """
-
+from string import ascii_lowercase
 from matplotlib import gridspec, pyplot as plt
 import seaborn as sns
 
 
-def getSetup(figsize, gridd, mults=None, multz=None, empts=None):
-    """ Figure setup. """
+def getSetup(figsize, gridd):
+    """ Establish figure set-up with subplots. """
+    sns.set(style="whitegrid", font_scale=0.7, color_codes=True, palette="colorblind", rc={"grid.linestyle": "dotted", "axes.linewidth": 0.6})
 
-    sns.set(style="whitegrid",
-            font_scale=0.7,
-            color_codes=True,
-            palette="colorblind",
-            rc={'grid.linestyle': 'dotted',
-                'axes.linewidth': 0.6})
-
-    # Setup plotting space
-    f = plt.figure(figsize=figsize)
-
-    # Make grid
-    gs1 = gridspec.GridSpec(*gridd)
+    # Setup plotting space and grid
+    f = plt.figure(figsize=figsize, constrained_layout=True)
+    gs1 = gridspec.GridSpec(*gridd, figure=f)
 
     # Get list of axis objects
-    if mults is None:
-        ax = [f.add_subplot(gs1[x]) for x in range(gridd[0] * gridd[1])]
-    else:
-        ax = [f.add_subplot(gs1[x]) if x not in mults else f.add_subplot(gs1[x:x + multz[x]]) for x in range(
-            gridd[0] * gridd[1]) if not any([x - j in mults for j in range(1, max(multz.values()))]) and x not in empts]
+    ax = list()
+    for x in range(gridd[0] * gridd[1]):
+        ax.append(f.add_subplot(gs1[x]))
 
     return (ax, f)
 
 
-def subplotLabel(ax, letter, hstretch=1):
-    """Sublot labels"""
-    ax.text(-0.2 / hstretch, 1.2, letter, transform=ax.transAxes,
-            fontsize=16, fontweight='bold', va='top')
+def subplotLabel(axs):
+    """ Place subplot labels on figure. """
+    for ii, ax in enumerate(axs):
+        ax.text(-0.2, 1.25, ascii_lowercase[ii], transform=ax.transAxes, fontsize=16, fontweight="bold", va="top")
