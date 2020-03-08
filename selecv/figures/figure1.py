@@ -2,7 +2,6 @@
 Figure 1. Introduce the model system.
 """
 
-import string
 import seaborn as sns
 from .figureCommon import subplotLabel, getSetup
 from ..imports import import_Rexpr, getPopDict
@@ -13,8 +12,7 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((7, 6), (2, 2))
 
-    for ii, item in enumerate(ax):
-        subplotLabel(item, string.ascii_uppercase[ii])
+    subplotLabel(ax)
 
     _, npdata, cell_names = import_Rexpr()
     _, populations = getPopDict()

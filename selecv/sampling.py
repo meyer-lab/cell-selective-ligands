@@ -7,7 +7,6 @@ from .model import polyfc
 def sampleSpec(L0, KxStar, f, RtotMeans, RtotCovs, IgGC, Kav, nsample=100):
     """
     Sample the specificity between two populations.
-    TODO: I haven't checked that this works.
     RtotMeans: Tuple of receptor population expression means.
     """
     assert len(RtotMeans) == 2
@@ -20,10 +19,12 @@ def sampleSpec(L0, KxStar, f, RtotMeans, RtotCovs, IgGC, Kav, nsample=100):
 
 
 def samplePop(L0, KxStar, f, RtotMeans, RtotCovs, IgGC, Kav, nsample=100):
-    """ Sample the binding for one population. """
+    """
+    Sample the binding for one population.
+    Note that receptor expression is given in log10 units
+    """
     quants = np.empty(nsample)
-    pop = multivariate_normal.rvs(mean=RtotMeans, cov=RtotCovs, size=nsample)
-    pop = np.absolute(pop) # Note that I'm taking the absolute value to avoid negatives
+    pop = np.power(10.0, multivariate_normal.rvs(mean=RtotMeans, cov=RtotCovs, size=nsample))
 
     for ii in range(nsample):
         quants[ii] = polyfc(L0, KxStar, f, pop[ii, :], IgGC, Kav)
