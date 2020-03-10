@@ -39,7 +39,7 @@ def getAffDict():
 
 
 theoreticalpops = {
-    'Pop1': [100, 100],
+    'Pop1': [1, 1],
     'Pop2': [1000, 100],
     'Pop3': [10000, 100],
     'Pop4': [100, 10000],
@@ -48,10 +48,20 @@ theoreticalpops = {
     'Pop7': [10000, 10000]
 }
 
+theoreticalpops = {
+    'Pop1': [2, 2, [[0.01, 0.005], [0.005, 0.01]]],
+    'Pop2': [3, 2, [[0.015, 0.00], [0.00, 0.005]]],
+    'Pop3': [4, 2, [[0.015, 0.00], [0.00, 0.005]]],
+    'Pop4': [2, 4, [[0.005, 0.00], [0.00, 0.015]]],
+    'Pop5': [3.2, 3.8, [[0.01, 0.005], [0.005, 0.01]]],
+    'Pop6': [3.8, 3.2, [[0.01, 0.005], [0.005, 0.01]]],
+    'Pop7': [4, 4, [[0.01, 0.01], [0.02, 0.01]]]
+}
+
 
 def getPopDict():
     """Returns dictionary and dataframe containt theoretical populations"""
-    populationdf = pds.DataFrame.from_dict(data=theoreticalpops, orient='index', columns=['Receptor_1', 'Receptor_2'])
+    populationdf = pds.DataFrame.from_dict(data=theoreticalpops, orient='index', columns=['Receptor_1', 'Receptor_2', 'Covariance_Matrix'])
     populationdf = populationdf.reset_index()
-    populationdf.columns = ['Population', 'Receptor_1', 'Receptor_2']
+    populationdf.columns = ['Population', 'Receptor_1', 'Receptor_2', 'Covariance_Matrix']
     return theoreticalpops, populationdf
