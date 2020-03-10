@@ -4,7 +4,6 @@ Data and file imports.
 from os.path import join, dirname
 from scipy.stats import gmean
 import pandas as pds
-import numpy as np
 
 
 path_here = dirname(dirname(__file__))

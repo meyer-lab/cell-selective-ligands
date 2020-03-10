@@ -43,7 +43,7 @@ def sampleReceptors(df, nsample=100):
     """
     Populations = df.Population.unique()
     sampledf = pds.DataFrame(columns=['Population', 'Receptor_1', 'Receptor_2'])
-    for jj, population in enumerate(Populations):
+    for population in Populations:
         populationdf = df[df['Population'] == population]
         RtotMeans = np.array([populationdf.Receptor_1.to_numpy(), populationdf.Receptor_2.to_numpy()]).flatten()
         RtotCovs = populationdf.Covariance_Matrix.to_numpy()[0]
