@@ -61,6 +61,7 @@ def sampleReceptors(df, nsample=100):
 
 
 def plotSampleConc(ax, df, concRange, popList):
+    "Makes a line chart comparing binding ratios of populations at multiple concentrations"
     npoints = 100
     concScan = np.logspace(concRange[0], concRange[1], npoints)
     df1 = df[df['Population'] == popList[0]]

@@ -26,6 +26,7 @@ def makeFigure():
 
 
 def ValencyPlot(ax, df, valencies, popList):
+    "Makes a line chart comparing binding ratios of populations at multiple valencies"
     df1 = df[df['Population'] == popList[0]]
     df2 = df[df['Population'] == popList[1]]
     recMean1 = np.array([df1['Receptor_1'].to_numpy(), df1['Receptor_2'].to_numpy()]).flatten()

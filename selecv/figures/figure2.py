@@ -29,6 +29,7 @@ def makeFigure():
 
 
 def affHeatMap(ax, df, affRange, popList):
+    "Makes a heatmap comparing binding ratios of populations at a range of binding affinities"
     npoints = 10
     affScan = np.logspace(affRange[0], affRange[1], npoints)
     df1 = df[df['Population'] == popList[0]]
