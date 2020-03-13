@@ -25,7 +25,7 @@ def makeFigure():
     _, npdata, cell_names = import_Rexpr()
     _, populations = getPopDict()
     plotCellpops(ax[0:2], npdata, cell_names, populations)
-    plotSampleConc(ax[2], populations, [-12., 4.,], ['Pop2', 'Pop3'])
+    plotSampleConc(ax[2], populations, [-12., 4., ], ['Pop2', 'Pop3'])
 
     return f
 
@@ -34,7 +34,7 @@ def plotCellpops(ax, data, names, df):
     "Plot both theoretical and real receptor abundances"
     for ii, cell in enumerate(names):
         ax[0].scatter(data[ii, 0], data[ii, 1], label=cell)
-    ax[0].set(ylabel='IL2Ra Abundance', xlabel='IL2Rb Abundance', xscale='log', yscale='log')
+    ax[0].set(ylabel='IL2Rα Abundance', xlabel='IL-2Rβ Abundance', xscale='log', yscale='log')
     ax[0].legend()
 
     sampleData = sampleReceptors(df, 1000)
@@ -73,7 +73,7 @@ def plotSampleConc(ax, df, concRange, popList):
     for ii, conc in enumerate(concScan):
         sampMeans[ii], sampDevs[ii], = sampleSpec(conc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[10e-9, 10e-9]]), nsample=100)
 
-    underDev, overDev = sampMeans-sampDevs, sampMeans+sampDevs
+    underDev, overDev = sampMeans - sampDevs, sampMeans + sampDevs
     ax.plot(concScan, sampMeans, color='royalblue')
     ax.fill_between(concScan, underDev, overDev, color='royalblue', alpha=.1)
     ax.set(xscale='log', xlim=(np.power(10, concRange[0]), np.power(10, concRange[1])))
