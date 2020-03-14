@@ -71,6 +71,7 @@ def plotSampleConc(ax, df, concRange, popList):
     Cov1 = df1.Covariance_Matrix.to_numpy()[0]
     Cov2 = df2.Covariance_Matrix.to_numpy()[0]
     sampMeans, sampDevs = np.zeros([npoints]), np.zeros([npoints])
+
     for ii, conc in enumerate(concScan):
         sampMeans[ii], sampDevs[ii], = sampleSpec(conc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[10e-9, 10e-9]]), nsample=100)
 
