@@ -2,7 +2,7 @@ SHELL := /bin/bash
 
 .PHONY: clean test testprofile testcover docs
 
-all: output/manuscript.html output/manuscript.pdf pylint.log
+all: output/manuscript.html pylint.log
 
 flist = 1 2 3 4 5
 

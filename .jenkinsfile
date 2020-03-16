@@ -16,7 +16,7 @@ pipeline {
           sh 'make output/manuscript.md'
         }
         sh 'make all -j 4'
-        archiveArtifacts artifacts: 'output/manuscript.pdf, output/*.svg', onlyIfSuccessful: true
+        archiveArtifacts artifacts: 'output/*.svg', onlyIfSuccessful: true
         recordIssues qualityGates: [[threshold: 90, type: 'TOTAL', unstable: true]], tools: [pyLint(pattern: 'pylint.log')]
         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'output', reportFiles: 'manuscript.html', reportName: 'Manuscript'])
       }
