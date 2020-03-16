@@ -3,9 +3,11 @@ Implementation of a simple multivalent binding model.
 """
 
 import numpy as np
+from numba import njit
 from scipy.optimize import root
 
 
+@njit
 def Req_func(Req, Rtot, L0fA, AKxStar, f):
     """ Mass balance. Transformation to account for bounds. """
     Phisum = np.dot(AKxStar, Req.T)
