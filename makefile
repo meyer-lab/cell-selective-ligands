@@ -43,17 +43,6 @@ output/manuscript.html: venv output/manuscript.md $(patsubst %, output/figure%.s
 		--include-after-body=common/templates/manubot/plugins/hypothesis.html \
 		--output=output/manuscript.html output/manuscript.md
 
-output/manuscript.pdf: venv output/manuscript.md $(patsubst %, output/figure%.svg, $(flist))
-	. venv/bin/activate && pandoc --from=markdown --to=html5 \
-    	--pdf-engine=weasyprint --pdf-engine-opt=--presentational-hints \
-    	--filter=pandoc-fignos --filter=pandoc-eqnos --filter=pandoc-tablenos \
-    	--bibliography=output/references.json \
-    	--csl=common/templates/manubot/style.csl \
-    	--metadata link-citations=true \
-    	--webtex=https://latex.codecogs.com/svg.latex? \
-    	--include-after-body=common/templates/manubot/default.html \
-    	--output=output/manuscript.pdf output/manuscript.md
-
 test: venv
 	. venv/bin/activate; pytest -s
 
