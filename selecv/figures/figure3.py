@@ -17,7 +17,7 @@ def makeFigure():
     ax, f = getSetup((7, 6), (4, 3))
     subplotLabel(ax)
 
-    valencyScan = np.array([1, 2, 4, 8, 16, 32])
+    valencyScan = np.logspace(0.0, 6.0, base=2.0, num=10)
     _, populationsdf = getPopDict()
 
     ValencyPlot(ax[0], populationsdf, valencyScan, ['Pop2', 'Pop3'])
