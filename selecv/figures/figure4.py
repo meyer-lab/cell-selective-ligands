@@ -21,7 +21,9 @@ def makeFigure():
 
     affinities = np.array([[10e-7, 10e-9], [10e-9, 10e-7]])
     _, populationsdf = getPopDict()
-    MixPlot(ax[0], populationsdf, ['Pop5', 'Pop6'], affinities, 101)
+    MixPlot(ax[0], populationsdf, ['Pop2', 'Pop3'], affinities, 101)
+    MixPlot(ax[1], populationsdf, ['Pop3', 'Pop4'], affinities, 101)
+    MixPlot(ax[2], populationsdf, ['Pop5', 'Pop6'], affinities, 101)
 
     return f
 
@@ -40,6 +42,8 @@ def MixPlot(ax, df, popList, affinities, npoints):
     for ii, mixture1 in enumerate(mixRatio):
         sampMeans[ii], sampDevs[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([mixture1, 1 - mixture1]), np.array([affinities[0], affinities[1]]))
 
+    sampMeans *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+    sampDevs *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
     underDev, overDev = sampMeans - sampDevs, sampMeans + sampDevs
     ax.plot(mixRatio, sampMeans, color='royalblue')
     ax.fill_between(mixRatio, underDev, overDev, color='royalblue', alpha=.1)
