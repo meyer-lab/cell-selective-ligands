@@ -8,7 +8,7 @@ from scipy.stats import multivariate_normal
 from .model import polyfc
 
 
-nsample=200
+nsample = 200
 
 
 def sampleSpec(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav):
