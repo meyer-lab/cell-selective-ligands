@@ -43,7 +43,7 @@ def MixPlot(ax, df, popList, affinities, npoints):
         underDev[ii], sampMeans[ii], overDev[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([mixture1, 1 - mixture1]), np.array([affinities[0], affinities[1]]))
 
     sampMeans *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
-    underDev*= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+    underDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
     overDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
 
     ax.plot(mixRatio, sampMeans, color='royalblue')

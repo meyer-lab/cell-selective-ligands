@@ -41,7 +41,7 @@ def ValencyPlot(ax, df, valencies, popList):
         underDev[ii], sampMeans[ii], overDev[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[affinity, affinity]]))
 
     sampMeans *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
-    underDev*= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+    underDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
     overDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
 
     ax.plot(valencies, sampMeans, color='royalblue')
