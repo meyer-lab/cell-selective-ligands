@@ -17,7 +17,7 @@ def makeFigure():
     ax, f = getSetup((7, 6), (4, 3))
     subplotLabel(ax)
 
-    valencyScan = np.array([1, 2, 4, 8, 16, 32])
+    valencyScan = np.logspace(0.0, 5.0, base=2.0, num=10)
     _, populationsdf = getPopDict()
 
     ValencyPlot(ax[0], populationsdf, valencyScan, ['Pop2', 'Pop3'])
@@ -36,7 +36,7 @@ def ValencyPlot(ax, df, valencies, popList):
     sampMeans, sampDevs = np.zeros([len(valencies)]), np.zeros([len(valencies)])
 
     for ii, val in enumerate(valencies):
-        sampMeans[ii], sampDevs[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[affinity, affinity]]), nsample=1000)
+        sampMeans[ii], sampDevs[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[affinity, affinity]]))
 
     underDev, overDev = sampMeans - sampDevs, sampMeans + sampDevs
     ax.plot(valencies, sampMeans, color='royalblue')
