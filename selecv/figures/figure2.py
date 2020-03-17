@@ -38,12 +38,12 @@ def affHeatMap(ax, df, affRange, popList):
     recMean2 = np.array([df2['Receptor_1'].to_numpy(), df2['Receptor_2'].to_numpy()]).flatten()
     Cov1 = df1.Covariance_Matrix.to_numpy()[0]
     Cov2 = df2.Covariance_Matrix.to_numpy()[0]
-    sampMeans = np.zeros([npoints, 1])
+    sampMeans = np.zeros(npoints)
     ratioDF = pds.DataFrame(columns=affScan, index=affScan)
 
     for ii, aff1 in enumerate(affScan):
         for jj, aff2 in enumerate(affScan):
-            sampMeans[jj, 0], _, _ = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[aff1, aff2]]))
+            _, sampMeans[jj], _ = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[aff1, aff2]]))
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
     sns.heatmap(ratioDF, ax=ax, xticklabels=False, yticklabels=False)
