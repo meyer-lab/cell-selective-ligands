@@ -19,8 +19,8 @@ def sampleSpec(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav):
     assert len(RtotMeans) == 2
     assert len(RtotCovs) == 2
 
-    quants = samplePop(L0, KxStar, f, RtotMeans[0], RtotCovs[0], LigC, Kav, nsample)
-    quants /= samplePop(L0, KxStar, f, RtotMeans[1], RtotCovs[1], LigC, Kav, nsample)
+    quants = samplePop(L0, KxStar, f, RtotMeans[0], RtotCovs[0], LigC, Kav)
+    quants /= samplePop(L0, KxStar, f, RtotMeans[1], RtotCovs[1], LigC, Kav)
 
     return np.mean(quants), np.std(quants)
 
