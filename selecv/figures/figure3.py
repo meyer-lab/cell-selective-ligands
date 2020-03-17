@@ -36,7 +36,7 @@ def ValencyPlot(ax, df, valencies, popList):
     sampMeans, sampDevs = np.zeros([len(valencies)]), np.zeros([len(valencies)])
 
     for ii, val in enumerate(valencies):
-        sampMeans[ii], sampDevs[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[affinity, affinity]]), nsample=1000)
+        sampMeans[ii], sampDevs[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[affinity, affinity]]))
 
     underDev, overDev = sampMeans - sampDevs, sampMeans + sampDevs
     ax.plot(valencies, sampMeans, color='royalblue')

@@ -8,7 +8,10 @@ from scipy.stats import multivariate_normal
 from .model import polyfc
 
 
-def sampleSpec(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav, nsample=100):
+nsample=200
+
+
+def sampleSpec(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav):
     """
     Sample the specificity between two populations.
     RtotMeans: Tuple of receptor population expression means.
@@ -22,7 +25,7 @@ def sampleSpec(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav, nsample=100):
     return np.mean(quants), np.std(quants)
 
 
-def samplePop(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav, nsample=100):
+def samplePop(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav):
     """
     Sample the binding for one population.
     Note that receptor expression is given in log10 units

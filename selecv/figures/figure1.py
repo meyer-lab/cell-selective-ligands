@@ -73,7 +73,7 @@ def plotSampleConc(ax, df, concRange, popList):
     sampMeans, sampDevs = np.zeros([npoints]), np.zeros([npoints])
 
     for ii, conc in enumerate(concScan):
-        sampMeans[ii], sampDevs[ii], = sampleSpec(conc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[10e-9, 10e-9]]), nsample=100)
+        sampMeans[ii], sampDevs[ii], = sampleSpec(conc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[10e-9, 10e-9]]))
 
     underDev, overDev = sampMeans - sampDevs, sampMeans + sampDevs
     ax.plot(concScan, sampMeans, color='royalblue')

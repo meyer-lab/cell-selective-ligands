@@ -43,7 +43,7 @@ def affHeatMap(ax, df, affRange, popList):
 
     for ii, aff1 in enumerate(affScan):
         for jj, aff2 in enumerate(affScan):
-            sampMeans[jj, 0], _ = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[aff1, aff2]]), nsample=100)
+            sampMeans[jj, 0], _ = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[aff1, aff2]]))
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
     sns.heatmap(ratioDF, ax=ax, xticklabels=False, yticklabels=False)

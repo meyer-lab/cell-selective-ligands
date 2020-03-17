@@ -38,7 +38,7 @@ def MixPlot(ax, df, popList, affinities, npoints):
     mixRatio = np.linspace(0, 1, npoints)
 
     for ii, mixture1 in enumerate(mixRatio):
-        sampMeans[ii], sampDevs[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([mixture1, 1 - mixture1]), np.array([affinities[0], affinities[1]]), nsample=100)
+        sampMeans[ii], sampDevs[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([mixture1, 1 - mixture1]), np.array([affinities[0], affinities[1]]))
 
     underDev, overDev = sampMeans - sampDevs, sampMeans + sampDevs
     ax.plot(mixRatio, sampMeans, color='royalblue')
