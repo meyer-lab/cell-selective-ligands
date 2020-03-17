@@ -22,7 +22,7 @@ def sampleSpec(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav):
     quants = samplePop(L0, KxStar, f, RtotMeans[0], RtotCovs[0], LigC, Kav)
     quants /= samplePop(L0, KxStar, f, RtotMeans[1], RtotCovs[1], LigC, Kav)
 
-    return np.mean(quants), np.std(quants)
+    return np.quantile(quants, [0.1, 0.5, 0.9])
 
 
 def samplePop(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav):
