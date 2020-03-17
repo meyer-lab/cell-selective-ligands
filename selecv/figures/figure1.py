@@ -75,6 +75,10 @@ def plotSampleConc(ax, df, concRange, popList):
     for ii, conc in enumerate(concScan):
         underDev[ii], sampMeans[ii], overDev[ii] = sampleSpec(conc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[10e-9, 10e-9]]))
 
+    sampMeans *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+    underDev*= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+    overDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+
     ax.plot(concScan, sampMeans, color='royalblue')
     ax.fill_between(concScan, underDev, overDev, color='royalblue', alpha=.1)
     ax.set(xscale='log', xlim=(np.power(10, concRange[0]), np.power(10, concRange[1])))

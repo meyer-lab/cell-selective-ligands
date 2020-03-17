@@ -20,7 +20,9 @@ def makeFigure():
     valencyScan = np.logspace(0.0, 5.0, base=2.0, num=10)
     _, populationsdf = getPopDict()
 
-    ValencyPlot(ax[0], populationsdf, valencyScan, ['Pop2', 'Pop3'])
+    ValencyPlot(ax[0], populationsdf, valencyScan, ['Pop1', 'Pop3'])
+    ValencyPlot(ax[1], populationsdf, valencyScan, ['Pop2', 'Pop3'])
+    ValencyPlot(ax[2], populationsdf, valencyScan, ['Pop3', 'Pop4'])
 
     return f
 
@@ -37,6 +39,10 @@ def ValencyPlot(ax, df, valencies, popList):
 
     for ii, val in enumerate(valencies):
         underDev[ii], sampMeans[ii], overDev[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[affinity, affinity]]))
+
+    sampMeans *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+    underDev*= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+    overDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
 
     ax.plot(valencies, sampMeans, color='royalblue')
     ax.fill_between(valencies, underDev, overDev, color='royalblue', alpha=.1)
