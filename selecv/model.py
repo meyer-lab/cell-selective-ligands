@@ -56,7 +56,6 @@ def Req_Regression(L0, KxStar, f, Rtot, LigC, Kav):
     AKxStar = A * KxStar
 
     # Identify an initial guess just on max monovalent interaction
-    # Correction factor at end is just empirical
     x0 = np.max(L0fA, axis=0)
     x0 = np.multiply(1.0 - np.divide(x0, 1 + x0), Rtot)
 
