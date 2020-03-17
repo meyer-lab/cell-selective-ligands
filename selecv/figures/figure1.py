@@ -70,15 +70,15 @@ def plotSampleConc(ax, df, concRange, popList):
     recMean2 = np.array([df2['Receptor_1'].to_numpy(), df2['Receptor_2'].to_numpy()]).flatten()
     Cov1 = df1.Covariance_Matrix.to_numpy()[0]
     Cov2 = df2.Covariance_Matrix.to_numpy()[0]
-    sampMeans, sampDevs = np.zeros([npoints]), np.zeros([npoints])
+    sampMeans, underDev, overDev = np.zeros(npoints), np.zeros(npoints), np.zeros(npoints)
 
     for ii, conc in enumerate(concScan):
-        sampMeans[ii], sampDevs[ii], = sampleSpec(conc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[10e-9, 10e-9]]))
-
+        underDev[ii], sampMeans[ii], overDev[ii] = sampleSpec(conc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[10e-9, 10e-9]]))
 
     sampMeans *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
-    sampDevs *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
-    underDev, overDev = sampMeans - sampDevs, sampMeans + sampDevs
+    underDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+    overDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+
     ax.plot(concScan, sampMeans, color='royalblue')
     ax.fill_between(concScan, underDev, overDev, color='royalblue', alpha=.1)
     ax.set(xscale='log', xlim=(np.power(10, concRange[0]), np.power(10, concRange[1])))

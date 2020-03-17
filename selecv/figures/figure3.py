@@ -35,14 +35,15 @@ def ValencyPlot(ax, df, valencies, popList):
     recMean2 = np.array([df2['Receptor_1'].to_numpy(), df2['Receptor_2'].to_numpy()]).flatten()
     Cov1 = df1.Covariance_Matrix.to_numpy()[0]
     Cov2 = df2.Covariance_Matrix.to_numpy()[0]
-    sampMeans, sampDevs = np.zeros([len(valencies)]), np.zeros([len(valencies)])
+    sampMeans, underDev, overDev = np.zeros_like(valencies), np.zeros_like(valencies), np.zeros_like(valencies)
 
     for ii, val in enumerate(valencies):
-        sampMeans[ii], sampDevs[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[affinity, affinity]]))
+        underDev[ii], sampMeans[ii], overDev[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[affinity, affinity]]))
 
     sampMeans *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
-    sampDevs *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
-    underDev, overDev = sampMeans - sampDevs, sampMeans + sampDevs
+    underDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+    overDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+
     ax.plot(valencies, sampMeans, color='royalblue')
     ax.fill_between(valencies, underDev, overDev, color='royalblue', alpha=.1)
     ax.set(xlabel='Valency', ylabel='Binding Ratio', title=popList[0] + ' to ' + popList[1] + ' binding ratio')
