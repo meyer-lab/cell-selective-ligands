@@ -37,7 +37,7 @@ def MixPlot(ax, df, popList, affinities, npoints):
     "Makes a line chart comparing binding ratios of populations at multiple mixture compositions"
     recMeans, Covs = [], []
     #Title = popList[0] + ' to ' + popList[1]
-    for ii, pop in enumerate(popList):
+    for _, pop in enumerate(popList):
         dfPop = df[df['Population'] == pop]
         recMeans.append(np.array([dfPop['Receptor_1'].to_numpy(), dfPop['Receptor_2'].to_numpy()]).flatten())
         Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
