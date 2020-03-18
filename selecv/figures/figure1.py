@@ -39,7 +39,7 @@ def plotCellpops(ax, data, names, df):
 
     sampleData = sampleReceptors(df, 20000)
     sns.set_palette("husl", 7)
-    for jj, pop in enumerate(sampleData.Population.unique()):
+    for pop in sampleData.Population.unique():
         popDF = sampleData.loc[sampleData['Population'] == pop]
         sns.kdeplot(popDF.Receptor_1, popDF.Receptor_2, ax=ax[1], label=pop, shade=True, shade_lowest=False)
     ax[1].legend()
