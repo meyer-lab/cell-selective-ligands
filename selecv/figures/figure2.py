@@ -20,9 +20,9 @@ def makeFigure():
     ax, f = getSetup((7, 6), (4, 3))
     _, populationsdf = getPopDict()
     affHeatMap(ax[0], populationsdf, [-9, -7], ['Pop3', 'Pop2'])
-    affHeatMap(ax[1], populationsdf, [-9, -7], ['Pop4', 'Pop2'])
-    affHeatMap(ax[2], populationsdf, [-9, -7], ['Pop3', 'Pop4'])
-    affHeatMap(ax[3], populationsdf, [-9, -7], ['Pop5', 'Pop3'])
+    affHeatMap(ax[1], populationsdf, [-9, -7], ['Pop3', 'Pop5'])
+    affHeatMap(ax[2], populationsdf, [-9, -7], ['Pop5', 'Pop3'])
+    affHeatMap(ax[3], populationsdf, [-9, -7], ['Pop5', 'Pop4'])
     affHeatMap(ax[4], populationsdf, [-9, -7], ['Pop5', 'Pop6'])
 
     subplotLabel(ax)
@@ -48,5 +48,5 @@ def affHeatMap(ax, df, affRange, popList):
             _, sampMeans[jj], _ = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[aff1, aff2]]))
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
-    sns.heatmap(ratioDF, ax=ax, xticklabels=False, yticklabels=False)
+    sns.heatmap(ratioDF, ax=ax, xticklabels=npoints - 1, yticklabels=npoints - 1, vmin=0, vmax=10)
     ax.set(title=popList[0] + ' to ' + popList[1] + ' binding ratio', xlabel='Rec 1 Affinity', ylabel='Rec 2 Affinity')
