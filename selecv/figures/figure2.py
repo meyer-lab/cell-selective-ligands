@@ -20,9 +20,9 @@ def makeFigure():
     ax, f = getSetup((7, 6), (4, 3))
     _, populationsdf = getPopDict()
     affHeatMap(ax[0], populationsdf, [-9, -7], ['Pop3', 'Pop2'])
-    affHeatMap(ax[1], populationsdf, [-9, -7], ['Pop3', 'Pop5'])
-    affHeatMap(ax[2], populationsdf, [-9, -7], ['Pop5', 'Pop3'])
-    affHeatMap(ax[3], populationsdf, [-9, -7], ['Pop5', 'Pop4'])
+    affHeatMap(ax[1], populationsdf, [-9, -7], ['Pop5', 'Pop3'])
+    affHeatMap(ax[2], populationsdf, [-9, -7], ['Pop6', 'Pop3'])
+    affHeatMap(ax[3], populationsdf, [-9, -7], ['Pop7', 'Pop4'])
     affHeatMap(ax[4], populationsdf, [-9, -7], ['Pop5', 'Pop6'])
 
     subplotLabel(ax)
