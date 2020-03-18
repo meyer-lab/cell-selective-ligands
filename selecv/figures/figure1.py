@@ -25,7 +25,7 @@ def makeFigure():
     _, npdata, cell_names = import_Rexpr()
     _, populations = getPopDict()
     plotCellpops(ax[0:2], npdata, cell_names, populations)
-    plotSampleConc(ax[2], populations, [-12., 4., ], ['Pop2', 'Pop3'])
+    plotSampleConc(ax[2], populations, [-12., 4., ], ['Pop3', 'Pop2'])
 
     return f
 
@@ -34,12 +34,15 @@ def plotCellpops(ax, data, names, df):
     "Plot both theoretical and real receptor abundances"
     for ii, cell in enumerate(names):
         ax[0].scatter(data[ii, 0], data[ii, 1], label=cell)
-    ax[0].set(ylabel='IL2Rα Abundance', xlabel='IL-2Rβ Abundance', xscale='log', yscale='log')
+    ax[0].set(xlabel='IL2Rα Abundance', ylabel='IL-2Rβ Abundance', xscale='log', yscale='log')
     ax[0].legend()
 
-    sampleData = sampleReceptors(df, 1000)
-
-    sns.scatterplot(x='Receptor_1', y='Receptor_2', hue='Population', data=sampleData, ax=ax[1])
+    sampleData = sampleReceptors(df, 20000)
+    sns.set_palette("husl", 7)
+    for pop in sampleData.Population.unique():
+        popDF = sampleData.loc[sampleData['Population'] == pop]
+        sns.kdeplot(popDF.Receptor_1, popDF.Receptor_2, ax=ax[1], label=pop, shade=True, shade_lowest=False)
+    ax[1].legend()
     ax[1].set(xscale="log", yscale="log")
 
 
