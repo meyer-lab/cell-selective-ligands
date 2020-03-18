@@ -16,11 +16,15 @@ def sampleSpec(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav):
     Sample the specificity between two populations.
     RtotMeans: Tuple of receptor population expression means.
     """
-    assert len(RtotMeans) == 2
-    assert len(RtotCovs) == 2
+    assert len(RtotMeans) == len(RtotCovs)
 
-    quants = samplePop(L0, KxStar, f, RtotMeans[0], RtotCovs[0], LigC, Kav)
-    quants /= samplePop(L0, KxStar, f, RtotMeans[1], RtotCovs[1], LigC, Kav)
+    quantsNum = samplePop(L0, KxStar, f, RtotMeans[0], RtotCovs[0], LigC, Kav)
+    quantsDiv = np.zeros([len(quantsNum)])
+
+    for ii in range(0, len(RtotCovs) - 1):
+        quantsDiv += samplePop(L0, KxStar, f, RtotMeans[ii + 1], RtotCovs[ii + 1], LigC, Kav)
+
+    quants = quantsNum / quantsDiv
 
     return np.quantile(quants, [0.1, 0.5, 0.9])
 

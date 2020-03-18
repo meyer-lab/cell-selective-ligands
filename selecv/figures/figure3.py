@@ -7,7 +7,7 @@ from ..imports import getPopDict
 from ..sampling import sampleSpec
 
 ligConc = np.array([10e-9])
-KxStarP = 10e3
+KxStarP = 10e2
 affinity = 10e-9
 
 
@@ -20,9 +20,12 @@ def makeFigure():
     valencyScan = np.logspace(0.0, 5.0, base=2.0, num=10)
     _, populationsdf = getPopDict()
 
-    ValencyPlot(ax[0], populationsdf, valencyScan, ['Pop1', 'Pop3'])
-    ValencyPlot(ax[1], populationsdf, valencyScan, ['Pop2', 'Pop3'])
+    ValencyPlot(ax[0], populationsdf, valencyScan, ['Pop3', 'Pop1'])
+    ValencyPlot(ax[1], populationsdf, valencyScan, ['Pop3', 'Pop2'])
     ValencyPlot(ax[2], populationsdf, valencyScan, ['Pop3', 'Pop4'])
+    ValencyPlot(ax[3], populationsdf, valencyScan, ['Pop5', 'Pop3'])
+    ValencyPlot(ax[4], populationsdf, valencyScan, ['Pop5', 'Pop6'])
+    ValencyPlot(ax[5], populationsdf, valencyScan, ['Pop7', 'Pop5'])
 
     return f
 
