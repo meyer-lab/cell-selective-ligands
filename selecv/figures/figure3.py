@@ -40,10 +40,6 @@ def ValencyPlot(ax, df, valencies, popList):
     for ii, val in enumerate(valencies):
         underDev[ii], sampMeans[ii], overDev[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[affinity, affinity]]))
 
-    sampMeans *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
-    underDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
-    overDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
-
     ax.plot(valencies, sampMeans, color='royalblue')
     ax.fill_between(valencies, underDev, overDev, color='royalblue', alpha=.1)
     ax.set(xlabel='Valency', ylabel='Binding Ratio', title=popList[0] + ' to ' + popList[1] + ' binding ratio')
