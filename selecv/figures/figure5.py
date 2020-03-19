@@ -20,7 +20,7 @@ def makeFigure():
     subplotLabel(ax)
 
     _, populationsdf = getPopDict()
-    opt, optselec, selecNaught = optimizeDesign(populationsdf, ['Pop3', 'Pop2'])
+    _, _, _ = optimizeDesign(populationsdf, ['Pop3', 'Pop2'])
 
     return f
 
@@ -41,6 +41,6 @@ def optimizeDesign(df, popList):
     optimized = minimize(minSelecFunc, xNaught, bounds=xBnds, method='L-BFGS-B', args=(recMeans, Covs), options={'eps': 1, 'disp': True})
     params = optimized.x
     optSelec = sampleSpec(ligConc, KxStar, params[0], recMeans, Covs, np.array([params[1], 1 - params[1]]), np.array([[params[2], params[3]], [params[4], params[5]]]))[1]
-    selecNot=sampleSpec(ligConc, KxStar, xNaught[0], recMeans, Covs, np.array([xNaught[1], 1 - xNaught[1]]), np.array([[xNaught[2], xNaught[3]], [xNaught[4], xNaught[5]]]))[1]
+    selecNot = sampleSpec(ligConc, KxStar, xNaught[0], recMeans, Covs, np.array([xNaught[1], 1 - xNaught[1]]), np.array([[xNaught[2], xNaught[3]], [xNaught[4], xNaught[5]]]))[1]
 
     return optimized, optSelec, selecNot
