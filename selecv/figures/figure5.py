@@ -9,8 +9,8 @@ from ..sampling import sampleSpec
 
 ligConc = 10e-9
 KxStar = 10e3
-xNaught = [1.0, 0.5, 10e-9, 10e-9, 10e-9, 10e-9] #Conc, KxStar, Valency, Mix1, aff11, aff12, aff21, aff22
-xBnds = ((1, 32), (0, 1), (10e-11, 10e-7), (10e-11, 10e-7), (10e-11, 10e-7), (10e-11, 10e-7))
+xNaught = [4.0, 1, 10e-9, 10e-9, 10e-9, 10e-9]  # Conc, KxStar, Valency, Mix1, aff11, aff12, aff21, aff22
+xBnds = ((1, 32), (1, 1), (10e-9, 10e-9), (10e-9, 10e-9), (10e-9, 10e-9), (10e-9, 10e-9))
 
 
 def makeFigure():
@@ -20,7 +20,7 @@ def makeFigure():
     subplotLabel(ax)
 
     _, populationsdf = getPopDict()
-    optimizeDesign(populationsdf, ['Pop3', 'Pop4'])
+    opt, optselec, selecNaught = optimizeDesign(populationsdf, ['Pop3', 'Pop2'])
 
     return f
 
@@ -37,12 +37,10 @@ def optimizeDesign(df, popList):
         dfPop = df[df['Population'] == pop]
         recMeans.append(np.array([dfPop['Receptor_1'].to_numpy(), dfPop['Receptor_2'].to_numpy()]).flatten())
         Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
-    
-    optimized = minimize(minSelecFunc, xNaught, bounds=xBnds, method='L-BFGS-B', args=(recMeans, Covs), options={'disp': True})
+
+    optimized = minimize(minSelecFunc, xNaught, bounds=xBnds, method='L-BFGS-B', args=(recMeans, Covs), options={'eps': 1, 'disp': True})
     params = optimized.x
-    print(params)
-    print(sampleSpec(ligConc, kxStar, params[0], recMeans, Covs, np.array([params[1], 1 - params[1]]), np.array([[params[2], params[3]], [params[4], params[5]]]))[1])
-    print(sampleSpec(ligConc, kxStar, xNaught[0], recMeans, Covs, np.array([xNaught[1], 1 - xNaught[1]]), np.array([[xNaught[2], xNaught[3]], [xNaught[4], xNaught[5]]]))[1])
-    
-    print("Valency, Mix1, aff11, aff12, aff21, aff22")
-    return optimized
+    optSelec = sampleSpec(ligConc, KxStar, params[0], recMeans, Covs, np.array([params[1], 1 - params[1]]), np.array([[params[2], params[3]], [params[4], params[5]]]))[1])
+    selecNot=sampleSpec(ligConc, KxStar, xNaught[0], recMeans, Covs, np.array([xNaught[1], 1 - xNaught[1]]), np.array([[xNaught[2], xNaught[3]], [xNaught[4], xNaught[5]]]))[1])
+
+    return optimized, optSelec, selecNot
