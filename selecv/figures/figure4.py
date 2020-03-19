@@ -26,7 +26,7 @@ def makeFigure():
     MixPlot(ax[2], populationsdf, ['Pop5', 'Pop6'], affinities, 101)
     MixPlot(ax[3], populationsdf, ['Pop7', 'Pop6'], affinities, 101)
     MixPlot(ax[4], populationsdf, ['Pop5', 'Pop3', 'Pop4'], affinities, 101)
-    MixPlot(ax[5], populationsdf, ['Pop6', 'Pop3', 'Pop4'], affinities, 101)
+    MixPlot(ax[5], populationsdf, ['Pop7', 'Pop3', 'Pop4'], affinities, 101)
     MixPlot(ax[6], populationsdf, ['Pop7', 'Pop3', 'Pop4'], affinities, 101)
     MixPlot(ax[7], populationsdf, ['Pop6', 'Pop1', 'Pop2', 'Pop3', 'Pop4', 'Pop5', 'Pop7'], affinities, 101)
 
