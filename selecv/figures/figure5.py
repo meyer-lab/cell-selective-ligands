@@ -39,8 +39,10 @@ def optimizeDesign(df, popList):
         Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
     
     optimized = minimize(minSelecFunc, xNaught, bounds=xBnds, method='L-BFGS-B', args=(recMeans, Covs), options={'disp': True})
-    print(optimized.x)
-    print(minSelecFunc(optimized.x, recMeans, Covs))
-    print(minSelecFunc(xNaught, recMeans, Covs))
+    params = optimized.x
+    print(params)
+    print(sampleSpec(ligConc, kxStar, params[0], recMeans, Covs, np.array([params[1], 1 - params[1]]), np.array([[params[2], params[3]], [params[4], params[5]]]))[1])
+    print(sampleSpec(ligConc, kxStar, xNaught[0], recMeans, Covs, np.array([xNaught[1], 1 - xNaught[1]]), np.array([[xNaught[2], xNaught[3]], [xNaught[4], xNaught[5]]]))[1])
+    
     print("Valency, Mix1, aff11, aff12, aff21, aff22")
     return optimized
