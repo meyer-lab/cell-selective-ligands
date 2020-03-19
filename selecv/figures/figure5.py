@@ -7,15 +7,16 @@ from .figureCommon import subplotLabel, getSetup
 from ..imports import getPopDict
 from ..sampling import sampleSpec
 
-
-xNaught = [10e-9, 10e-9, 1.0, 0.5, 10e-7, 10e-11, 10e-11, 10e-7] #Conc, KxStar, Valency, Mix1, aff11, aff12, aff21, aff22
-xBnds = ((10e-11, 10e-7), (10e-11, 10e3), (1, 32), (0, 1), (10e-7, 10e-7), (10e-11, 10e-11), (10e-11, 10e-11), (10e-7, 10e-7))
+ligConc = 10e-9
+KxStar = 10e3
+xNaught = [1.0, 0.5, 10e-9, 10e-9, 10e-9, 10e-9] #Conc, KxStar, Valency, Mix1, aff11, aff12, aff21, aff22
+xBnds = ((1, 32), (0, 1), (10e-11, 10e-7), (10e-11, 10e-7), (10e-11, 10e-7), (10e-11, 10e-7))
 
 
 def makeFigure():
     """ Make figure 5. """
     # Get list of axis objects
-    ax, f = getSetup((7, 6), (3, 4))
+    ax, f = getSetup((7, 6), (2, 3))
     subplotLabel(ax)
 
     _, populationsdf = getPopDict()
@@ -26,7 +27,7 @@ def makeFigure():
 
 def minSelecFunc(x, recMeansM, CovsM):
     "Provides the function to be minimized to get optimal selectivity"
-    return 1 / sampleSpec(x[0], x[1], x[2], recMeansM, CovsM, np.array([x[3], 1 - x[3]]), np.array([[x[4], x[5]], [x[6], x[7]]]))[1]
+    return 1 / sampleSpec(ligConc, KxStar, x[0], recMeansM, CovsM, np.array([x[1], 1 - x[1]]), np.array([[x[2], x[3]], [x[4], x[5]]]))[1]
 
 
 def optimizeDesign(df, popList):
@@ -41,5 +42,5 @@ def optimizeDesign(df, popList):
     print(optimized.x)
     print(minSelecFunc(optimized.x, recMeans, Covs))
     print(minSelecFunc(xNaught, recMeans, Covs))
-    print("Conc, KxStar, Valency, Mix1, aff11, aff12, aff21, aff22")
+    print("Valency, Mix1, aff11, aff12, aff21, aff22")
     return optimized
