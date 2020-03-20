@@ -3,9 +3,11 @@ Implementation of a simple multivalent binding model.
 """
 
 import numpy as np
+from numba import njit
 from scipy.optimize import root
 
 
+@njit
 def Req_func(Req, Rtot, L0fA, AKxStar, f):
     """ Mass balance. Transformation to account for bounds. """
     Phisum = np.dot(AKxStar, Req.T)
@@ -54,7 +56,6 @@ def Req_Regression(L0, KxStar, f, Rtot, LigC, Kav):
     AKxStar = A * KxStar
 
     # Identify an initial guess just on max monovalent interaction
-    # Correction factor at end is just empirical
     x0 = np.max(L0fA, axis=0)
     x0 = np.multiply(1.0 - np.divide(x0, 1 + x0), Rtot)
 

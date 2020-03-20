@@ -11,7 +11,7 @@ from ..imports import import_Rexpr, getPopDict
 from ..sampling import sampleSpec
 
 ligConc = np.array([10e-9])
-KxStarP = 10e2
+KxStarP = 10
 val = 16.0
 
 
@@ -25,7 +25,7 @@ def makeFigure():
     _, npdata, cell_names = import_Rexpr()
     _, populations = getPopDict()
     plotCellpops(ax[0:2], npdata, cell_names, populations)
-    plotSampleConc(ax[2], populations, [-12., 4., ], ['Pop2', 'Pop3'])
+    plotSampleConc(ax[2], populations, [-12., 4., ], ['Pop3', 'Pop2'])
 
     return f
 
@@ -34,12 +34,15 @@ def plotCellpops(ax, data, names, df):
     "Plot both theoretical and real receptor abundances"
     for ii, cell in enumerate(names):
         ax[0].scatter(data[ii, 0], data[ii, 1], label=cell)
-    ax[0].set(ylabel='IL2Rα Abundance', xlabel='IL-2Rβ Abundance', xscale='log', yscale='log')
+    ax[0].set(xlabel='IL2Rα Abundance', ylabel='IL-2Rβ Abundance', xscale='log', yscale='log')
     ax[0].legend()
 
-    sampleData = sampleReceptors(df, 1000)
-
-    sns.scatterplot(x='Receptor_1', y='Receptor_2', hue='Population', data=sampleData, ax=ax[1])
+    sampleData = sampleReceptors(df, 20000)
+    sns.set_palette("husl", 7)
+    for pop in sampleData.Population.unique():
+        popDF = sampleData.loc[sampleData['Population'] == pop]
+        sns.kdeplot(popDF.Receptor_1, popDF.Receptor_2, ax=ax[1], label=pop, shade=True, shade_lowest=False)
+    ax[1].legend()
     ax[1].set(xscale="log", yscale="log")
 
 
@@ -70,12 +73,15 @@ def plotSampleConc(ax, df, concRange, popList):
     recMean2 = np.array([df2['Receptor_1'].to_numpy(), df2['Receptor_2'].to_numpy()]).flatten()
     Cov1 = df1.Covariance_Matrix.to_numpy()[0]
     Cov2 = df2.Covariance_Matrix.to_numpy()[0]
-    sampMeans, sampDevs = np.zeros([npoints]), np.zeros([npoints])
+    sampMeans, underDev, overDev = np.zeros(npoints), np.zeros(npoints), np.zeros(npoints)
 
     for ii, conc in enumerate(concScan):
-        sampMeans[ii], sampDevs[ii], = sampleSpec(conc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[10e-9, 10e-9]]), nsample=100)
+        underDev[ii], sampMeans[ii], overDev[ii] = sampleSpec(conc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[10e-9, 10e-9]]))
 
-    underDev, overDev = sampMeans - sampDevs, sampMeans + sampDevs
+    sampMeans *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+    underDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+    overDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
+
     ax.plot(concScan, sampMeans, color='royalblue')
     ax.fill_between(concScan, underDev, overDev, color='royalblue', alpha=.1)
     ax.set(xscale='log', xlim=(np.power(10, concRange[0]), np.power(10, concRange[1])))
