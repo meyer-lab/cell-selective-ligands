@@ -52,5 +52,5 @@ def MixPlot(ax, df, popList, affinities, npoints):
 
     ax.plot(mixRatio, sampMeans, color='royalblue')
     ax.fill_between(mixRatio, underDev, overDev, color='royalblue', alpha=.1)
-    ax.set(xlabel='Ligand 1 in Mixture', ylabel='Binding Ratio', ylim=(0, 10), xlime=(0, 1), title=popList[0] + ' to ' + popList[1] + ' binding ratio')
+    ax.set(xlabel='Ligand 1 in Mixture', ylabel='Binding Ratio', ylim=(0, 10), xlim=(0, 1), title=popList[0] + ' to ' + popList[1] + ' binding ratio')
     #ax.set_title(Title + ' binding ratio', fontsize = 8 - 0.5*len(popList))
