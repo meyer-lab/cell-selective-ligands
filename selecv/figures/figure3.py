@@ -22,10 +22,13 @@ def makeFigure():
 
     ValencyPlot(ax[0], populationsdf, valencyScan, ['Pop3', 'Pop1'])
     ValencyPlot(ax[1], populationsdf, valencyScan, ['Pop3', 'Pop2'])
-    ValencyPlot(ax[2], populationsdf, valencyScan, ['Pop3', 'Pop4'])
+    ValencyPlot(ax[2], populationsdf, valencyScan, ['Pop7', 'Pop5'])
     ValencyPlot(ax[3], populationsdf, valencyScan, ['Pop5', 'Pop3'])
+    ax[3].set_ylim(0, 2)
     ValencyPlot(ax[4], populationsdf, valencyScan, ['Pop5', 'Pop6'])
-    ValencyPlot(ax[5], populationsdf, valencyScan, ['Pop7', 'Pop5'])
+    ax[4].set_ylim(0, 2)
+    ValencyPlot(ax[5], populationsdf, valencyScan, ['Pop3', 'Pop4'])
+    ax[5].set_ylim(0, 2)
 
     return f
 
@@ -45,4 +48,4 @@ def ValencyPlot(ax, df, valencies, popList):
 
     ax.plot(valencies, sampMeans, color='royalblue')
     ax.fill_between(valencies, underDev, overDev, color='royalblue', alpha=.1)
-    ax.set(xlabel='Valency', ylabel='Binding Ratio', title=popList[0] + ' to ' + popList[1] + ' binding ratio')
+    ax.set(xlabel='Valency', ylabel='Binding Ratio', title=popList[0] + ' to ' + popList[1] + ' binding ratio', xlim=(1, 32), ylim=(0, 100))

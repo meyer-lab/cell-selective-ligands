@@ -24,6 +24,7 @@ def makeFigure():
     affHeatMap(ax[2], populationsdf, [-9, -7], ['Pop6', 'Pop3'])
     affHeatMap(ax[3], populationsdf, [-9, -7], ['Pop7', 'Pop4'])
     affHeatMap(ax[4], populationsdf, [-9, -7], ['Pop5', 'Pop6'])
+    affHeatMap(ax[5], populationsdf, [-9, -7], ['Pop5', 'Pop6', 'Pop3'])
 
     subplotLabel(ax)
 
