@@ -19,14 +19,14 @@ def makeFigure():
 
     subplotLabel(ax)
 
-    affinities = np.array([[10e-7, 10e-9], [10e-9, 10e-7]])
+    affinities = np.array([[10e8, 10e6], [10e6, 10e8]])
     _, populationsdf = getPopDict()
     MixPlot(ax[0], populationsdf, ['Pop3', 'Pop2'], affinities, 101)
     MixPlot(ax[1], populationsdf, ['Pop3', 'Pop4'], affinities, 101)
     MixPlot(ax[2], populationsdf, ['Pop5', 'Pop6'], affinities, 101)
     MixPlot(ax[3], populationsdf, ['Pop7', 'Pop6'], affinities, 101)
     MixPlot(ax[4], populationsdf, ['Pop5', 'Pop3', 'Pop4'], affinities, 101)
-    MixPlot(ax[5], populationsdf, ['Pop7', 'Pop3', 'Pop4'], affinities, 101)
+    MixPlot(ax[5], populationsdf, ['Pop6', 'Pop3', 'Pop4'], affinities, 101)
     MixPlot(ax[6], populationsdf, ['Pop7', 'Pop3', 'Pop4'], affinities, 101)
     MixPlot(ax[7], populationsdf, ['Pop6', 'Pop1', 'Pop2', 'Pop3', 'Pop4', 'Pop5', 'Pop7'], affinities, 101)
 
@@ -52,5 +52,5 @@ def MixPlot(ax, df, popList, affinities, npoints):
 
     ax.plot(mixRatio, sampMeans, color='royalblue')
     ax.fill_between(mixRatio, underDev, overDev, color='royalblue', alpha=.1)
-    ax.set(xlabel='Ligand 1 in Mixture', ylabel='Binding Ratio', title=popList[0] + ' to ' + popList[1] + ' binding ratio')
+    ax.set(xlabel='Ligand 1 in Mixture', ylabel='Binding Ratio', ylim=(0, 10), xlim=(0, 1), title=popList[0] + ' to ' + popList[1] + ' binding ratio')
     #ax.set_title(Title + ' binding ratio', fontsize = 8 - 0.5*len(popList))
