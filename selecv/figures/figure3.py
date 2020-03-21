@@ -7,9 +7,9 @@ from ..imports import getPopDict
 from ..sampling import sampleSpec
 from ..model import polyfc
 
-ligConc = np.array([10e7])
-KxStarP = 1
-affinity = 10e-9
+ligConc = np.array([10e-9])
+KxStarP = 10e-10
+affinity = 10e7
 
 
 def makeFigure():
@@ -20,8 +20,6 @@ def makeFigure():
 
     valencyScan = np.logspace(0.0, 5.0, base=2.0, num=10)
     _, populationsdf = getPopDict()
-    
-    print(polyfc(ligConc, KxStarP, 1, 500, [1], np.array([[affinity]]))/500)
 
     ValencyPlot(ax[0], populationsdf, valencyScan, ['Pop3', 'Pop1'])
     ValencyPlot(ax[1], populationsdf, valencyScan, ['Pop3', 'Pop2'])
@@ -64,6 +62,9 @@ def valDemo(ax):
     for ii, valencyLab in enumerate(labels):
         for jj, recCount in enumerate(recScan):
             percHold[jj] = polyfc(ligConc, KxStarP, ii + 1, recCount, [1], np.array([[affinity]])) / recCount
+            #print(polyfc(ligConc, KxStarP, ii + 1, recCount, [1], np.array([[affinity]])))
+            #print(recCount)
+            #print(ligConc, KxStarP, ii + 1, recCount, [1], np.array([[affinity]]))
 
         ax.plot(recScan, percHold, label=valencyLab)
     ax.set(xlim=(1, 1000), ylim=(0, 1), xlabel='Receptor Abundance', ylabel='Fraction Receptors Bound', xscale='log')
