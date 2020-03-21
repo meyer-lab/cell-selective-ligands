@@ -8,7 +8,7 @@ from ..sampling import sampleSpec
 from ..model import polyfc
 
 ligConc = np.array([10e-9])
-KxStarP = 10e-10
+KxStarP = 10e-11
 affinity = 10e7
 
 
@@ -62,8 +62,9 @@ def valDemo(ax):
     for ii, valencyLab in enumerate(labels):
         for jj, recCount in enumerate(recScan):
             percHold[jj] = polyfc(ligConc, KxStarP, ii + 1, recCount, [1], np.array([[affinity]])) / recCount
+
             #print(polyfc(ligConc, KxStarP, ii + 1, recCount, [1], np.array([[affinity]])))
-            #print(recCount)
+            # print(recCount)
             #print(ligConc, KxStarP, ii + 1, recCount, [1], np.array([[affinity]]))
 
         ax.plot(recScan, percHold, label=valencyLab)
