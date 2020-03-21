@@ -54,6 +54,7 @@ def ValencyPlot(ax, df, valencies, popList):
 
 
 def valDemo(ax):
+    "Demonstrate effect of valency"
     nPoints = 100
     recScan = np.logspace(0, 4, nPoints)
     labels = ['Monovalent', 'Bivalent', 'Trivalent', 'Tetravalent']
