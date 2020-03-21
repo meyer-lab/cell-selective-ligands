@@ -19,7 +19,7 @@ def makeFigure():
 
     subplotLabel(ax)
 
-    affinities = np.array([[10e-7, 10e-9], [10e-9, 10e-7]])
+    affinities = np.array([[10e8, 10e6], [10e6, 10e8]])
     _, populationsdf = getPopDict()
     MixPlot(ax[0], populationsdf, ['Pop3', 'Pop2'], affinities, 101)
     MixPlot(ax[1], populationsdf, ['Pop3', 'Pop4'], affinities, 101)
