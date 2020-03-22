@@ -5,7 +5,7 @@ Implementation of a simple multivalent binding model.
 import numpy as np
 from numba import njit
 from scipy.optimize import root
-
+from scipy.special import binom
 
 @njit
 def Req_func(Req, Rtot, L0fA, AKxStar, f):
@@ -66,3 +66,57 @@ def Req_Regression(L0, KxStar, f, Rtot, LigC, Kav):
         "Failure in rootfinding. " + str(lsq)
 
     return lsq['x'].reshape(1, -1)
+
+
+
+def Req_func2(Req, L0, KxStar, Rtot, Cplx, Ctheta, Kav):
+    Psi = np.ones((Kav.shape[0], Kav.shape[1] + 1))
+    Psi[:, :Kav.shape[1]] *= Req * Kav * KxStar
+    Psirs = np.sum(Psi, axis = 1).reshape(-1, 1)
+    Psinorm = (Psi / Psirs)[:, :-1]
+
+    Rbound = L0 / KxStar * np.sum(Ctheta.reshape(-1, 1) * \
+                                  np.dot(Cplx, Psinorm) * \
+                                  np.exp(np.dot(Cplx, np.log1p(Psirs - 1))), \
+                                  axis = 0)
+    return Req + Rbound - Rtot
+
+def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
+    """
+    The main function to be called for multivalent binding
+    :param L0: concentration of ligand complexes
+    :param KxStar: Kx for detailed balance correction
+    :param Rtot: numbers of each receptor on the cell
+    :param Cplx: the monomer ligand composition of each complex
+    :param Ctheta: the composition of complexes
+    :param Kav: Ka for monomer ligand to receptors
+    :return: Lbound
+    """
+    # Consistency check
+    Kav = np.array(Kav)
+    assert Kav.ndim == 2
+    Rtot = np.array(Rtot)
+    assert Rtot.ndim == 1
+    Cplx = np.array(Cplx)
+    assert Cplx.ndim == 2
+    Ctheta = np.array(Ctheta)
+    assert Ctheta.ndim == 1
+
+    assert Kav.shape[0] == Cplx.shape[1]
+    assert Kav.shape[1] == Rtot.size
+    assert Cplx.shape[0] == Ctheta.size
+    Ctheta = Ctheta / np.sum(Ctheta)
+
+    # Solve Req
+    lsq = root(Req_func2, Rtot, method="lm", \
+               args=(L0, KxStar, Rtot, Cplx, Ctheta, Kav), options={'maxiter': 3000})
+    assert lsq['success'], "Failure in rootfinding. " + str(lsq)
+    Req = lsq['x'].reshape(1, -1)
+
+    # Calculate the results
+    Psi = np.ones((Kav.shape[0], Kav.shape[1] + 1))
+    Psi[:, :Kav.shape[1]] *= Req * Kav * KxStar
+    Psirs = np.sum(Psi, axis=1).reshape(-1, 1)
+
+    Lbound = L0 / KxStar * np.sum(Ctheta * np.expm1(np.dot(Cplx, np.log1p(Psirs - 1))).flatten())
+    return Lbound
