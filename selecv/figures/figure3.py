@@ -78,7 +78,7 @@ def valDemo(ax):
     point = Line2D([], [], color='black', marker='.', linestyle='None', markersize=6, label='Low Affinity')
     handles.append(line)
     handles.append(point)
-    ax.legend(handles=handles)
+    ax.legend(handles=handles, prop={'size': 6})
 
 
 def ConcValPlot(ax):
@@ -94,20 +94,30 @@ def ConcValPlot(ax):
         ax.plot(recScan, percHold, label=str(conc * 10e8) + ' nM')
 
     ax.set(xlim=(1, 10000), ylim=(0, 1), xlabel='Receptor Abundance', ylabel='Fraction Receptors Bound', xscale='log')
-    ax.legend()
+    ax.legend(prop={'size': 6})
 
 
 def KxValPlot(ax):
     "Keep valency constant and high - vary concentration"
+    concs = [ligConc, 10e-11]
     KxScan = np.logspace(-13, -9, 5)
     valency = 4
     recScan = np.logspace(0, 4, 100)
     percHold = np.zeros(100)
+    colors = ['royalblue', 'orange', 'limegreen', 'orangered', 'blueviolet']
+    lines = ['-', ':']
 
-    for ii, Kx in enumerate(KxScan):
-        for jj, recCount in enumerate(recScan):
-            percHold[jj] = polyfc(ligConc, Kx, valency, recCount, [1], np.array([[affinity]])) / recCount
-        ax.plot(recScan, percHold, label='Kx* = ' + str(Kx))
+    for ii, conc in enumerate(concs):
+        for jj, Kx in enumerate(KxScan):
+            for kk, recCount in enumerate(recScan):
+                percHold[kk] = polyfc(conc, Kx, valency, recCount, [1], np.array([[affinity]])) / recCount
+            ax.plot(recScan, percHold, label='Kx* = ' + str(Kx), linestyle=lines[ii], color=colors[jj])
 
     ax.set(xlim=(1, 10000), ylim=(0, 1), xlabel='Receptor Abundance', ylabel='Fraction Receptors Bound', xscale='log')
-    ax.legend()
+    handles, _ = ax.get_legend_handles_labels()
+    handles = handles[0:5]
+    line = Line2D([], [], color='black', marker='_', linestyle='None', markersize=6, label='10 nM')
+    point = Line2D([], [], color='black', marker='.', linestyle='None', markersize=6, label='0.1 nM')
+    handles.append(line)
+    handles.append(point)
+    ax.legend(handles=handles, prop={'size': 6})
