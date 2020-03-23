@@ -88,7 +88,7 @@ def ConcValPlot(ax):
     recScan = np.logspace(0, 4, 100)
     percHold = np.zeros(100)
 
-    for ii, conc in enumerate(concScan):
+    for conc in concScan:
         for jj, recCount in enumerate(recScan):
             percHold[jj] = polyfc(conc, KxStarP, valency, recCount, [1], np.array([[affinity]])) / recCount
         ax.plot(recScan, percHold, label=str(conc * 10e8) + ' nM')
