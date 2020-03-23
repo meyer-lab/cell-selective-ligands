@@ -47,13 +47,19 @@ def ValencyPlot(ax, df, valencies, popList):
     Cov1 = df1.Covariance_Matrix.to_numpy()[0]
     Cov2 = df2.Covariance_Matrix.to_numpy()[0]
     sampMeans, underDev, overDev = np.zeros_like(valencies), np.zeros_like(valencies), np.zeros_like(valencies)
+    affinities = [10e5, 10e6, 10e7]
+    concs = [10e-11, 10e-10, 10e-9]
+    labels = ['Low Affinity/Conc', 'Med Affinity/Conc', 'High Affinity/Conc']
+    colors = ['lime', 'blue', 'red']
 
-    for ii, val in enumerate(valencies):
-        underDev[ii], sampMeans[ii], overDev[ii] = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[affinity, affinity]]))
+    for ii, aff in enumerate(affinities):
+        for jj, val in enumerate(valencies):
+            underDev[jj], sampMeans[jj], overDev[jj] = sampleSpec(concs[ii], KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[aff, aff]]))
 
-    ax.plot(valencies, sampMeans, color='royalblue')
-    ax.fill_between(valencies, underDev, overDev, color='royalblue', alpha=.1)
-    ax.set(xlabel='Valency', ylabel='Binding Ratio', title=popList[0] + ' to ' + popList[1] + ' binding ratio', xlim=(1, 32), ylim=(0, 100))
+        ax.plot(valencies, sampMeans, color=colors[ii], label=labels[ii])
+        ax.fill_between(valencies, underDev, overDev, color=colors[ii], alpha=.1)
+    ax.set(xlabel='Valency', ylabel='Binding Ratio', title=popList[0] + ' to ' + popList[1] + ' binding ratio', xlim=(1, 32), ylim=(0, 150))
+    ax.legend(prop={'size': 6})
 
 
 def valDemo(ax):
