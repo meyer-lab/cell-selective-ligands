@@ -20,6 +20,7 @@ def makeFigure():
     subplotLabel(ax)
 
     _, populationsdf = getPopDict()
+    gridSearchTry(populationsdf, ['Pop3', 'Pop2'])
     _, _, _ = optimizeDesign(populationsdf, ['Pop3', 'Pop2'])
 
     return f
@@ -44,3 +45,41 @@ def optimizeDesign(df, popList):
     selecNot = sampleSpec(ligConc, KxStar, xNaught[0], recMeans, Covs, np.array([xNaught[1], 1 - xNaught[1]]), np.array([[xNaught[2], xNaught[3]], [xNaught[4], xNaught[5]]]))[1]
 
     return optimized, optSelec, selecNot
+
+
+searchdic = {'L0': np.logspace(-11, -8, 4),
+             'Kx': np.logspace(-12, -8, 5),
+             'Val': np.logspace(0.0, 4.0, base=2.0, num=5),
+             'Mix': np.linspace(0, 0.5, 2),
+             'Aff': np.logspace(5, 9, 2)
+            }
+
+
+def gridSearchTry(df, popList):
+    recMeans, Covs = [], []
+    for ii, pop in enumerate(popList):
+        dfPop = df[df['Population'] == pop]
+        recMeans.append(np.array([dfPop['Receptor_1'].to_numpy(), dfPop['Receptor_2'].to_numpy()]).flatten())
+        Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
+
+    resultsTensor = np.zeros([4, 5, 5, 3, 5, 5, 5, 5])
+    for ii, conc in enumerate(searchdic['L0']):
+        print(conc)
+        for jj, kx in enumerate(searchdic['Kx']):
+            print(kx)
+            for kk, val in enumerate(searchdic['Val']):
+                for ll, mix in enumerate(searchdic['Mix']):
+                    for mm, aff1 in enumerate(searchdic['Aff']):
+                        for nn, aff2 in enumerate(searchdic['Aff']):
+                            for oo, aff3 in enumerate(searchdic['Aff']):
+                                for pp, aff4 in enumerate(searchdic['Aff']):
+                                    resultsTensor[ii, jj, kk, ll, mm, nn, oo, pp] = sampleSpec(conc, kx, val, recMeans, Covs, np.array([mix, 1 - mix]), np.array([[aff1, aff2], [aff3, aff4]]))[1]
+
+    maxSelec = np.amax(resultsTensor)
+    maxSelecCoords = np.where(resultsTensor == maxSelec)[0]
+    print(maxSelecCoords)
+    maxParams = np.array([searchdic['L0'][maxSelecCoords[0]], searchdic['Kx'][maxSelecCoords[1]], searchdic['Val'][maxSelecCoords[2]], searchdic['Mix'][maxSelecCoords[3]], searchdic['Aff'][maxSelecCoords[4]], searchdic['Aff'][maxSelecCoords[5]], searchdic['Aff'][maxSelecCoords[6]], searchdic['Aff'][maxSelecCoords[7]]])
+    print(maxSelec)
+    print(maxParams)
+    
+    return maxSelec, maxParams
