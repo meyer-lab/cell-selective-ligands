@@ -24,7 +24,7 @@ def makeFigure():
     affHeatMap(ax[2], populationsdf, [5, 9], ['Pop6', 'Pop3'])
     affHeatMap(ax[3], populationsdf, [5, 9], ['Pop7', 'Pop4'])
     affHeatMap(ax[4], populationsdf, [5, 9], ['Pop5', 'Pop6'])
-    affHeatMap(ax[5], populationsdf, [5, 9], ['Pop5', 'Pop4', 'Pop3'])
+    affHeatMap(ax[5], populationsdf, [5, 9], ['Pop7', 'Pop4', 'Pop3'])
 
     subplotLabel(ax)
 
@@ -37,18 +37,17 @@ def affHeatMap(ax, df, affRange, popList):
     ticks = np.full([npoints], None)
     affScan = np.logspace(affRange[0], affRange[1], npoints)
     ticks[0], ticks[-1] = '10e' + str(affRange[0]), '10e' + str(affRange[1])
-    df1 = df[df['Population'] == popList[0]]
-    df2 = df[df['Population'] == popList[1]]
-    recMean1 = np.array([df1['Receptor_1'].to_numpy(), df1['Receptor_2'].to_numpy()]).flatten()
-    recMean2 = np.array([df2['Receptor_1'].to_numpy(), df2['Receptor_2'].to_numpy()]).flatten()
-    Cov1 = df1.Covariance_Matrix.to_numpy()[0]
-    Cov2 = df2.Covariance_Matrix.to_numpy()[0]
+    recMeans, Covs = [], []
+    for ii, pop in enumerate(popList):
+        dfPop = df[df['Population'] == pop]
+        recMeans.append(np.array([dfPop['Receptor_1'].to_numpy(), dfPop['Receptor_2'].to_numpy()]).flatten())
+        Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
     sampMeans = np.zeros(npoints)
     ratioDF = pds.DataFrame(columns=affScan, index=affScan)
 
     for ii, aff1 in enumerate(affScan):
         for jj, aff2 in enumerate(affScan):
-            _, sampMeans[jj], _ = sampleSpec(ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[aff1, aff2]]))
+            _, sampMeans[jj], _ = sampleSpec(ligConc, KxStarP, val, recMeans, Covs, np.array([1]), np.array([[aff1, aff2]]))
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
     sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=ticks, vmin=0, vmax=10, fmt=':.0e')
