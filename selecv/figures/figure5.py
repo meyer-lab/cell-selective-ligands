@@ -52,7 +52,7 @@ searchdic = {'L0': np.logspace(-11, -8, 4),
              'Val': np.logspace(0.0, 4.0, base=2.0, num=5),
              'Mix': np.linspace(0, 0.5, 2),
              'Aff': np.logspace(5, 9, 2)
-            }
+             }
 
 
 def gridSearchTry(df, popList):
@@ -76,10 +76,11 @@ def gridSearchTry(df, popList):
                                     resultsTensor[ii, jj, kk, ll, mm, nn, oo, pp] = sampleSpec(conc, kx, val, recMeans, Covs, np.array([mix, 1 - mix]), np.array([[aff1, aff2], [aff3, aff4]]))[1]
 
     maxSelec = np.amax(resultsTensor)
-    maxSelecCoords = np.where(resultsTensor == maxSelec)[0]
-    print(maxSelecCoords)
-    maxParams = np.array([searchdic['L0'][maxSelecCoords[0]], searchdic['Kx'][maxSelecCoords[1]], searchdic['Val'][maxSelecCoords[2]], searchdic['Mix'][maxSelecCoords[3]], searchdic['Aff'][maxSelecCoords[4]], searchdic['Aff'][maxSelecCoords[5]], searchdic['Aff'][maxSelecCoords[6]], searchdic['Aff'][maxSelecCoords[7]]])
     print(maxSelec)
+    maxSelecCoords = np.unravel_index(np.argmax(resultsTensor), resultsTensor.shape)
+    print(maxSelecCoords)
+    maxParams = np.array([searchdic['L0'][maxSelecCoords[0]], searchdic['Kx'][maxSelecCoords[1]], searchdic['Val'][maxSelecCoords[2]], searchdic['Mix'][maxSelecCoords[3]],
+                          searchdic['Aff'][maxSelecCoords[4]], searchdic['Aff'][maxSelecCoords[5]], searchdic['Aff'][maxSelecCoords[6]], searchdic['Aff'][maxSelecCoords[7]]])
     print(maxParams)
-    
+
     return maxSelec, maxParams
