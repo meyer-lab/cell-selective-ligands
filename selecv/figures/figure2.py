@@ -54,4 +54,5 @@ def affHeatMap(ax, df, affRange, popList):
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
     sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=ticks, vmin=0, vmax=10)
-    ax.set(title=Title + ' binding ratio', xlabel='Rec 1 Affinity', ylabel='Rec 2 Affinity', fontsize=8 - 0.4 * len(popList))
+    ax.set(xlabel='Rec 1 Affinity', ylabel='Rec 2 Affinity')
+    ax.set_title(Title + ' binding ratio', fontsize=8 - 0.4 * len(popList))

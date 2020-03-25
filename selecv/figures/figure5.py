@@ -20,7 +20,7 @@ def makeFigure():
     subplotLabel(ax)
 
     _, populationsdf = getPopDict()
-    gridSearchTry(populationsdf, ['Pop3', 'Pop2'])
+    gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
     _, _, _ = optimizeDesign(populationsdf, ['Pop3', 'Pop2'])
 
     return f
@@ -56,6 +56,7 @@ searchdic = {'L0': np.logspace(-11, -8, 4),
 
 
 def gridSearchTry(df, popList):
+    """Grid search for best params for selectivity. Works but slowly. Probably won't use."""
     recMeans, Covs = [], []
     for ii, pop in enumerate(popList):
         dfPop = df[df['Population'] == pop]
@@ -64,9 +65,7 @@ def gridSearchTry(df, popList):
 
     resultsTensor = np.zeros([4, 5, 5, 3, 5, 5, 5, 5])
     for ii, conc in enumerate(searchdic['L0']):
-        print(conc)
         for jj, kx in enumerate(searchdic['Kx']):
-            print(kx)
             for kk, val in enumerate(searchdic['Val']):
                 for ll, mix in enumerate(searchdic['Mix']):
                     for mm, aff1 in enumerate(searchdic['Aff']):
@@ -76,11 +75,10 @@ def gridSearchTry(df, popList):
                                     resultsTensor[ii, jj, kk, ll, mm, nn, oo, pp] = sampleSpec(conc, kx, val, recMeans, Covs, np.array([mix, 1 - mix]), np.array([[aff1, aff2], [aff3, aff4]]))[1]
 
     maxSelec = np.amax(resultsTensor)
-    print(maxSelec)
+    # print(maxSelec)
     maxSelecCoords = np.unravel_index(np.argmax(resultsTensor), resultsTensor.shape)
-    print(maxSelecCoords)
     maxParams = np.array([searchdic['L0'][maxSelecCoords[0]], searchdic['Kx'][maxSelecCoords[1]], searchdic['Val'][maxSelecCoords[2]], searchdic['Mix'][maxSelecCoords[3]],
                           searchdic['Aff'][maxSelecCoords[4]], searchdic['Aff'][maxSelecCoords[5]], searchdic['Aff'][maxSelecCoords[6]], searchdic['Aff'][maxSelecCoords[7]]])
-    print(maxParams)
+    # print(maxParams)
 
     return maxSelec, maxParams
