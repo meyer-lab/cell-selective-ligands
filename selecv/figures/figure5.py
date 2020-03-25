@@ -20,7 +20,7 @@ def makeFigure():
     subplotLabel(ax)
 
     _, populationsdf = getPopDict()
-    gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
+    #gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
     _, _, _ = optimizeDesign(populationsdf, ['Pop3', 'Pop2'])
 
     return f
