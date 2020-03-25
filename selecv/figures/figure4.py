@@ -42,7 +42,7 @@ def MixPlot(ax, df, popList, affinities, npoints):
         recMeans.append(np.array([dfPop['Receptor_1'].to_numpy(), dfPop['Receptor_2'].to_numpy()]).flatten())
         Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
         if ii >= 2:
-            Title += ' and ' + pop
+            Title += '/' + pop
 
     sampMeans, underDev, overDev = np.zeros(npoints), np.zeros(npoints), np.zeros(npoints)
     mixRatio = np.linspace(0, 1, npoints)
@@ -53,7 +53,7 @@ def MixPlot(ax, df, popList, affinities, npoints):
     ax.plot(mixRatio, sampMeans, color='royalblue')
     ax.fill_between(mixRatio, underDev, overDev, color='royalblue', alpha=.1)
     if len(popList) == 2:
-        ax.set(xlabel='Ligand 1 in Mixture', ylabel='Binding Ratio', ylim=(0, 10), xlim=(0, 1), title=popList[0] + ' to ' + popList[1] + ' binding ratio')
+        ax.set(xlabel='Ligand 1 in Mixture', ylabel='Binding Ratio', ylim=(0, 10), xlim=(0, 1), title=Title + ' binding ratio')
     else:
         ax.set(xlabel='Ligand 1 in Mixture', ylabel='Binding Ratio', ylim=(0, 4), xlim=(0, 1))
-        ax.set_title(Title + ' binding ratio', fontsize=8 - 0.6 * len(popList))
+        ax.set_title(Title + ' binding ratio', fontsize=8 - 0.4 * len(popList))
