@@ -39,16 +39,6 @@ def getAffDict():
 
 
 theoreticalpops = {
-    'Pop1': [1, 1],
-    'Pop2': [1000, 100],
-    'Pop3': [10000, 100],
-    'Pop4': [100, 10000],
-    'Pop5': [3000, 5000],
-    'Pop6': [5000, 3000],
-    'Pop7': [10000, 10000]
-}
-
-theoreticalpops = {
     'Pop1': [2, 2, [[0.01, 0.005], [0.005, 0.01]]],
     'Pop2': [3, 2, [[0.015, 0.00], [0.00, 0.005]]],
     'Pop3': [4, 2, [[0.015, 0.00], [0.00, 0.005]]],
@@ -65,3 +55,18 @@ def getPopDict():
     populationdf = populationdf.reset_index()
     populationdf.columns = ['Population', 'Receptor_1', 'Receptor_2', 'Covariance_Matrix']
     return theoreticalpops, populationdf
+
+
+affDict = {
+    'IL2Rα': [1 / 10 * 10e8, 'cytokine'],
+    'IL-2Rβ': [1 / 144 * 10e8, 'cytokine'],
+    'FcGamma': [6.5e7, 'FcG']
+}
+
+
+def getAffDict():
+    """Returns dictionary and dataframe containt theoretical populations"""
+    affDF = pds.DataFrame.from_dict(affDict, orient='index', columns=['Affinity', 'Type'])
+    affDF = affDF.reset_index()
+    affDF = affDF.rename(columns={'index': 'Ligand', 'Affinity': 'Affinity', 'Type': 'Type'})
+    return affDict, affDF

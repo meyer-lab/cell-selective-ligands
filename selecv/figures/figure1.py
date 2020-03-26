@@ -7,7 +7,7 @@ import pandas as pds
 import numpy as np
 from scipy.stats import multivariate_normal
 from .figureCommon import subplotLabel, getSetup
-from ..imports import import_Rexpr, getPopDict
+from ..imports import import_Rexpr, getPopDict, getAffDict
 from ..sampling import sampleSpec
 
 ligConc = np.array([10e-9])
@@ -22,10 +22,12 @@ def makeFigure():
 
     subplotLabel(ax)
 
+    _, affData = getAffDict()
     _, npdata, cell_names = import_Rexpr()
     _, populations = getPopDict()
     plotCellpops(ax[0:2], npdata, cell_names, populations)
     plotSampleConc(ax[2], populations, [-12., 4., ], ['Pop3', 'Pop2'])
+    affPlot(ax[3], affData)
 
     return f
 
@@ -85,3 +87,12 @@ def plotSampleConc(ax, df, concRange, popList):
     ax.plot(concScan, sampMeans, color='royalblue')
     ax.fill_between(concScan, underDev, overDev, color='royalblue', alpha=.1)
     ax.set(xscale='log', xlim=(np.power(10, concRange[0]), np.power(10, concRange[1])))
+
+
+def affPlot(ax, affDF):
+    """
+    Plot affinities for both cytokines and antibodies.
+    """
+    sns.barplot(x='Ligand', y='Affinity', hue='Type', data=affDF, ax=ax)
+    ax.set(yscale='log', ylabel='Affinity ($K_a$)')
+    ax.legend()
