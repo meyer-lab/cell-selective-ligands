@@ -33,7 +33,7 @@ mutaff = {
 }
 
 
-def getAffDict():
+def getAffDict1():
     """Returns a dictionary containing mutant dissociation constants for 2Ra and BGc"""
     return mutaff
 
