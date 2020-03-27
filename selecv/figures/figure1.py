@@ -86,13 +86,14 @@ def plotSampleConc(ax, df, concRange, popList):
 
     ax.plot(concScan, sampMeans, color='royalblue')
     ax.fill_between(concScan, underDev, overDev, color='royalblue', alpha=.1)
-    ax.set(xscale='log', xlim=(np.power(10, concRange[0]), np.power(10, concRange[1])))
+    ax.set(xscale='log', xlim=(np.power(10, concRange[0]), np.power(10, concRange[1])), ylabel='Binding Ratio', xlabel='Concentration (nM)')
 
 
 def affPlot(ax, affDF):
     """
     Plot affinities for both cytokines and antibodies.
     """
-    sns.barplot(x='Ligand', y='Affinity', hue='Type', data=affDF, ax=ax)
+    sns.barplot(x='Receptor/Ligand Pair', y='Affinity', hue='Type', data=affDF, ax=ax)
     ax.set(yscale='log', ylabel='Affinity ($K_a$)')
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=35, rotation_mode="anchor", ha="right", fontsize=7, position=(0, 0.02))
     ax.legend()
