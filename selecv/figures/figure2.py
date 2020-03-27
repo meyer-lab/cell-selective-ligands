@@ -17,14 +17,17 @@ val = 1.0
 def makeFigure():
     """ Make figure 2. """
     # Get list of axis objects
-    ax, f = getSetup((7, 6), (4, 3))
+    ax, f = getSetup((7, 6), (3, 3))
     _, populationsdf = getPopDict()
-    affHeatMap(ax[0], populationsdf, [5, 9], ['Pop3', 'Pop2'])
-    affHeatMap(ax[1], populationsdf, [5, 9], ['Pop5', 'Pop3'])
-    affHeatMap(ax[2], populationsdf, [5, 9], ['Pop6', 'Pop3'])
-    affHeatMap(ax[3], populationsdf, [5, 9], ['Pop7', 'Pop4'])
-    affHeatMap(ax[4], populationsdf, [5, 9], ['Pop5', 'Pop6'])
-    affHeatMap(ax[5], populationsdf, [5, 9], ['Pop7', 'Pop4', 'Pop3'])
+    affHeatMap(ax[0], populationsdf, [4, 9], ['Pop3', 'Pop2'])
+    affHeatMap(ax[1], populationsdf, [4, 9], ['Pop5', 'Pop3'])
+    affHeatMap(ax[2], populationsdf, [4, 9], ['Pop6', 'Pop3'])
+    affHeatMap(ax[3], populationsdf, [4, 9], ['Pop7', 'Pop4'])
+    affHeatMap(ax[4], populationsdf, [4, 9], ['Pop5', 'Pop6'])
+    affHeatMap(ax[5], populationsdf, [4, 9], ['Pop7', 'Pop8'])
+    affHeatMap(ax[6], populationsdf, [4, 9], ['Pop7', 'Pop4', 'Pop3'])
+    affHeatMap(ax[7], populationsdf, [4, 9], ['Pop6', 'Pop4', 'Pop3'])
+    affHeatMap(ax[8], populationsdf, [4, 9], ['Pop5', 'Pop6', 'Pop3'])
 
     subplotLabel(ax)
 
@@ -36,7 +39,7 @@ def affHeatMap(ax, df, affRange, popList):
     npoints = 15
     ticks = np.full([npoints], None)
     affScan = np.logspace(affRange[0], affRange[1], npoints)
-    ticks[0], ticks[-1] = '10e' + str(affRange[0]), '10e' + str(affRange[1])
+    ticks[0], ticks[-1] = '10e' + str(affRange[0] - 1), '10e' + str(affRange[1] - 1)
     recMeans, Covs = [], []
     Title = popList[0] + ' to ' + popList[1]
     for ii, pop in enumerate(popList):
@@ -54,5 +57,5 @@ def affHeatMap(ax, df, affRange, popList):
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
     sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=ticks, vmin=0, vmax=10)
-    ax.set(xlabel='Rec 1 Affinity', ylabel='Rec 2 Affinity')
+    ax.set(xlabel='Rec 1 Affinity ($K_a$)', ylabel='Rec 2 Affinity ($K_a$)')
     ax.set_title(Title + ' binding ratio', fontsize=8 - 0.4 * len(popList))

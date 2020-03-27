@@ -15,20 +15,20 @@ val = 1.0
 def makeFigure():
     """ Make figure 4. """
     # Get list of axis objects
-    ax, f = getSetup((7, 6), (3, 4))
+    ax, f = getSetup((5, 6), (2, 4))
 
     subplotLabel(ax)
 
-    affinities = np.array([[10e8, 10e6], [10e6, 10e8]])
+    affinities = np.array([[10e8, 10e1], [10e1, 10e8]])
     _, populationsdf = getPopDict()
     MixPlot(ax[0], populationsdf, ['Pop3', 'Pop2'], affinities, 101)
     MixPlot(ax[1], populationsdf, ['Pop3', 'Pop4'], affinities, 101)
     MixPlot(ax[2], populationsdf, ['Pop5', 'Pop6'], affinities, 101)
-    MixPlot(ax[3], populationsdf, ['Pop7', 'Pop6'], affinities, 101)
+    MixPlot(ax[3], populationsdf, ['Pop7', 'Pop8'], affinities, 101)
     MixPlot(ax[4], populationsdf, ['Pop5', 'Pop3', 'Pop4'], affinities, 101)
     MixPlot(ax[5], populationsdf, ['Pop6', 'Pop3', 'Pop4'], affinities, 101)
     MixPlot(ax[6], populationsdf, ['Pop7', 'Pop3', 'Pop4'], affinities, 101)
-    MixPlot(ax[7], populationsdf, ['Pop6', 'Pop2', 'Pop3', 'Pop4', 'Pop7'], affinities, 101)
+    MixPlot(ax[7], populationsdf, ['Pop7', 'Pop8'], affinities, 101)
 
     return f
 
