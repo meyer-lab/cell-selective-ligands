@@ -15,7 +15,7 @@ val = 1.0
 def makeFigure():
     """ Make figure 4. """
     # Get list of axis objects
-    ax, f = getSetup((5, 6), (2, 4))
+    ax, f = getSetup((7, 6), (3, 3))
 
     subplotLabel(ax)
 
@@ -25,10 +25,11 @@ def makeFigure():
     MixPlot(ax[1], populationsdf, ['Pop3', 'Pop4'], affinities, 101)
     MixPlot(ax[2], populationsdf, ['Pop5', 'Pop6'], affinities, 101)
     MixPlot(ax[3], populationsdf, ['Pop7', 'Pop8'], affinities, 101)
-    MixPlot(ax[4], populationsdf, ['Pop5', 'Pop3', 'Pop4'], affinities, 101)
-    MixPlot(ax[5], populationsdf, ['Pop6', 'Pop3', 'Pop4'], affinities, 101)
-    MixPlot(ax[6], populationsdf, ['Pop7', 'Pop3', 'Pop4'], affinities, 101)
-    MixPlot(ax[7], populationsdf, ['Pop7', 'Pop8'], affinities, 101)
+    MixPlot(ax[4], populationsdf, ['Pop5', 'Pop8'], affinities, 101)
+    MixPlot(ax[5], populationsdf, ['Pop5', 'Pop3', 'Pop4'], affinities, 101)
+    MixPlot(ax[6], populationsdf, ['Pop6', 'Pop3', 'Pop4'], affinities, 101)
+    MixPlot(ax[7], populationsdf, ['Pop7', 'Pop3', 'Pop4'], affinities, 101)
+    MixPlot(ax[8], populationsdf, ['Pop8', 'Pop5', 'Pop6'], affinities, 101)
 
     return f
 
