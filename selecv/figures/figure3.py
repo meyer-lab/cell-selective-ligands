@@ -3,7 +3,7 @@ Figure 3. Exploration of Valency.
 """
 import numpy as np
 from matplotlib.lines import Line2D
-from .figureCommon import subplotLabel, getSetup
+from .figureCommon import subplotLabel, getSetup, PlotCellPops
 from ..imports import getPopDict
 from ..sampling import sampleSpec
 from ..model import polyfc
@@ -22,9 +22,9 @@ def makeFigure():
     valencyScan = np.logspace(0.0, 5.0, base=2.0, num=10)
     _, populationsdf = getPopDict()
 
-    valDemo(ax[0])
-    ConcValPlot(ax[1])
-    KxValPlot(ax[2])
+    PlotCellPops(ax[0], populationsdf)
+    valDemo(ax[1])
+    ConcValPlot(ax[2])
     ValencyPlot(ax[3], populationsdf, valencyScan, ['Pop3', 'Pop2'])
     ValencyPlot(ax[4], populationsdf, valencyScan, ['Pop7', 'Pop5'])
     ValencyPlot(ax[5], populationsdf, valencyScan, ['Pop7', 'Pop8'])
@@ -74,7 +74,7 @@ def valDemo(ax):
     for ii, aff in enumerate(affs):
         for jj, valencyLab in enumerate(labels):
             for kk, recCount in enumerate(recScan):
-                percHold[kk] = polyfc(ligConc, KxStarP, jj + 1, recCount, [1], np.array([[aff]])) / recCount
+                percHold[kk] = polyfc(ligConc, KxStarP, jj + 1, recCount, [1], np.array([[aff]]))[1] / recCount
             ax.plot(recScan, percHold, label=valencyLab, linestyle=lines[ii], color=colors[jj])
 
     ax.set(xlim=(1, 10000), ylim=(0, 1), xlabel='Receptor Abundance', ylabel='Fraction Receptors Bound', xscale='log')
@@ -96,7 +96,7 @@ def ConcValPlot(ax):
 
     for conc in concScan:
         for jj, recCount in enumerate(recScan):
-            percHold[jj] = polyfc(conc, KxStarP, valency, recCount, [1], np.array([[affinity]])) / recCount
+            percHold[jj] = polyfc(conc, KxStarP, valency, recCount, [1], np.array([[affinity]]))[1] / recCount
         ax.plot(recScan, percHold, label=str(conc * 10e8) + ' nM')
 
     ax.set(xlim=(1, 10000), ylim=(0, 1), xlabel='Receptor Abundance', ylabel='Fraction Receptors Bound', xscale='log')
@@ -116,7 +116,7 @@ def KxValPlot(ax):
     for ii, conc in enumerate(concs):
         for jj, Kx in enumerate(KxScan):
             for kk, recCount in enumerate(recScan):
-                percHold[kk] = polyfc(conc, Kx, valency, recCount, [1], np.array([[affinity]])) / recCount
+                percHold[kk] = polyfc(conc, Kx, valency, recCount, [1], np.array([[affinity]]))[1] / recCount
             ax.plot(recScan, percHold, label='Kx* = ' + str(Kx), linestyle=lines[ii], color=colors[jj])
 
     ax.set(xlim=(1, 10000), ylim=(0, 1), xlabel='Receptor Abundance', ylabel='Fraction Receptors Bound', xscale='log')
