@@ -3,7 +3,6 @@ Figure 1. Introduce the model system.
 """
 
 import seaborn as sns
-import pandas as pds
 import numpy as np
 from .figureCommon import subplotLabel, getSetup, PlotCellPops
 from ..imports import import_Rexpr, getPopDict, getAffDict
