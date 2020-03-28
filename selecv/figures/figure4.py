@@ -21,7 +21,7 @@ def makeFigure():
 
     affinities = np.array([[10e8, 10e1], [10e1, 10e8]])
     _, populationsdf = getPopDict()
-    PlotCellPops(ax[0], populationsdf, bbox=True)
+    PlotCellPops(ax[0], populationsdf)
     MixPlot(ax[1], populationsdf, ['Pop3', 'Pop2'], affinities, 101)
     MixPlot(ax[2], populationsdf, ['Pop5', 'Pop3', 'Pop4'], affinities, 101)
     MixPlot(ax[3], populationsdf, ['Pop6', 'Pop3', 'Pop4'], affinities, 101)

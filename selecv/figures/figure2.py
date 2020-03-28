@@ -19,7 +19,7 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((7, 4), (2, 3))
     _, populationsdf = getPopDict()
-    PlotCellPops(ax[0], populationsdf, bbox=True)
+    PlotCellPops(ax[0], populationsdf)
     affHeatMap(ax[1], populationsdf, [4, 9], ['Pop3', 'Pop2'], Cbar=False)
     affHeatMap(ax[2], populationsdf, [4, 9], ['Pop5', 'Pop3'])
     affHeatMap(ax[3], populationsdf, [4, 9], ['Pop7', 'Pop4'], Cbar=False)
