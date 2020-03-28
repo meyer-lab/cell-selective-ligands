@@ -3,6 +3,7 @@ Contains utilities and functions that are commonly used in the figure creation f
 """
 from string import ascii_lowercase
 from matplotlib import gridspec, pyplot as plt
+from scipy.stats import multivariate_normal
 import seaborn as sns
 import pandas as pds
 import numpy as np
