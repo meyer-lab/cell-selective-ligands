@@ -3,7 +3,7 @@ Figure 4. Mixtures for enhanced targeting.
 """
 
 import numpy as np
-from .figureCommon import subplotLabel, getSetup
+from .figureCommon import subplotLabel, getSetup, PlotCellPops
 from ..imports import getPopDict
 from ..sampling import sampleSpec
 
@@ -15,21 +15,18 @@ val = 1.0
 def makeFigure():
     """ Make figure 4. """
     # Get list of axis objects
-    ax, f = getSetup((7, 6), (3, 3))
+    ax, f = getSetup((7, 4), (2, 3))
 
     subplotLabel(ax)
 
     affinities = np.array([[10e8, 10e1], [10e1, 10e8]])
     _, populationsdf = getPopDict()
-    MixPlot(ax[0], populationsdf, ['Pop3', 'Pop2'], affinities, 101)
-    MixPlot(ax[1], populationsdf, ['Pop3', 'Pop4'], affinities, 101)
-    MixPlot(ax[2], populationsdf, ['Pop5', 'Pop6'], affinities, 101)
-    MixPlot(ax[3], populationsdf, ['Pop7', 'Pop8'], affinities, 101)
-    MixPlot(ax[4], populationsdf, ['Pop5', 'Pop8'], affinities, 101)
-    MixPlot(ax[5], populationsdf, ['Pop5', 'Pop3', 'Pop4'], affinities, 101)
-    MixPlot(ax[6], populationsdf, ['Pop6', 'Pop3', 'Pop4'], affinities, 101)
-    MixPlot(ax[7], populationsdf, ['Pop7', 'Pop3', 'Pop4'], affinities, 101)
-    MixPlot(ax[8], populationsdf, ['Pop8', 'Pop5', 'Pop6'], affinities, 101)
+    PlotCellPops(ax[0], populationsdf, bbox=True)
+    MixPlot(ax[1], populationsdf, ['Pop3', 'Pop2'], affinities, 101)
+    MixPlot(ax[2], populationsdf, ['Pop5', 'Pop3', 'Pop4'], affinities, 101)
+    MixPlot(ax[3], populationsdf, ['Pop6', 'Pop3', 'Pop4'], affinities, 101)
+    MixPlot(ax[4], populationsdf, ['Pop7', 'Pop3', 'Pop4'], affinities, 101)
+    MixPlot(ax[5], populationsdf, ['Pop8', 'Pop5', 'Pop6'], affinities, 101)
 
     return f
 
