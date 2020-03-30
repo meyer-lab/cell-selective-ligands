@@ -4,7 +4,7 @@ SHELL := /bin/bash
 
 all: output/manuscript.html pylint.log
 
-flist = 1 2 3 4 5
+flist = 1 2 3 4 5 9
 
 venv: venv/bin/activate
 
