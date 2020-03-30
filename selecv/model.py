@@ -7,6 +7,7 @@ from numba import njit
 from scipy.optimize import root
 from scipy.special import binom
 
+
 @njit
 def Req_func(Req, Rtot, L0fA, AKxStar, f):
     """ Mass balance. Transformation to account for bounds. """
@@ -69,18 +70,18 @@ def Req_Regression(L0, KxStar, f, Rtot, LigC, Kav):
     return lsq['x'].reshape(1, -1)
 
 
-
 def Req_func2(Req, L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     Psi = np.ones((Kav.shape[0], Kav.shape[1] + 1))
     Psi[:, :Kav.shape[1]] *= Req * Kav * KxStar
-    Psirs = np.sum(Psi, axis = 1).reshape(-1, 1)
+    Psirs = np.sum(Psi, axis=1).reshape(-1, 1)
     Psinorm = (Psi / Psirs)[:, :-1]
 
-    Rbound = L0 / KxStar * np.sum(Ctheta.reshape(-1, 1) * \
-                                  np.dot(Cplx, Psinorm) * \
-                                  np.exp(np.dot(Cplx, np.log1p(Psirs - 1))), \
-                                  axis = 0)
+    Rbound = L0 / KxStar * np.sum(Ctheta.reshape(-1, 1) *
+                                  np.dot(Cplx, Psinorm) *
+                                  np.exp(np.dot(Cplx, np.log1p(Psirs - 1))),
+                                  axis=0)
     return Req + Rbound - Rtot
+
 
 def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     """
@@ -109,7 +110,7 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     Ctheta = Ctheta / np.sum(Ctheta)
 
     # Solve Req
-    lsq = root(Req_func2, Rtot, method="lm", \
+    lsq = root(Req_func2, Rtot, method="lm",
                args=(L0, KxStar, Rtot, Cplx, Ctheta, Kav), options={'maxiter': 3000})
     assert lsq['success'], "Failure in rootfinding. " + str(lsq)
     Req = lsq['x'].reshape(1, -1)
