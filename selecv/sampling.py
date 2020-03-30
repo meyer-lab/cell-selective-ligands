@@ -29,15 +29,16 @@ def sampleSpec(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav):
     return np.quantile(quants, [0.1, 0.5, 0.9])
 
 
-def samplePop(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav):
+def samplePop(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav, quantity=0):
     """
     Sample the binding for one population.
     Note that receptor expression is given in log10 units
+    Quantity: (0) Lbound, (1) Rbound
     """
     quants = np.empty(nsample)
     pop = np.power(10.0, multivariate_normal.rvs(mean=RtotMeans, cov=RtotCovs, size=nsample))
 
     for ii in range(nsample):
-        quants[ii] = polyfc(L0, KxStar, f, pop[ii, :], LigC, Kav)
+        quants[ii] = polyfc(L0, KxStar, f, pop[ii, :], LigC, Kav)[quantity]
 
     return quants

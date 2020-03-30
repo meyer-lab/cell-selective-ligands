@@ -3,11 +3,9 @@ Figure 1. Introduce the model system.
 """
 
 import seaborn as sns
-import pandas as pds
 import numpy as np
-from scipy.stats import multivariate_normal
-from .figureCommon import subplotLabel, getSetup
-from ..imports import import_Rexpr, getPopDict
+from .figureCommon import subplotLabel, getSetup, PlotCellPops
+from ..imports import import_Rexpr, getPopDict, getAffDict
 from ..sampling import sampleSpec
 
 ligConc = np.array([10e-9])
@@ -22,45 +20,23 @@ def makeFigure():
 
     subplotLabel(ax)
 
+    _, affData = getAffDict()
     _, npdata, cell_names = import_Rexpr()
     _, populations = getPopDict()
-    plotCellpops(ax[0:2], npdata, cell_names, populations)
+    plotRealPops(ax[0], npdata, cell_names)
+    PlotCellPops(ax[1], populations)
     plotSampleConc(ax[2], populations, [-12., 4., ], ['Pop3', 'Pop2'])
+    affPlot(ax[3], affData)
 
     return f
 
 
-def plotCellpops(ax, data, names, df):
-    "Plot both theoretical and real receptor abundances"
+def plotRealPops(ax, data, names):
+    "Plot both real receptor abundances"
     for ii, cell in enumerate(names):
-        ax[0].scatter(data[ii, 0], data[ii, 1], label=cell)
-    ax[0].set(xlabel='IL2Rα Abundance', ylabel='IL-2Rβ Abundance', xscale='log', yscale='log')
-    ax[0].legend()
-
-    sampleData = sampleReceptors(df, 20000)
-    sns.set_palette("husl", 7)
-    for pop in sampleData.Population.unique():
-        popDF = sampleData.loc[sampleData['Population'] == pop]
-        sns.kdeplot(popDF.Receptor_1, popDF.Receptor_2, ax=ax[1], label=pop, shade=True, shade_lowest=False)
-    ax[1].legend()
-    ax[1].set(xscale="log", yscale="log")
-
-
-def sampleReceptors(df, nsample=100):
-    """
-    Generate samples in each sample space
-    """
-    Populations = df.Population.unique()
-    sampledf = pds.DataFrame(columns=['Population', 'Receptor_1', 'Receptor_2'])
-    for population in Populations:
-        populationdf = df[df['Population'] == population]
-        RtotMeans = np.array([populationdf.Receptor_1.to_numpy(), populationdf.Receptor_2.to_numpy()]).flatten()
-        RtotCovs = populationdf.Covariance_Matrix.to_numpy()[0]
-        pop = np.power(10.0, multivariate_normal.rvs(mean=RtotMeans, cov=RtotCovs, size=nsample))
-        popdf = pds.DataFrame({'Population': population, 'Receptor_1': pop[:, 0], 'Receptor_2': pop[:, 1]})
-        sampledf = sampledf.append(popdf)
-
-    return sampledf
+        ax.scatter(data[ii, 0], data[ii, 1], label=cell)
+    ax.set(xlabel='IL2Rα Abundance', ylabel='IL-2Rβ Abundance', xscale='log', yscale='log')
+    ax.legend()
 
 
 def plotSampleConc(ax, df, concRange, popList):
@@ -84,4 +60,14 @@ def plotSampleConc(ax, df, concRange, popList):
 
     ax.plot(concScan, sampMeans, color='royalblue')
     ax.fill_between(concScan, underDev, overDev, color='royalblue', alpha=.1)
-    ax.set(xscale='log', xlim=(np.power(10, concRange[0]), np.power(10, concRange[1])))
+    ax.set(xscale='log', xlim=(np.power(10, concRange[0]), np.power(10, concRange[1])), ylabel='Binding Ratio', xlabel='Concentration (nM)')
+
+
+def affPlot(ax, affDF):
+    """
+    Plot affinities for both cytokines and antibodies.
+    """
+    sns.barplot(x='Receptor/Ligand Pair', y='Affinity', hue='Type', data=affDF, ax=ax)
+    ax.set(yscale='log', ylabel='Affinity ($K_a$)')
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=35, rotation_mode="anchor", ha="right", fontsize=7, position=(0, 0.02))
+    ax.legend()

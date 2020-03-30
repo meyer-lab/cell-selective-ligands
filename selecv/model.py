@@ -45,8 +45,9 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
     Phisum = np.sum(Phi[:, :nr])
 
     Lbound = L0 / KxStar * ((1 + Phisum)**f - 1)
+    Rbound = L0 / KxStar * f * Phisum * (1 + Phisum)**(f - 1)
 
-    return Lbound
+    return Lbound, Rbound
 
 
 def Req_Regression(L0, KxStar, f, Rtot, LigC, Kav):
