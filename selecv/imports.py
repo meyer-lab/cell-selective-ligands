@@ -33,20 +33,10 @@ mutaff = {
 }
 
 
-def getAffDict():
+def getAffDict1():
     """Returns a dictionary containing mutant dissociation constants for 2Ra and BGc"""
     return mutaff
 
-
-theoreticalpops = {
-    'Pop1': [1, 1],
-    'Pop2': [1000, 100],
-    'Pop3': [10000, 100],
-    'Pop4': [100, 10000],
-    'Pop5': [3000, 5000],
-    'Pop6': [5000, 3000],
-    'Pop7': [10000, 10000]
-}
 
 theoreticalpops = {
     'Pop1': [2, 2, [[0.01, 0.005], [0.005, 0.01]]],
@@ -55,7 +45,8 @@ theoreticalpops = {
     'Pop4': [2, 4, [[0.005, 0.00], [0.00, 0.015]]],
     'Pop5': [3.2, 3.8, [[0.01, 0.005], [0.005, 0.01]]],
     'Pop6': [3.8, 3.2, [[0.01, 0.005], [0.005, 0.01]]],
-    'Pop7': [4, 4, [[0.01, 0.01], [0.02, 0.01]]]
+    'Pop7': [4, 4, [[0.01, 0.01], [0.02, 0.01]]],
+    'Pop8': [3.2, 3.2, [[0.05, -0.04], [-0.04, 0.05]]]
 }
 
 
@@ -65,3 +56,24 @@ def getPopDict():
     populationdf = populationdf.reset_index()
     populationdf.columns = ['Population', 'Receptor_1', 'Receptor_2', 'Covariance_Matrix']
     return theoreticalpops, populationdf
+
+
+affDict = {
+    'IL2·IL2Rα': [1 / 10 * 10e8, 'Cytokine'],
+    'IL2·IL2Rβ': [1 / 144 * 10e8, 'Cytokine'],
+    'IL15·IL2Rα': [1 / 438 * 10e8, 'Cytokine'],
+    'IL15·IL15R': [1 / 0.065 * 10e8, 'Cytokine'],
+    'IL7·IL7R': [1 / 59.0 * 10e8, 'Cytokine'],
+    'IL9·IL9R': [1 / 0.1 * 10e8, 'Cytokine'],
+    'IL4·IL4R': [1 / 1.0 * 10e8, 'Cytokine'],
+    'IL21·IL21R': [1 / 0.07 * 10e8, 'Cytokine'],
+    'FcGamma': [6.5e7, 'FcG']
+}
+
+
+def getAffDict():
+    """Returns dictionary and dataframe containt theoretical populations"""
+    affDF = pds.DataFrame.from_dict(affDict, orient='index', columns=['Affinity', 'Type'])
+    affDF = affDF.reset_index()
+    affDF = affDF.rename(columns={'index': 'Receptor/Ligand Pair', 'Affinity': 'Affinity', 'Type': 'Type'})
+    return affDict, affDF
