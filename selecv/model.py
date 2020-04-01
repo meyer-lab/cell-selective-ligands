@@ -5,7 +5,6 @@ Implementation of a simple multivalent binding model.
 import numpy as np
 from numba import njit
 from scipy.optimize import root
-from scipy.special import binom
 
 
 @njit
