@@ -1,12 +1,10 @@
 """
 
 """
-
-from .figureCommon import getSetup
-
-
 import numpy as np
 import pandas as pd
+from .figureCommon import getSetup
+from ..model import polyc
 
 
 def makeFigure(L0=1e-9, KxStar=10**-12.2, ff=4, offdiag=1e5, comp=[[4, 0], [0, 4]]):
