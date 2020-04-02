@@ -99,7 +99,6 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     :return: Lbound
     """
     # Consistency check
-    L0 = L0 / f
     Kav = np.array(Kav)
     assert Kav.ndim == 2
     Rtot = np.array(Rtot)
