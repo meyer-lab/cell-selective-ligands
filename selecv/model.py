@@ -11,7 +11,7 @@ from scipy.optimize import root
 def Req_func(Req, Rtot, L0fA, AKxStar, f):
     """ Mass balance. Transformation to account for bounds. """
     Phisum = np.dot(AKxStar, Req.T)
-    return Req + L0fA * Req * (1 + Phisum)**(f - 1) - Rtot
+    return Req + L0fA * Req * (1 + Phisum) ** (f - 1) - Rtot
 
 
 def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
@@ -44,14 +44,14 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
     Phi[:, :nr] *= Kav * Req * KxStar
     Phisum = np.sum(Phi[:, :nr])
 
-    Lbound = L0 / KxStar * ((1 + Phisum)**f - 1)
-    Rbound = L0 / KxStar * f * Phisum * (1 + Phisum)**(f - 1)
+    Lbound = L0 / KxStar * ((1 + Phisum) ** f - 1)
+    Rbound = L0 / KxStar * f * Phisum * (1 + Phisum) ** (f - 1)
 
     return Lbound, Rbound
 
 
 def Req_Regression(L0, KxStar, f, Rtot, LigC, Kav):
-    '''Run least squares regression to calculate the Req vector'''
+    """Run least squares regression to calculate the Req vector"""
     A = np.dot(LigC.T, Kav)
     L0fA = L0 * f * A
     AKxStar = A * KxStar
@@ -61,24 +61,20 @@ def Req_Regression(L0, KxStar, f, Rtot, LigC, Kav):
     x0 = np.multiply(1.0 - np.divide(x0, 1 + x0), Rtot)
 
     # Solve Req by calling least_squares() and Req_func()
-    lsq = root(Req_func, x0, method="lm", args=(Rtot, L0fA, AKxStar, f), options={'maxiter': 3000})
+    lsq = root(Req_func, x0, method="lm", args=(Rtot, L0fA, AKxStar, f), options={"maxiter": 3000})
 
-    assert lsq['success'], \
-        "Failure in rootfinding. " + str(lsq)
+    assert lsq["success"], "Failure in rootfinding. " + str(lsq)
 
-    return lsq['x'].reshape(1, -1)
+    return lsq["x"].reshape(1, -1)
 
 
 def Req_func2(Req, L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     Psi = np.ones((Kav.shape[0], Kav.shape[1] + 1))
-    Psi[:, :Kav.shape[1]] *= Req * Kav * KxStar
+    Psi[:, : Kav.shape[1]] *= Req * Kav * KxStar
     Psirs = np.sum(Psi, axis=1).reshape(-1, 1)
     Psinorm = (Psi / Psirs)[:, :-1]
 
-    Rbound = L0 / KxStar * np.sum(Ctheta.reshape(-1, 1) *
-                                  np.dot(Cplx, Psinorm) *
-                                  np.exp(np.dot(Cplx, np.log1p(Psirs - 1))),
-                                  axis=0)
+    Rbound = L0 / KxStar * np.sum(Ctheta.reshape(-1, 1) * np.dot(Cplx, Psinorm) * np.exp(np.dot(Cplx, np.log1p(Psirs - 1))), axis=0)
     return Req + Rbound - Rtot
 
 
@@ -109,14 +105,13 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     Ctheta = Ctheta / np.sum(Ctheta)
 
     # Solve Req
-    lsq = root(Req_func2, Rtot, method="lm",
-               args=(L0, KxStar, Rtot, Cplx, Ctheta, Kav), options={'maxiter': 3000})
-    assert lsq['success'], "Failure in rootfinding. " + str(lsq)
-    Req = lsq['x'].reshape(1, -1)
+    lsq = root(Req_func2, Rtot, method="lm", args=(L0, KxStar, Rtot, Cplx, Ctheta, Kav), options={"maxiter": 3000})
+    assert lsq["success"], "Failure in rootfinding. " + str(lsq)
+    Req = lsq["x"].reshape(1, -1)
 
     # Calculate the results
     Psi = np.ones((Kav.shape[0], Kav.shape[1] + 1))
-    Psi[:, :Kav.shape[1]] *= Req * Kav * KxStar
+    Psi[:, : Kav.shape[1]] *= Req * Kav * KxStar
     Psirs = np.sum(Psi, axis=1).reshape(-1, 1)
 
     Lbound = L0 / KxStar * np.sum(Ctheta * np.expm1(np.dot(Cplx, np.log1p(Psirs - 1))).flatten())

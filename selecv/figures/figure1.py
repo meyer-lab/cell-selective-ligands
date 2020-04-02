@@ -25,7 +25,7 @@ def makeFigure():
     _, populations = getPopDict()
     plotRealPops(ax[0], npdata, cell_names)
     PlotCellPops(ax[1], populations)
-    plotSampleConc(ax[2], populations, [-12., 4., ], ['Pop3', 'Pop2'])
+    plotSampleConc(ax[2], populations, [-12.0, 4.0], ["Pop3", "Pop2"])
     affPlot(ax[3], affData)
 
     return f
@@ -35,7 +35,7 @@ def plotRealPops(ax, data, names):
     "Plot both real receptor abundances"
     for ii, cell in enumerate(names):
         ax.scatter(data[ii, 0], data[ii, 1], label=cell)
-    ax.set(xlabel='IL2Rα Abundance', ylabel='IL-2Rβ Abundance', xscale='log', yscale='log')
+    ax.set(xlabel="IL2Rα Abundance", ylabel="IL-2Rβ Abundance", xscale="log", yscale="log")
     ax.legend()
 
 
@@ -43,31 +43,33 @@ def plotSampleConc(ax, df, concRange, popList):
     "Makes a line chart comparing binding ratios of populations at multiple concentrations"
     npoints = 100
     concScan = np.logspace(concRange[0], concRange[1], npoints)
-    df1 = df[df['Population'] == popList[0]]
-    df2 = df[df['Population'] == popList[1]]
-    recMean1 = np.array([df1['Receptor_1'].to_numpy(), df1['Receptor_2'].to_numpy()]).flatten()
-    recMean2 = np.array([df2['Receptor_1'].to_numpy(), df2['Receptor_2'].to_numpy()]).flatten()
+    df1 = df[df["Population"] == popList[0]]
+    df2 = df[df["Population"] == popList[1]]
+    recMean1 = np.array([df1["Receptor_1"].to_numpy(), df1["Receptor_2"].to_numpy()]).flatten()
+    recMean2 = np.array([df2["Receptor_1"].to_numpy(), df2["Receptor_2"].to_numpy()]).flatten()
     Cov1 = df1.Covariance_Matrix.to_numpy()[0]
     Cov2 = df2.Covariance_Matrix.to_numpy()[0]
     sampMeans, underDev, overDev = np.zeros(npoints), np.zeros(npoints), np.zeros(npoints)
 
     for ii, conc in enumerate(concScan):
-        underDev[ii], sampMeans[ii], overDev[ii] = sampleSpec(conc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[10e-9, 10e-9]]))
+        underDev[ii], sampMeans[ii], overDev[ii] = sampleSpec(
+            conc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[10e-9, 10e-9]])
+        )
 
     sampMeans *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
     underDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
     overDev *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
 
-    ax.plot(concScan, sampMeans, color='royalblue')
-    ax.fill_between(concScan, underDev, overDev, color='royalblue', alpha=.1)
-    ax.set(xscale='log', xlim=(np.power(10, concRange[0]), np.power(10, concRange[1])), ylabel='Binding Ratio', xlabel='Concentration (nM)')
+    ax.plot(concScan, sampMeans, color="royalblue")
+    ax.fill_between(concScan, underDev, overDev, color="royalblue", alpha=0.1)
+    ax.set(xscale="log", xlim=(np.power(10, concRange[0]), np.power(10, concRange[1])), ylabel="Binding Ratio", xlabel="Concentration (nM)")
 
 
 def affPlot(ax, affDF):
     """
     Plot affinities for both cytokines and antibodies.
     """
-    sns.barplot(x='Receptor/Ligand Pair', y='Affinity', hue='Type', data=affDF, ax=ax)
-    ax.set(yscale='log', ylabel='Affinity ($K_a$)')
+    sns.barplot(x="Receptor/Ligand Pair", y="Affinity", hue="Type", data=affDF, ax=ax)
+    ax.set(yscale="log", ylabel="Affinity ($K_a$)")
     ax.set_xticklabels(ax.get_xticklabels(), rotation=35, rotation_mode="anchor", ha="right", fontsize=7, position=(0, 0.02))
     ax.legend()
