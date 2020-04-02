@@ -10,9 +10,9 @@ import pandas as pd
 
 
 def makeFigure(L0, KxStar, Comp, ff = None, Cplx = None, offdiag = 1e5):
-    nAffPts = 3
-    ax, fig = getSetup((7, 6), (nAffPts, nAffPts))
-    affRange = (6., 8.)
+    nAffPts = 4
+    ax, fig = getSetup((9, 8), (nAffPts, nAffPts))
+    affRange = (5., 8.)
     affScan = np.logspace(affRange[0], affRange[1], nAffPts)
     abundRange = (1., 4.)
     if ff is not None:
