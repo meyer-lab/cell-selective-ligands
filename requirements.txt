@@ -9,4 +9,4 @@ manubot==0.3.1
 pandoc-fignos==2.2.0
 pandoc-eqnos==2.1.1
 pandoc-tablenos==2.1.1
-numba==0.48.0
+jaxlib==0.1.43

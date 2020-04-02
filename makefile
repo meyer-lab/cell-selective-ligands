@@ -1,4 +1,5 @@
 SHELL := /bin/bash
+JAX_ENABLE_X64 := True
 
 .PHONY: clean test testprofile testcover docs
 

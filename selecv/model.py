@@ -3,16 +3,17 @@ Implementation of a simple multivalent binding model.
 """
 
 import numpy as np
-from numba import njit
+import jax.numpy as jnp
+from jax import jit, jacfwd
 from scipy.optimize import root
-from scipy.special import binom
 
 
-@njit
 def Req_func(Req, Rtot, L0fA, AKxStar, f):
     """ Mass balance. Transformation to account for bounds. """
-    Phisum = np.dot(AKxStar, Req.T)
+    Phisum = jnp.dot(AKxStar, Req.T)
     return Req + L0fA * Req * (1 + Phisum)**(f - 1) - Rtot
+
+Req_comp = jit(Req_func)
 
 
 def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
@@ -65,8 +66,11 @@ def Req_Regression(L0, KxStar, f, Rtot, LigC, Kav):
     x0 = np.max(L0fA, axis=0)
     x0 = np.multiply(1.0 - np.divide(x0, 1 + x0), Rtot)
 
+    ff = lambda x: Req_comp(x, Rtot, L0fA, AKxStar, f)
+    J = lambda x: jacfwd(ff)(x)
+
     # Solve Req by calling least_squares() and Req_func()
-    lsq = root(Req_func, x0, method="lm", args=(Rtot, L0fA, AKxStar, f), options={'maxiter': 3000})
+    lsq = root(ff, x0, method="lm", jac=J, options={'maxiter': 3000})
 
     assert lsq['success'], \
         "Failure in rootfinding. " + str(lsq)
