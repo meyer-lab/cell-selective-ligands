@@ -9,7 +9,7 @@ from ..imports import import_Rexpr, getPopDict, getAffDict
 from ..sampling import sampleSpec
 
 ligConc = np.array([10e-9])
-KxStarP = 10
+KxStarP = 10e-11
 val = 16.0
 
 
