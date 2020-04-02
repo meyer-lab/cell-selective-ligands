@@ -26,6 +26,7 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
     Kav: a matrix of Ka values. row = IgG's, col = FcgR's
     """
     # Data consistency check
+    L0 = L0 / f
     Kav = np.array(Kav)
     Rtot = np.array(Rtot)
     assert Rtot.ndim <= 1
@@ -95,6 +96,7 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     :return: Lbound
     """
     # Consistency check
+    L0 = L0 / f
     Kav = np.array(Kav)
     assert Kav.ndim == 2
     Rtot = np.array(Rtot)
