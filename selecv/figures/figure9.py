@@ -3,6 +3,7 @@
 """
 import numpy as np
 import pandas as pd
+import seaborn as sns
 from .figureCommon import getSetup
 from ..model import polyc
 
