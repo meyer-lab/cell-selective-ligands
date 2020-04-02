@@ -2,7 +2,7 @@ SHELL := /bin/bash
 
 .PHONY: clean test testprofile testcover docs
 
-all: output/manuscript.html pylint.log
+all: output/manuscript.html pylint.log coverage.xml
 
 flist = 1 2 3 4 5
 
@@ -47,7 +47,7 @@ test: venv
 	. venv/bin/activate; pytest -s
 
 coverage.xml: venv
-	. venv/bin/activate; pytest --junitxml=junit.xml --cov=lineage --cov-report xml:coverage.xml
+	. venv/bin/activate; pytest --junitxml=junit.xml --cov=selecv --cov-report xml:coverage.xml
 
 pylint.log: venv
 	. venv/bin/activate && (pylint --rcfile=./common/pylintrc selecv > pylint.log || echo "pylint exited with $?")

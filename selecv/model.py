@@ -25,6 +25,7 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
     Kav: a matrix of Ka values. row = IgG's, col = FcgR's
     """
     # Data consistency check
+    L0 = L0 / f
     Kav = np.array(Kav)
     Rtot = np.array(Rtot)
     assert Rtot.ndim <= 1
@@ -44,10 +45,14 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
     Phi[:, :nr] *= Kav * Req * KxStar
     Phisum = np.sum(Phi[:, :nr])
 
-    Lbound = L0 / KxStar * ((1 + Phisum) ** f - 1)
-    Rbound = L0 / KxStar * f * Phisum * (1 + Phisum) ** (f - 1)
+    Lbound = L0 / KxStar * ((1 + Phisum)**f - 1)
+    Rbound = L0 / KxStar * f * Phisum * (1 + Phisum)**(f - 1)
 
     return Lbound, Rbound
+
+
+def polyfcm(KxStar, f, Rtot, Lig, Kav):
+    return polyfc(np.sum(Lig) / f, KxStar, f, Rtot, Lig / np.sum(Lig), Kav)
 
 
 def Req_Regression(L0, KxStar, f, Rtot, LigC, Kav):
@@ -115,4 +120,10 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     Psirs = np.sum(Psi, axis=1).reshape(-1, 1)
 
     Lbound = L0 / KxStar * np.sum(Ctheta * np.expm1(np.dot(Cplx, np.log1p(Psirs - 1))).flatten())
-    return Lbound
+    Rbound = L0 / KxStar * np.sum(Ctheta * np.dot(Cplx, 1-1/Psirs).flatten()
+                                  * np.exp(np.dot(Cplx, np.log(Psirs))).flatten())
+    return Lbound, Rbound
+
+
+def polycm(KxStar, Rtot, Cplx, Ltheta, Kav):
+    return polyc(np.sum(Ltheta), KxStar, Rtot, Cplx, Ltheta/np.sum(Ltheta), Kav)
