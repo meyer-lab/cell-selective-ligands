@@ -54,6 +54,7 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
 
 
 def polyfcm(KxStar, f, Rtot, Lig, Kav):
+    """ Defines ligand concentration within the ligC variable, rather than as a separate variable. """
     return polyfc(np.sum(Lig) / f, KxStar, f, Rtot, Lig / np.sum(Lig), Kav)
 
 
