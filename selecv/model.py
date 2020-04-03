@@ -44,13 +44,18 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
     assert LigC.size == Kav.shape[0]
 
     # Run least squares to get Req
-    Req = Req_Regression(L0, KxStar, f, Rtot, LigC, Kav)
+    A = np.dot(LigC.T, Kav)
+    L0fA = L0 * f * A
+    AKxStar = A * KxStar
 
-    nr = Rtot.size  # the number of different receptors
+    # Solve Req by calling least_squares() and Req_func()
+    lsq = root(Req_func, Rtot, method="lm", args=(Rtot, L0fA, AKxStar, f), options={"maxiter": 3000})
+    assert lsq["success"], "Failure in rootfinding. " + str(lsq)
+    Req = lsq["x"].reshape(1, -1)
 
-    Phi = np.ones((LigC.size, nr + 1)) * LigC.reshape(-1, 1)
-    Phi[:, :nr] *= Kav * Req * KxStar
-    Phisum = np.sum(Phi[:, :nr])
+    Phi = np.ones((LigC.size, Rtot.size + 1)) * LigC.reshape(-1, 1)
+    Phi[:, :Rtot.size] *= Kav * Req * KxStar
+    Phisum = np.sum(Phi[:, :Rtot.size])
 
     Lbound = L0 / KxStar * ((1 + Phisum)**f - 1)
     Rbound = L0 / KxStar * f * Phisum * (1 + Phisum)**(f - 1)
@@ -60,24 +65,6 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
 
 def polyfcm(KxStar, f, Rtot, Lig, Kav):
     return polyfc(np.sum(Lig) / f, KxStar, f, Rtot, Lig / np.sum(Lig), Kav)
-
-
-def Req_Regression(L0, KxStar, f, Rtot, LigC, Kav):
-    """Run least squares regression to calculate the Req vector"""
-    A = np.dot(LigC.T, Kav)
-    L0fA = L0 * f * A
-    AKxStar = A * KxStar
-
-    # Identify an initial guess just on max monovalent interaction
-    x0 = np.max(L0fA, axis=0)
-    x0 = np.multiply(1.0 - np.divide(x0, 1 + x0), Rtot)
-
-    # Solve Req by calling least_squares() and Req_func()
-    lsq = root(Req_func, x0, method="lm", args=(Rtot, L0fA, AKxStar, f), options={"maxiter": 3000})
-
-    assert lsq["success"], "Failure in rootfinding. " + str(lsq)
-
-    return lsq["x"].reshape(1, -1)
 
 
 def Req_func2(Req, L0, KxStar, Rtot, Cplx, Ctheta, Kav):
@@ -118,8 +105,8 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     Req = lsq["x"].reshape(1, -1)
 
     # Calculate the results
-    Psi = np.ones((Kav.shape[0], Kav.shape[1] + 1))
-    Psi[:, : Kav.shape[1]] *= Req * Kav * KxStar
+    Psi = np.ones((Kav.shape[0], Rtot.size + 1))
+    Psi[:, : Rtot.size] *= Req * Kav * KxStar
     Psirs = np.sum(Psi, axis=1).reshape(-1, 1)
 
     Lbound = L0 / KxStar * np.sum(Ctheta * np.expm1(np.dot(Cplx, np.log1p(Psirs - 1))).flatten())
