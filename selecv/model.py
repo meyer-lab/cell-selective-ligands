@@ -126,10 +126,10 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     Psirs = np.sum(Psi, axis=1).reshape(-1, 1)
 
     Lbound = L0 / KxStar * np.sum(Ctheta * np.expm1(np.dot(Cplx, np.log1p(Psirs - 1))).flatten())
-    Rbound = L0 / KxStar * np.sum(Ctheta * np.dot(Cplx, 1-1/Psirs).flatten()
+    Rbound = L0 / KxStar * np.sum(Ctheta * np.dot(Cplx, 1 - 1 / Psirs).flatten()
                                   * np.exp(np.dot(Cplx, np.log(Psirs))).flatten())
     return Lbound, Rbound
 
 
 def polycm(KxStar, Rtot, Cplx, Ltheta, Kav):
-    return polyc(np.sum(Ltheta), KxStar, Rtot, Cplx, Ltheta/np.sum(Ltheta), Kav)
+    return polyc(np.sum(Ltheta), KxStar, Rtot, Cplx, Ltheta / np.sum(Ltheta), Kav)
