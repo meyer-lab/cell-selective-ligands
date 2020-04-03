@@ -7,14 +7,17 @@ from numba import njit
 from scipy.optimize import root
 
 
-def paramCheck(Kav, Rtot):
+def paramCheck(Kav, Rtot, LigC):
     """ Common checks of input parameters. """
     Kav = np.array(Kav)
     Rtot = np.array(Rtot)
+    LigC = np.array(LigC)
     assert Kav.ndim == 2
-    assert Rtot.size == Kav.shape[1]
+    assert LigC.ndim == 1
     assert Rtot.ndim == 1
-    return Kav, Rtot
+    assert Rtot.size == Kav.shape[1]
+    assert np.isclose(np.sum(LigC), 1.0)
+    return Kav, Rtot, LigC
 
 
 @njit
@@ -36,11 +39,7 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
     """
     # Data consistency check
     L0 = L0 / f
-    Kav, Rtot = paramCheck(Kav, Rtot)
-
-    LigC = np.array(LigC)
-    assert LigC.ndim <= 1
-    LigC = LigC / np.sum(LigC)
+    Kav, Rtot, LigC = paramCheck(Kav, Rtot, LigC)
     assert LigC.size == Kav.shape[0]
 
     # Run least squares to get Req
@@ -89,15 +88,11 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     :return: Lbound
     """
     # Consistency check
-    Kav, Rtot = paramCheck(Kav, Rtot)
-
+    Kav, Rtot, Ctheta = paramCheck(Kav, Rtot, Ctheta)
     Cplx = np.array(Cplx)
     assert Cplx.ndim == 2
-    Ctheta = np.array(Ctheta)
-    assert Ctheta.ndim == 1
     assert Kav.shape[0] == Cplx.shape[1]
     assert Cplx.shape[0] == Ctheta.size
-    Ctheta = Ctheta / np.sum(Ctheta)
 
     # Solve Req
     lsq = root(Req_func2, Rtot, method="lm", args=(L0, KxStar, Rtot, Cplx, Ctheta, Kav), options={"maxiter": 3000})

@@ -43,6 +43,7 @@ class TestPolyc(unittest.TestCase):
         nr = np.random.randint(1, 10)
         Rtot = np.floor(100. + np.random.rand(nr) * (10. ** np.random.randint(4, 6, size=nr)))
         LigC = np.random.rand(nl) * (10. ** np.random.randint(1, 2, size=nl))
+        LigC /= np.sum(LigC)
         Kav = np.random.rand(nl, nr) * (10. ** np.random.randint(3, 7, size=(nl, nr)))
 
         res = polyfc(L0 * f, KxStar, f, Rtot, LigC, Kav)
