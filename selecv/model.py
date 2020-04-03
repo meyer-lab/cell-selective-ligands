@@ -7,6 +7,16 @@ from numba import njit
 from scipy.optimize import root
 
 
+def paramCheck(Kav, Rtot):
+    """ Common checks of input parameters. """
+    Kav = np.array(Kav)
+    Rtot = np.array(Rtot)
+    assert Kav.ndim == 2
+    assert Rtot.size == Kav.shape[1]
+    assert Rtot.ndim == 1
+    return Kav, Rtot
+
+
 @njit
 def Req_func(Req, Rtot, L0fA, AKxStar, f):
     """ Mass balance. Transformation to account for bounds. """
@@ -26,15 +36,12 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
     """
     # Data consistency check
     L0 = L0 / f
-    Kav = np.array(Kav)
-    Rtot = np.array(Rtot)
-    assert Rtot.ndim <= 1
+    Kav, Rtot = paramCheck(Kav, Rtot)
+
     LigC = np.array(LigC)
     assert LigC.ndim <= 1
     LigC = LigC / np.sum(LigC)
     assert LigC.size == Kav.shape[0]
-    assert Rtot.size == Kav.shape[1]
-    assert Kav.ndim == 2
 
     # Run least squares to get Req
     Req = Req_Regression(L0, KxStar, f, Rtot, LigC, Kav)
@@ -95,17 +102,13 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     :return: Lbound
     """
     # Consistency check
-    Kav = np.array(Kav)
-    assert Kav.ndim == 2
-    Rtot = np.array(Rtot)
-    assert Rtot.ndim == 1
+    Kav, Rtot = paramCheck(Kav, Rtot)
+
     Cplx = np.array(Cplx)
     assert Cplx.ndim == 2
     Ctheta = np.array(Ctheta)
     assert Ctheta.ndim == 1
-
     assert Kav.shape[0] == Cplx.shape[1]
-    assert Kav.shape[1] == Rtot.size
     assert Cplx.shape[0] == Ctheta.size
     Ctheta = Ctheta / np.sum(Ctheta)
 
