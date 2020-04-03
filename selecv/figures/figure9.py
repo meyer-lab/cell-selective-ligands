@@ -7,6 +7,9 @@ from ..model import polyfc, polyc
 
 import numpy as np
 import pandas as pd
+import seaborn as sns
+from .figureCommon import getSetup
+from ..model import polyc
 
 
 def makeFigure(L0, KxStar, Comp, ff = None, Cplx = None, offdiag = 1e5):
