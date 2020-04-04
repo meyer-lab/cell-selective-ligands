@@ -14,7 +14,7 @@ def paramCheck(Kav, Rtot, LigC):
     LigC = np.array(LigC)
     assert Kav.ndim == 2
     assert LigC.ndim == 1
-    assert Rtot.ndim == 1
+    assert Rtot.ndim <= 1
     assert Rtot.size == Kav.shape[1]
     assert np.isclose(np.sum(LigC), 1.0)
     return Kav, Rtot, LigC
