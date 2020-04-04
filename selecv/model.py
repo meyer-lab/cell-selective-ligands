@@ -38,13 +38,13 @@ def polyfc(Lmono, KxStar, f, Rtot, LigC, Kav):
     Kav: a matrix of Ka values. row = IgG's, col = FcgR's
     """
     # Data consistency check
-    L0 = L0 / f
+    Lmono = Lmono / f
     Kav, Rtot, LigC = paramCheck(Kav, Rtot, LigC)
     assert LigC.size == Kav.shape[0]
 
     # Run least squares to get Req
     A = np.dot(LigC.T, Kav)
-    L0fA = L0 * f * A
+    L0fA = Lmono * f * A
     AKxStar = A * KxStar
 
     # Solve Req by calling least_squares() and Req_func()
