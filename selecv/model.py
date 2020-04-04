@@ -21,16 +21,16 @@ def paramCheck(Kav, Rtot, LigC):
 
 
 @njit
-def Req_func(Req, Rtot, L0fA, AKxStar, f):
+def Req_func(Req, Rtot, LmonoA, AKxStar, f):
     """ Mass balance. Transformation to account for bounds. """
     Phisum = np.dot(AKxStar, Req.T)
-    return Req + L0fA * Req * (1 + Phisum) ** (f - 1) - Rtot
+    return Req + LmonoA * Req * (1 + Phisum) ** (f - 1) - Rtot
 
 
-def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
+def polyfc(Lmono, KxStar, f, Rtot, LigC, Kav):
     """
     The main function. Generate all info for heterogenenous binding case
-    L0: concentration of ligand.
+    Lmono: concentration of ligand monomers.
     KxStar: detailed balance-corrected Kx.
     f: valency
     Rtot: numbers of each receptor appearing on the cell.
@@ -56,8 +56,8 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
     Phi[:, :Rtot.size] *= Kav * Req * KxStar
     Phisum = np.sum(Phi[:, :Rtot.size])
 
-    Lbound = L0 / KxStar * ((1 + Phisum)**f - 1)
-    Rbound = L0 / KxStar * f * Phisum * (1 + Phisum)**(f - 1)
+    Lbound = Lmono / f / KxStar * ((1 + Phisum)**f - 1)
+    Rbound = Lmono / KxStar * Phisum * (1 + Phisum)**(f - 1)
 
     return Lbound, Rbound
 
