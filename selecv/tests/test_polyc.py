@@ -47,7 +47,7 @@ class TestPolyc(unittest.TestCase):
         Kav = np.random.rand(nl, nr) * (10. ** np.random.randint(3, 7, size=(nl, nr)))
 
         res = polyfc(L0, KxStar, f, Rtot, LigC, Kav)
-        res2 = polyfc2(L0, KxStar, f, Rtot, LigC, Kav)
+        res2 = polyfc2(L0 / f, KxStar, f, Rtot, LigC, Kav)
 
         self.assertAlmostEqual(res[0], res2[0])
         self.assertAlmostEqual(res[1], res2[1])
