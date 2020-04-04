@@ -66,7 +66,6 @@ def polyfcm(KxStar, f, Rtot, Lig, Kav):
     return polyfc(np.sum(Lig) / f, KxStar, f, Rtot, Lig / np.sum(Lig), Kav)
 
 
-@njit
 def Req_func2(Req, L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     Psi = np.ones((Kav.shape[0], Kav.shape[1] + 1))
     Psi[:, : Kav.shape[1]] *= Req * Kav * KxStar
