@@ -38,7 +38,6 @@ def polyfc(Lmono, KxStar, f, Rtot, LigC, Kav):
     Kav: a matrix of Ka values. row = IgG's, col = FcgR's
     """
     # Data consistency check
-    Lmono = Lmono / f
     Kav, Rtot, LigC = paramCheck(Kav, Rtot, LigC)
     assert LigC.size == Kav.shape[0]
 
