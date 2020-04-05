@@ -11,6 +11,8 @@ venv: venv/bin/activate
 venv/bin/activate: requirements.txt
 	test -d venv || virtualenv venv
 	. venv/bin/activate && pip install -Uqr requirements.txt
+	julia -e 'using Pkg; Pkg.add("PyCall"); Pkg.add(PackageSpec(url="https://github.com/meyer-lab/polyBindingModel.jl.git")); Pkg.build(); Pkg.precompile()'
+	. venv/bin/activate && python3 -c "import julia; julia.install()"
 	touch venv/bin/activate
 
 output/figure%.svg: venv genFigures.py selecv/figures/figure%.py
