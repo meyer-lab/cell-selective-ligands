@@ -20,8 +20,8 @@ def polyfc(Lmono, KxStar, f, Rtot, LigC, Kav):
     """
     # Data consistency check
     Kav = np.array(Kav)
-    Rtot = np.array(Rtot)
-    assert Rtot.ndim <= 1
+    Rtot = np.atleast_1d(np.array(Rtot))
+    assert Rtot.ndim == 1
     LigC = np.array(LigC)
     assert LigC.ndim <= 1
     LigC = LigC / np.sum(LigC)
