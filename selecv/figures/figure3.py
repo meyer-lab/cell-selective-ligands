@@ -8,7 +8,7 @@ from ..imports import getPopDict
 from ..sampling import sampleSpec
 from ..model import polyfc
 
-ligConc = np.array([10e-9])
+ligConc = 1.0e-9
 KxStarP = 10e-11
 affinity = 10e7  # 7
 
