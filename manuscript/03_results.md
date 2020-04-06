@@ -14,15 +14,21 @@ Text.
 
 Text.
 
+Example: [@doi:10.1038/srep40098]
+
 ![**Valency provides selectivity based on receptor expression levels.** A) Receptor abundances of a panel of theoretical cell populations. B) Fraction of receptors bound by a high and low affinity ligand (($K_a$) = 10^8^, 10^7^ respectively) in four valencies over a range of receptors/cell. Fraction bound is constant for monovalent ligand, and increases at higher receptor counts for ligands of higher valencies. C) Fraction of receptors bound by a tetravalent ligand with a association constant of 10^8^ at a variety of concentrations over a range of receptors/cell. Values coalesce at higher receptor counts. D-I) Binding ratio between target and off-target populations at a range of valencies for ligands at pairs of high, medium, and low concentrations and affinities to receptor 1 and 2 (10 nM, 1 nM, and 0.1 nM, and 10^6^, 10^7^, and 10^8^ respectively). D-F) Varying valency is an effective strategy for target and off-target population pairs with large receptor abundance discrepancies, especially using ligands with low affinities at low concentrations. G-I) Binding ratios between population pairs with similar receptor counts fails to vary with valency of ligand.](./output/figure3.svg){#fig:valency}
 
 ### Non-Overlapping Ligand Targeting Drives Enhanced Selectivity Of Mixtures
 
 Text.
 
+Example: [@pmid:28886385]
+
 ![**Ligand mixtures with non-overlapping responses can enhance selectivity.** A) Receptor abundances of a panel of theoretical cell populations. B-F) Binding ratio between target and off-target populations exposed to a mixture of two monovalent ligands at a concentration of 10 nM. Ligand 1 binds with high affinity (($K_a$) = 10^9^) for receptor 1 and low affinity to receptor 2 (($K_a$) = 10^2^), while ligand 2 binds with high affinity to receptor two, and low affinity to receptor 1. B) Binding ratio between population 3 and 2. Mixtures cannot enhance selectivity between a target population and a single off-target population. C-F) Binding ratios between a target and multiple off-target populations. The minimum binding ratio between these pairs is reported. With multiple off-target populations, mixtures can achieve superior cell-type selectivity to singular ligand compositions.](./output/figure4.svg){#fig:mixture}
 
 ### Combining Strategies For Superior Selectivity
+
+Example: [@pmid:30145356]
 
 Text.
 
