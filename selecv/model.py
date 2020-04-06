@@ -29,7 +29,7 @@ def polyfc(Lmono, KxStar, f, Rtot, LigC, Kav):
     assert Rtot.size == Kav.shape[1]
     assert Kav.ndim == 2
 
-    struct = polyBindingModel.polyfc(Lmono, KxStar, f, Rtot, LigC, Kav)
+    struct = polyBindingModel.polyfc(Lmono / f, KxStar, f, Rtot, LigC, Kav)
 
     return struct.Lbound, struct.Rbound
 
