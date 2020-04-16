@@ -16,7 +16,7 @@ cellPopulations = {
 }
 
 
-def overlapCellPopulation(ax, scale, data = cellPopulations):
+def overlapCellPopulation(ax, scale, data=cellPopulations):
     ax_new = ax.twinx().twiny()
     ax_new.set_xscale("linear")
     ax_new.set_yscale("linear")
@@ -30,15 +30,14 @@ def overlapCellPopulation(ax, scale, data = cellPopulations):
                                  height=item[3],
                                  angle=item[4],
                                  facecolor="blue",
-                                 fill = True,
-                                 alpha = 0.5,
+                                 fill=True,
+                                 alpha=0.5,
                                  linewidth=1))
         ax_new.text(item[0], item[1], label,
                     horizontalalignment='center',
                     verticalalignment='center',
                     fontweight='bold',
                     color='white')
-
 
 
 def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=-2, vmax=4):
@@ -54,7 +53,7 @@ def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
 
-    contours = ax.contour(X, Y, logZ, levels=np.arange(-10, 20, 0.2), colors='black', linewidths = 0.2)
+    contours = ax.contour(X, Y, logZ, levels=np.arange(-10, 20, 0.2), colors='black', linewidths=0.2)
     ax.set_xscale("log")
     ax.set_yscale("log")
     plt.clabel(contours, inline=True, fontsize=3)
@@ -62,8 +61,7 @@ def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=
     overlapCellPopulation(ax, abundRange)
 
 
-
-def affinity(L0, KxStar, Comp, ff = None, Cplx = None, offdiag = 1e5, vmin = -2, vmax = 4):
+def affinity(L0, KxStar, Comp, ff=None, Cplx=None, offdiag=1e5, vmin=-2, vmax=4):
     nAffPts = 3
     axs, fig = getSetup((8, 8), (nAffPts, nAffPts))
 
@@ -75,17 +73,16 @@ def affinity(L0, KxStar, Comp, ff = None, Cplx = None, offdiag = 1e5, vmin = -2,
 
     for i1, aff1 in enumerate(affScan):
         for i2, aff2 in enumerate(np.flip(affScan)):
-            abundHeatMap(axs[i2 * nAffPts + i1], abundRange, \
-                         L0, KxStar, [[aff1, offdiag], [offdiag, aff2]], Comp, f = ff, Cplx = Cplx, \
-                         vmin = vmin, vmax = vmax)
+            abundHeatMap(axs[i2 * nAffPts + i1], abundRange,
+                         L0, KxStar, [[aff1, offdiag], [offdiag, aff2]], Comp, f=ff, Cplx=Cplx,
+                         vmin=vmin, vmax=vmax)
             axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e} $K_2$ = {:.1e}".format(aff1, aff2))
     return fig
 
 
-
-def valency(L0, KxStar, Comp, Kav = [[1e6, 1e5], [1e5, 1e6]], Cplx = None, vmin = -2, vmax = 4):
-    ffs = [2,3,4,6,8,12,16]
-    axs, fig = getSetup((3*len(ffs)-1, 3), (1, len(ffs)))
+def valency(L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None, vmin=-2, vmax=4):
+    ffs = [2, 3, 4, 6, 8, 12, 16]
+    axs, fig = getSetup((3 * len(ffs) - 1, 3), (1, len(ffs)))
     abundRange = (2., 5.)
 
     fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $K_x^*$={:.2e}, $LigC$={}".format(L0, Kav, KxStar, Comp))
@@ -97,23 +94,21 @@ def valency(L0, KxStar, Comp, Kav = [[1e6, 1e5], [1e5, 1e6]], Cplx = None, vmin 
     return fig
 
 
-
-def mixture(L0, KxStar, Kav = [[1e6, 1e5], [1e5, 1e6]], ff = 5, vmin = -2, vmax = 4):
+def mixture(L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, vmax=4):
     comps = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1.0]
-    axs, fig = getSetup((3*len(comps)-1, 3), (1, len(comps)))
+    axs, fig = getSetup((3 * len(comps) - 1, 3), (1, len(comps)))
     abundRange = (2., 5.)
 
     fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $f$={}, $K_x^*$={:.2e}".format(L0, Kav, ff, KxStar))
 
     for i, comp in enumerate(comps):
-        abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, [comp, 1-comp], f=ff, Cplx=None, vmin=vmin, vmax=vmax)
-        axs[i].set_title("$LigC$ = [{}, {}]".format(comp, 1-comp))
+        abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vmin=vmin, vmax=vmax)
+        axs[i].set_title("$LigC$ = [{}, {}]".format(comp, 1 - comp))
 
     return fig
 
 
-
-def complex(L0, KxStar, Kav = [[1e6, 1e5], [1e5, 1e6]], vmin = -2, vmax = 4):
+def complex(L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], vmin=-2, vmax=4):
     cplx = [0, 2, 4]
     axs, fig = getSetup((8, 8), (len(cplx), len(cplx)))
     abundRange = (2., 5.)
@@ -122,8 +117,8 @@ def complex(L0, KxStar, Kav = [[1e6, 1e5], [1e5, 1e6]], vmin = -2, vmax = 4):
 
     for i1, cplx1 in enumerate(cplx):
         for i2, cplx2 in enumerate(np.flip(cplx)):
-            abundHeatMap(axs[i2 * len(cplx) + i1], abundRange, L0, KxStar, Kav, [1], \
-                         Cplx = [[cplx1, cplx2]], vmin = vmin, vmax = vmax)
+            abundHeatMap(axs[i2 * len(cplx) + i1], abundRange, L0, KxStar, Kav, [1],
+                         Cplx=[[cplx1, cplx2]], vmin=vmin, vmax=vmax)
             axs[i2 * len(cplx) + i1].set_title("$Cplx$ = [{}, {}]".format(cplx1, cplx2))
     return fig
 
