@@ -4,7 +4,7 @@ SHELL := /bin/bash
 
 all: output/manuscript.html pylint.log coverage.xml
 
-flist = 1 2 3 4 5
+flist = 1 2 3 4 5 A1 A2 A3 A4
 
 venv: venv/bin/activate
 
