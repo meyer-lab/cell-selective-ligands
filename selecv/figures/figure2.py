@@ -18,20 +18,13 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((7, 4), (2, 3))
     _, populationsdf = getPopDict()
-    PlotCellPops(ax[0], populationsdf)
+    PlotCellPops(ax[0], populationsdf
+
     popCompare(ax[1], ["Pop3", "Pop2"], populationsdf, "Aff", Kav=[4, 9])
     popCompare(ax[2], ["Pop5", "Pop3"], populationsdf, "Aff", Kav=[4, 9])
     popCompare(ax[3], ["Pop7", "Pop4"], populationsdf, "Aff", Kav=[4, 9])
     popCompare(ax[4], ["Pop5", "Pop6"], populationsdf, "Aff", Kav=[4, 9])
     popCompare(ax[5], ["Pop7", "Pop8"], populationsdf, "Aff", Kav=[4, 9])
-
-    """
-    affHeatMap(ax[1], populationsdf, [4, 9], ["Pop3", "Pop2"], Cbar=False)
-    affHeatMap(ax[2], populationsdf, [4, 9], ["Pop5", "Pop3"])
-    affHeatMap(ax[3], populationsdf, [4, 9], ["Pop7", "Pop4"], Cbar=False)
-    affHeatMap(ax[4], populationsdf, [4, 9], ["Pop5", "Pop6"], Cbar=False)
-    affHeatMap(ax[5], populationsdf, [4, 9], ["Pop7", "Pop8"])
-    """
 
     subplotLabel(ax)
 

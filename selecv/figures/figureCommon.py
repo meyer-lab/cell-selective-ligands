@@ -111,18 +111,18 @@ def ValencyPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
     assert len(f) > 1
     assert len(L0) > 1
     assert len(L0) == len(Kav)
-    sampMeans, underDev, overDev = np.zeros_like(valencies), np.zeros_like(valencies), np.zeros_like(valencies)
+    sampMeans, underDev, overDev = np.zeros_like(f), np.zeros_like(f), np.zeros_like(f)
     labels = ["Low Affinity/Conc", "Med Affinity/Conc", "High Affinity/Conc"]
     colors = ["lime", "blue", "red"]
 
-    for ii, aff in enumerate(L0):
+    for ii, aff in enumerate(Kav):
         for jj, val in enumerate(f):
             underDev[jj], sampMeans[jj], overDev[jj] = sampleSpec(
-                concs[ii], KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[aff, aff]])
+                L0[ii], KxStar, val, [recMeans[0], recMeans[1]], [Covs[0], Covs[1]], np.array([1]), np.array([[aff, aff]])
             )
 
-        ax.plot(valencies, sampMeans, color=colors[ii], label=labels[ii])
-        ax.fill_between(valencies, underDev, overDev, color=colors[ii], alpha=0.1)
+        ax.plot(f, sampMeans, color=colors[ii], label=labels[ii])
+        ax.fill_between(f, underDev, overDev, color=colors[ii], alpha=0.1)
     ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 150))
     ax.legend(prop={"size": 6})
 
