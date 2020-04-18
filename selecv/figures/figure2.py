@@ -18,7 +18,7 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((7, 4), (2, 3))
     _, populationsdf = getPopDict()
-    PlotCellPops(ax[0], populationsdf
+    PlotCellPops(ax[0], populationsdf)
 
     popCompare(ax[1], ["Pop3", "Pop2"], populationsdf, "Aff", Kav=[4, 9])
     popCompare(ax[2], ["Pop5", "Pop3"], populationsdf, "Aff", Kav=[4, 9])
