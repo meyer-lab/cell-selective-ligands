@@ -92,7 +92,7 @@ def ValencyPlotC(ax, df, valencies, popList, perc):
     Cov2 = df2.Covariance_Matrix.to_numpy()[0]
     sampMeans, underDev, overDev = np.zeros_like(valencies), np.zeros_like(valencies), np.zeros_like(valencies)
     sampMeansC, underDevC, overDevC = np.zeros_like(valencies), np.zeros_like(valencies), np.zeros_like(valencies)
-    affinities = [10e5, 10e6, 10e7]
+    #affinities = [10e5, 10e6, 10e7]
     concs = [10e-11, 10e-10, 10e-9]
     labels = ["Low Affinity", "High Affinity"]
     colors = ["lime", "blue"]
