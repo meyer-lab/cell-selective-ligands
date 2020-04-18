@@ -31,8 +31,7 @@ def makeFigure():
     ValencyPlotC(ax[3], populationsdf, valencyScan, ["Pop3", "Pop2"], 0.9)
     ValencyPlotC(ax[4], populationsdf, valencyScan, ["Pop7", "Pop8"], 0.9)
     ValencyPlotC(ax[5], populationsdf, valencyScan, ["Pop7", "Pop5"], 0.9)
-    
-    
+
     PlotCellPops(ax[6], populationsdf)
     CPlot(ax[7], populationsdf, ["Pop3", "Pop2"], affinities, 11)
     ax[1].set_ylim(0, 50)
@@ -59,7 +58,6 @@ def CPlot(ax, df, popList, affinities, npoints):
     sampMeans, underDev, overDev = np.zeros(npoints), np.zeros(npoints), np.zeros(npoints)
     sampMeansC, underDevC, overDevC = np.zeros(npoints), np.zeros(npoints), np.zeros(npoints)
     mixRatio = np.linspace(0, 1, npoints)
-    
 
     for jj, mixture1 in enumerate(mixRatio):
         underDev[jj], sampMeans[jj], overDev[jj] = sampleSpec(
@@ -80,7 +78,7 @@ def CPlot(ax, df, popList, affinities, npoints):
         ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 4), xlim=(0, 1))
         ax.set_title(Title + " binding ratio", fontsize=8 - 0.4 * len(popList))
 
-        
+
 def ValencyPlotC(ax, df, valencies, popList, perc):
     "Makes a line chart comparing binding ratios of populations at multiple valencies"
     ligconc = 10e-11
@@ -97,12 +95,12 @@ def ValencyPlotC(ax, df, valencies, popList, perc):
     labels = ["Low Affinity", "High Affinity"]
     colors = ["lime", "blue"]
     affinities = np.array([[[10e6, 10e1], [10e1, 10e6]], [[10e8, 10e1], [10e1, 10e8]]])
-    
 
     for ii, aff in enumerate(affinities):
         for jj, val in enumerate(valencies):
-            underDev[jj], sampMeans[jj], overDev[jj] = sampleSpec(val * ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([perc, 1-perc]), np.array([aff[0], aff[1]]))
-            underDevC[jj], sampMeansC[jj], overDevC[jj] = sampleSpecC(ligConc, KxStarP, [recMean1, recMean2], [Cov1, Cov2], np.array([[val, 0], [0, val]]), np.array([perc, 1-perc]), np.array([aff[0], aff[1]]))
+            underDev[jj], sampMeans[jj], overDev[jj] = sampleSpec(val * ligConc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([perc, 1 - perc]), np.array([aff[0], aff[1]]))
+            underDevC[jj], sampMeansC[jj], overDevC[jj] = sampleSpecC(ligConc, KxStarP, [recMean1, recMean2], [Cov1, Cov2], np.array([
+                                                                      [val, 0], [0, val]]), np.array([perc, 1 - perc]), np.array([aff[0], aff[1]]))
 
         ax.plot(valencies, sampMeans, color=colors[ii], label=labels[ii] + "PolyFc")
         ax.fill_between(valencies, underDev, overDev, color=colors[ii], alpha=0.1)

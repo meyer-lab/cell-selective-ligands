@@ -74,4 +74,3 @@ def samplePopC(L0, KxStar, RtotMeans, RtotCovs, LigCplx, Ctheta, Kav, quantity=0
         quants[ii] = polyc(L0, KxStar, pop[ii, :], LigCplx, Ctheta, Kav)[quantity]
 
     return quants
-

@@ -66,8 +66,8 @@ def sampleReceptors(df, nsample=100):
 def getFuncDict():
     """Directs key word to given function"""
     FuncDict = {"Aff": affHeatMap,
-               "Valency": ValencyPlot,
-               "Mix": MixPlot}
+                "Valency": ValencyPlot,
+                "Mix": MixPlot}
     return FuncDict
 
 
@@ -129,8 +129,9 @@ def ValencyPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
 
 def MixPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
     "Makes a line chart comparing binding ratios of populations at multiple mixture compositions"
+    npoints = 51
     sampMeans, underDev, overDev = np.zeros(npoints), np.zeros(npoints), np.zeros(npoints)
-    mixRatio = np.linspace(0, 1, 11)
+    mixRatio = np.linspace(0, 1, npoints)
 
     for jj, mixture1 in enumerate(mixRatio):
         underDev[jj], sampMeans[jj], overDev[jj] = sampleSpec(
