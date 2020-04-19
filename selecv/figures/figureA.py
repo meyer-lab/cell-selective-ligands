@@ -121,9 +121,3 @@ def complex(L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], vmin=-2, vmax=4):
                          Cplx=[[cplx1, cplx2]], vmin=vmin, vmax=vmax)
             axs[i2 * len(cplx) + i1].set_title("$Cplx$ = [{}, {}]".format(cplx1, cplx2))
     return fig
-
-
-fig1 = affinity(1e-9, 10**-10, [0.5, 0.5], ff=4, vmin=0, vmax=10)
-fig2 = valency(1e-9, 10**-10, [0.5, 0.5], vmin=-1, vmax=10)
-fig3 = mixture(1e-9, 10**-10, ff=5, vmin=0, vmax=10)
-fig4 = complex(1e-9, 10**-10, vmin=0, vmax=10)
