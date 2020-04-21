@@ -44,7 +44,7 @@ def polyfc(Lmono, KxStar, f, Rtot, LigC, Kav):
     Phi[:, :nr] *= Kav * Req * KxStar
     Phisum = np.sum(Phi[:, :nr])
 
-    Lbound = Lmono / f / KxStar * ((1 + Phisum)**f - 1)
+    Lbound = Lmono / KxStar * ((1 + Phisum)**f - 1)
     Rbound = Lmono / KxStar * Phisum * (1 + Phisum)**(f - 1)
 
     return Lbound, Rbound

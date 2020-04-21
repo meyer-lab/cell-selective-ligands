@@ -118,12 +118,12 @@ def ValencyPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
     for ii, aff in enumerate(Kav):
         for jj, val in enumerate(f):
             underDev[jj], sampMeans[jj], overDev[jj] = sampleSpec(
-                L0[ii], KxStar, val, [recMeans[0], recMeans[1]], [Covs[0], Covs[1]], np.array([1]), np.array([[aff, aff]])
+                L0[ii] / val, KxStar, val, [recMeans[0], recMeans[1]], [Covs[0], Covs[1]], np.array([1]), np.array([[aff, aff]])
             )
 
         ax.plot(f, sampMeans, color=colors[ii], label=labels[ii])
         ax.fill_between(f, underDev, overDev, color=colors[ii], alpha=0.1)
-    ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 150))
+    ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 50))
     ax.legend(prop={"size": 6})
 
 
