@@ -20,6 +20,7 @@ def makeFigure():
 
     valencyScan = np.logspace(0.0, 4.0, base=2.0, num=10)
     _, populationsdf = getPopDict()
+    ax[8].axis("off")
 
     PlotCellPops(ax[0], populationsdf)
     valDemo(ax[1])
@@ -29,10 +30,10 @@ def makeFigure():
     popCompare(ax[5], ["Pop6", "Pop8"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
     #popCompare(ax[6], ["Pop5", "Pop4"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
     #ax[6].set_ylim(0, 2)
-    popCompare(ax[7], ["Pop5", "Pop6"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
+    popCompare(ax[6], ["Pop5", "Pop6"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
+    ax[6].set_ylim(0, 2)
+    popCompare(ax[7], ["Pop3", "Pop4"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
     ax[7].set_ylim(0, 2)
-    popCompare(ax[8], ["Pop3", "Pop4"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
-    ax[8].set_ylim(0, 2)
 
     return f
 
