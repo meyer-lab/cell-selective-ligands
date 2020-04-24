@@ -71,7 +71,7 @@ def getFuncDict():
     return FuncDict
 
 
-def popCompare(ax, popList, df, scanKey, Kav, L0=1e-9, KxStar=10 ** -12.2, f=1):
+def popCompare(ax, popList, df, scanKey, Kav, L0=1e-9, KxStar=10 ** -10.0, f=1):
     """Takes in populations and parameters to scan over and creates line plot"""
     funcDict = getFuncDict()
     recMeans, Covs = [], []
@@ -123,7 +123,8 @@ def ValencyPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
 
         ax.plot(f, sampMeans, color=colors[ii], label=labels[ii])
         ax.fill_between(f, underDev, overDev, color=colors[ii], alpha=0.1)
-    ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 50))
+    ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 100))
+    ax.set_xticks((4, 8, 12, 16))
     ax.legend(prop={"size": 6})
 
 
