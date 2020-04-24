@@ -8,7 +8,7 @@ jl = Julia(compiled_modules=False)
 from julia import polyBindingModel
 
 
-def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
+def polyfc(Lmono, KxStar, f, Rtot, LigC, Kav):
     """
     The main function. Generate all info for heterogenenous binding case
     L0: concentration of ligand complexes.
