@@ -1,19 +1,23 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ..model import *
-from .figureCommon import getSetup, subplotLabel
 from matplotlib.patches import Ellipse
 
+from ..model import *
+from .figureCommon import getSetup, subplotLabel
+
+
 cellPopulations = {
-    "1": [2.5, 2.5, 0.5, 0.25, 45],
-    "2": [3.5, 2.5, 0.5, 0.25, 0],
-    "3": [4.5, 2.5, 0.5, 0.25, 0],
-    "4": [2.5, 4.5, 0.3, 0.6, 0],
-    "5": [3.7, 4.2, 0.5, 0.25, 45],
-    "6": [4.3, 3.7, 0.5, 0.25, 45],
-    "7": [4.5, 4.5, 0.5, 0.25, 45],
-    "8": [3.7, 3.7, 0.25, 1, 45],
+    "1": [2, 2, 0.5, 0.25, 45],
+    "2": [3, 2, 0.5, 0.25, 0],
+    "3": [4, 2, 0.5, 0.25, 0],
+    "4": [2, 4, 0.3, 0.6, 0],
+    "5": [3.2, 3.7, 0.5, 0.25, 45],
+    "6": [3.7, 3.2, 0.5, 0.25, 45],
+    "7": [4, 4, 0.5, 0.25, 45],
+    "8": [3.2, 3.2, 0.25, 1, 45],
 }
+
+abundRange = (1.5, 4.5)
 
 
 def overlapCellPopulation(ax, scale, data=cellPopulations):
@@ -53,7 +57,7 @@ def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
 
-    contours = ax.contour(X, Y, logZ, levels=np.arange(-10, 20, 0.2), colors='black', linewidths=0.2)
+    contours = ax.contour(X, Y, logZ, levels=np.arange(-10, 20, 0.1), colors='black', linewidths=0.2)
     ax.set_xscale("log")
     ax.set_yscale("log")
     plt.clabel(contours, inline=True, fontsize=3)
@@ -69,21 +73,19 @@ def affinity(L0, KxStar, Comp, ff=None, Cplx=None, offdiag=1e5, vmin=-2, vmax=4)
 
     affRange = (5., 7.)
     affScan = np.logspace(affRange[0], affRange[1], nAffPts)
-    abundRange = (2., 5.)
 
     for i1, aff1 in enumerate(affScan):
         for i2, aff2 in enumerate(np.flip(affScan)):
             abundHeatMap(axs[i2 * nAffPts + i1], abundRange,
-                         L0, KxStar, [[aff1, offdiag], [offdiag, aff2]], Comp, f=ff, Cplx=Cplx,
+                         L0, KxStar, [[aff1, aff2]], Comp, f=ff, Cplx=Cplx,
                          vmin=vmin, vmax=vmax)
             axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e} $K_2$ = {:.1e}".format(aff1, aff2))
     return fig
 
 
 def valency(L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None, vmin=-2, vmax=4):
-    ffs = [2, 3, 4, 6, 8, 12, 16]
+    ffs = [1, 2, 4, 8, 16]
     axs, fig = getSetup((3 * len(ffs) - 1, 3), (1, len(ffs)))
-    abundRange = (2., 5.)
 
     fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $K_x^*$={:.2e}, $LigC$={}".format(L0, Kav, KxStar, Comp))
 
@@ -95,9 +97,8 @@ def valency(L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None, vmin=-2, 
 
 
 def mixture(L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, vmax=4):
-    comps = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1.0]
+    comps = [0.0, 0.2, 0.5, 0.8, 1.0]
     axs, fig = getSetup((3 * len(comps) - 1, 3), (1, len(comps)))
-    abundRange = (2., 5.)
 
     fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $f$={}, $K_x^*$={:.2e}".format(L0, Kav, ff, KxStar))
 
@@ -111,7 +112,6 @@ def mixture(L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, vmax=4):
 def complex(L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], vmin=-2, vmax=4):
     cplx = [0, 2, 4]
     axs, fig = getSetup((8, 8), (len(cplx), len(cplx)))
-    abundRange = (2., 5.)
 
     fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $K_x^*$={:.2e}".format(L0, Kav, KxStar))
 

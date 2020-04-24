@@ -3,4 +3,4 @@ from .figureA import valency
 
 def makeFigure():
     """ Heatmaps for various valency """
-    return valency(1e-9, 10 ** -10, [0.5, 0.5], vmin=-1, vmax=10)
+    return valency(1e-9, 10**-10, [1.0], Kav=[[3e6, 3e6]], vmin=0., vmax=9)

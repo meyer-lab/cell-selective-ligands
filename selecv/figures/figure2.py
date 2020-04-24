@@ -19,12 +19,13 @@ def makeFigure():
     ax, f = getSetup((7, 4), (2, 3))
     _, populationsdf = getPopDict()
     PlotCellPops(ax[0], populationsdf)
+    ax[5].axis("off")
 
-    popCompare(ax[1], ["Pop3", "Pop2"], populationsdf, "Aff", Kav=[4, 9])
-    popCompare(ax[2], ["Pop5", "Pop3"], populationsdf, "Aff", Kav=[4, 9])
-    popCompare(ax[3], ["Pop7", "Pop4"], populationsdf, "Aff", Kav=[4, 9])
-    popCompare(ax[4], ["Pop5", "Pop6"], populationsdf, "Aff", Kav=[4, 9])
-    popCompare(ax[5], ["Pop7", "Pop8"], populationsdf, "Aff", Kav=[4, 9])
+    popCompare(ax[1], ["Pop3", "Pop2"], populationsdf, "Aff", Kav=[4, 6])
+    popCompare(ax[2], ["Pop5", "Pop6"], populationsdf, "Aff", Kav=[4, 6])
+    popCompare(ax[3], ["Pop7", "Pop8"], populationsdf, "Aff", Kav=[4, 6])
+    popCompare(ax[4], ["Pop3", "Pop4"], populationsdf, "Aff", Kav=[4, 6])
+    #popCompare(ax[5], ["Pop7", "Pop8"], populationsdf, "Aff", Kav=[4, 6])
 
     subplotLabel(ax)
 
