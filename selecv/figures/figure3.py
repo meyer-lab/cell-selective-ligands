@@ -50,7 +50,7 @@ def valDemo(ax):
     for ii, aff in enumerate(affs):
         for jj, valencyLab in enumerate(labels):
             for kk, recCount in enumerate(recScan):
-                percHold[kk] = polyfc(ligConc, KxStarP, jj + 1, recCount, [1], np.array([[aff]]))[1] / recCount
+                percHold[kk] = polyfc(ligConc / (jj + 1), KxStarP, jj + 1, recCount, [1], np.array([[aff]]))[1] / recCount
             ax.plot(recScan, percHold, label=valencyLab, linestyle=lines[ii], color=colors[jj])
 
     ax.set(xlim=(1, 10000), ylim=(0, 1), xlabel="Receptor Abundance", ylabel="Fraction Receptors Bound", xscale="log")
@@ -72,7 +72,7 @@ def ConcValPlot(ax):
 
     for conc in concScan:
         for jj, recCount in enumerate(recScan):
-            percHold[jj] = polyfc(conc, KxStarP, valency, recCount, [1], np.array([[affinity]]))[1] / recCount
+            percHold[jj] = polyfc(conc / valency, KxStarP, valency, recCount, [1], np.array([[affinity]]))[1] / recCount
         ax.plot(recScan, percHold, label=str(conc * 10e8) + " nM")
 
     ax.set(xlim=(1, 10000), ylim=(0, 1), xlabel="Receptor Abundance", ylabel="Fraction Receptors Bound", xscale="log")
