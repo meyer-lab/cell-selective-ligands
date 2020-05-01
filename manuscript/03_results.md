@@ -12,7 +12,7 @@ Text.
 
 ### Valency Enables Selectivity To Cell Populations Based On Receptor Expression Levels
 
-Text.
+While affinity modulation techniques are effective for the selective targeting of cell populations expressing unique or mutated receptors, they remain largely inadequate for the targeting of cell populations expressing receptor profiles similar to those of off-target populations. In such cases, therapeutic ligands solely engineered with altered receptor binding activity are known to suffer from significant off-target toxicities, as monovalent ligands fail to distinguish between populations with varying receptor abundances, binding each with equal avidity [@doi:10.1021/cb6003788]. Valency engineering offers a promising avenue for distinguishing between such divergent populations, as multivalent ligand binding avidity is known to vary as a function of cellular receptor abundance, as well as ligand concentration and binding affinity [@doi:10.1021/jacs.8b09198]. These characteristics governing multivalent binding has been leveraged for effective targeting of cancer cells known to overexpress receptors shared with native tissue, but holistic understanding of the binding mechanisms at play has remained elusive [@doi:10.1016/j.ijpharm.2007.07.040]. We utilized our binding model to explore the interplay between these factors, and to define engineering specifications for cell-type selective multivalent ligands.
 
 Example: [@doi:10.1038/srep40098]
 
