@@ -53,7 +53,7 @@ def valDemo(ax):
                 percHold[kk] = polyfc(ligConc / (jj + 1), KxStarP, jj + 1, recCount, [1], np.array([[aff]]))[0] / recCount
             ax.plot(recScan, percHold, label=valencyLab, linestyle=lines[ii], color=colors[jj])
 
-    ax.set(xlim=(1, 100000000), xlabel="Receptor Abundance", ylabel="Lig bound / Receptor", xscale="log") # ylim=(0, 1), 
+    ax.set(xlim=(1, 100000000), xlabel="Receptor Abundance", ylabel="Lig bound / Receptor", xscale="log")  # ylim=(0, 1),
     handles, _ = ax.get_legend_handles_labels()
     handles = handles[0:4]
     line = Line2D([], [], color="black", marker="_", linestyle="None", markersize=6, label="High Affinity")
@@ -75,5 +75,5 @@ def ConcValPlot(ax):
             percHold[jj] = polyfc(conc / valency, KxStarP, valency, recCount, [1], np.array([[affinity]]))[0] / recCount
         ax.plot(recScan, percHold, label=str(conc * 10e8) + " nM")
 
-    ax.set(xlim=(1, 100000000), xlabel="Receptor Abundance", ylabel="Lig Bound / Receptor", xscale="log")#ylim=(0, 1), 
+    ax.set(xlim=(1, 100000000), xlabel="Receptor Abundance", ylabel="Lig Bound / Receptor", xscale="log")  # ylim=(0, 1),
     ax.legend(prop={"size": 6})
