@@ -45,11 +45,11 @@ class TestPolyc(unittest.TestCase):
         LigC = np.random.rand(nl) * (10. ** np.random.randint(1, 2, size=nl))
         Kav = np.random.rand(nl, nr) * (10. ** np.random.randint(3, 7, size=(nl, nr)))
 
-        res = polyfc(L0 * f, KxStar, f, Rtot, LigC, Kav)
+        res = polyfc(L0, KxStar, f, Rtot, LigC, Kav)
         res2 = polyfc2(L0, KxStar, f, Rtot, LigC, Kav)
 
-        self.assertAlmostEqual(res[0], res2[0])
-        self.assertAlmostEqual(res[1], res2[1])
+        self.assertTrue(abs(res[0] - res2[0]) < res[0] * 1e-7)
+        self.assertTrue(abs(res[1] - res2[1]) < res[1] * 1e-7)
 
 
 if __name__ == '__main__':
