@@ -6,7 +6,7 @@
 
 ### Affinity Provides Selectivity To Cell Populations With Unique Receptor Expression
 
-Text.
+Engineering the binding affinity between a ligand and a receptor through mutating the molecular structure of either or both components has been a popular strategy in drug development (ref). However, designing or simply predicting the affinities of a ligand to be a specific value is challenging, and it is most likely the mutated ligand will have different affinities to all receptors it binds to. Here we simplify the issue to allow directional and discriminating affinity modification for more definitive insights.
 
 When the cell population of interest expresses a higher level of a certain receptor than the others to the same ligand, enhancing the affinity of this receptor or reducing the affinity of competing receptors are obvious strategies to increase ligand bound. As demonstrated in Fig. X, cell type 3 expresses a high amount of receptor 1, while type 4 receptor 2. When the affinity of receptor 1 to the ligand is enhanced, the amount of ligand binds to cell type 3 increases significantly compared to type 4 (Fig X-line). As a general trend, all cell types with high expression of receptor 1 see an increased ligand bound. The contour plot on the background shows the trend more intuitively: when the affinity of receptor 1 increases (from the subplots on the left to those on the right), the contour lines shift inward and cluster denser, indicating higher rates of growth on the direction of more abundant receptor 1.
 
