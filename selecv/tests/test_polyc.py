@@ -50,6 +50,7 @@ class TestPolyc(unittest.TestCase):
 
         self.assertTrue(abs(res[0] - res2[0]) < res[0] * 1e-7)
         self.assertTrue(abs(res[1] - res2[1]) < res[1] * 1e-7)
+        self.assertAlmostEqual(np.sum(res[2]), res[0])
 
 
 if __name__ == '__main__':

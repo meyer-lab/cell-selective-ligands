@@ -5,6 +5,7 @@ Implementation of a simple multivalent binding model.
 import numpy as np
 from numba import njit
 from scipy.optimize import root
+from scipy.special import binom
 
 
 @njit
@@ -46,8 +47,9 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
 
     Lbound = L0 / KxStar * ((1 + Phisum) ** f - 1)
     Rbound = L0 / KxStar * f * Phisum * (1 + Phisum) ** (f - 1)
+    vieq = L0 / KxStar * binom(f, np.arange(1, f+1)) * np.power(Phisum, np.arange(1, f+1))
 
-    return Lbound, Rbound
+    return Lbound, Rbound, vieq
 
 
 def polyfcm(KxStar, f, Rtot, Lig, Kav):
