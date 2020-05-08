@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pds
 import seaborn as sns
 from matplotlib.lines import Line2D
-from .figureCommon import subplotLabel, getSetup, PlotCellPops, popCompare
+from .figureCommon import subplotLabel, getSetup, popCompare
 from ..imports import getPopDict
 from ..model import polyfc
 
@@ -83,16 +83,13 @@ def ConcValPlot(ax):
 def vieqPlot(ax, recCount, val):
     "Demonstrate effect of valency"
     vieqDF = pds.DataFrame(columns=["Binding Valency", "Ligand Bound", "$K_a$"])
-    valencies = [2, 4, 8]
-    ligConc = 1e-9
+    Conc = 1e-9
     affs = [1e8, 1e7, 1e6]
     afflabs = ["1e8", "1e7", "1e6"]
-    colors = ["royalblue", "orange", "orangered"]
-    # for val in valencies:
     for ii, aff in enumerate(affs):
-        vieq = polyfc(ligConc / (val), KxStarP, val, recCount, [1], np.array([[aff]]))[2]  # val + 1
+        vieq = polyfc(Conc / (val), KxStarP, val, recCount, [1], np.array([[aff]]))[2]  # val + 1
         for jj, bound in enumerate(vieq):
-            ligboundDF = pds.DataFrame({"Binding Valency": jj + 1, "Ligand Bound": [vieq[jj]], "$K_a$": afflabs[ii]})
+            ligboundDF = pds.DataFrame({"Binding Valency": jj + 1, "Ligand Bound": [bound], "$K_a$": afflabs[ii]})
             vieqDF = vieqDF.append(ligboundDF)
     sns.stripplot(x="Binding Valency", y="Ligand Bound", hue="$K_a$", data=vieqDF, ax=ax)
     ax.set(yscale="log", ylim=(0.1, 1e4), title="Valency Binding " + str(recCount) + " Receptors", ylabel="Ligand Bound", xlabel="Binding Valency")
@@ -104,15 +101,14 @@ def ratePlot(ax):
     recScan = np.logspace(0, 4, 100)
     val = np.arange(1, 5)
     affinities = [1e8, 1e6]
-    KxStarP = 10 ** -10.0
+    KxStarPl = 10 ** -10.0
     lines = ["-", ":"]
     colors = ["royalblue", "orange", "limegreen", "orangered"]
     rateHolder = np.zeros([100])
     for ii, Ka in enumerate(affinities):
         for jj, f in enumerate(val):
             for kk, recCount in enumerate(recScan):
-                rateHolder[kk] = KxStarP * Ka * (f - 1) * recCount
-
+                rateHolder[kk] = KxStarPl * Ka * (f - 1) * recCount
             ax.plot(recScan, rateHolder, color=colors[jj], label="Valency = " + str(f), linestyle=lines[ii])
     ax.set(xlim=(1, 10000), xlabel="Receptor Abundance", ylabel="Forward/Reverse Rate", xscale="log", ylim=(0, 5))  # ylim=(0, 1),
     handles, _ = ax.get_legend_handles_labels()
