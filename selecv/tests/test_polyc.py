@@ -52,6 +52,26 @@ class TestPolyc(unittest.TestCase):
         self.assertTrue(abs(res[1] - res2[1]) < res[1] * 1e-7)
         self.assertAlmostEqual(np.sum(res[2]), res[0])
 
+    def test_null_monomer(self):
+        # [3 0 0] should be equivalent to [3 0 5] if the last ligand has affinity 0
+        L0 = np.random.rand() * 10.0 ** np.random.randint(-15, -5)
+        KxStar = np.random.rand() * 10.0 ** np.random.randint(-15, -5)
+        Rtot = [1e5]
+        Kav = [[2e7], [3e5], [0]]
+
+        res11 = polyc(L0, KxStar, Rtot, [[3, 0, 0]], [1], Kav)
+        res12 = polyc(L0, KxStar, Rtot, [[3, 0, 5]], [1], Kav)
+        res21 = polyc(L0, KxStar, Rtot, [[0, 6, 0]], [1], Kav)
+        res22 = polyc(L0, KxStar, Rtot, [[0, 6, 3]], [1], Kav)
+        res31 = polyc(L0, KxStar, Rtot, [[2, 4, 0]], [1], Kav)
+        res32 = polyc(L0, KxStar, Rtot, [[2, 4, 5]], [1], Kav)
+
+        for i in range(2):
+            self.assertEqual(res11[i], res12[i])
+            self.assertEqual(res21[i], res22[i])
+            self.assertEqual(res31[i], res32[i])
+
+
 
 if __name__ == '__main__':
     unittest.main()
