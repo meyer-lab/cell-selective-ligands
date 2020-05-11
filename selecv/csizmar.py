@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import seaborn as sns
 from selecv.model import polyfc, polyc
 from matplotlib.pyplot import plot
 from sklearn.linear_model import LinearRegression
@@ -9,7 +10,7 @@ Kav = np.array([[5.88e7], [9.09e5], [0]])   # [C5, B22, NT]
 Recep = {"MDA": 5.2e4, "SK": 2.2e5, "LNCaP": 2.8e6, "MCF": 3.8e6}
 
 
-def predict(df, KxStar, LigC, polyfcM):
+def model_predict(df, KxStar, LigC, polyfcM):
     predicted, measured = [], []
     for _, row in df.iterrows():
         if polyfcM:
@@ -25,18 +26,47 @@ def predict(df, KxStar, LigC, polyfcM):
     return predicted, measured
 
 
-def fit_slope(KxStar, polyfcM=False):
+def fit_slope(KxStar, polyfcM=True):
     df = pd.read_csv("selecv/data/csizmar_s4a.csv")
-    X1, Y1 = predict(df, KxStar, [1, 0, 0], polyfcM)
+    X1, Y1 = model_predict(df, KxStar, [1, 0, 0], polyfcM)
     df = pd.read_csv("selecv/data/csizmar_s4b.csv")
-    X2, Y2 = predict(df, KxStar, [0, 1, 0], polyfcM)
+    X2, Y2 = model_predict(df, KxStar, [0, 1, 0], polyfcM)
     X, Y = np.array(X1 + X2).reshape(-1, 1), np.array(Y1 + Y2)
     lr = LinearRegression(fit_intercept=False)
     lr.fit(X, Y)
     print(lr.score(X, Y))
     plt = plot(X1, Y1, 'or')
     plot(X2, Y2, 'ob')
-    return plt#plt#lr.coef_[0]#plt#
+    return lr.coef_[0]
 
 
 KxStar = 10**-14.714
+slope = 0.008677777424519703
+
+
+
+
+def discrim():
+    df = pd.DataFrame(columns=['Lig','Recep','value'])
+    for lig in [[8,0,0], [4,0,4], [0,8,0], [0,4,4]]:
+        for rec in Recep.values():
+            res = polyfc(50 * 1e-9, KxStar, 8, [rec], lig, Kav)
+            df = df.append({'Lig': str(lig), 'Recep': rec, 'value': res[1] * slope}, ignore_index=True)
+    ax = sns.lineplot(x='Recep', y='value', hue='Lig', style='Lig', markers=True, data=df)
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set(xlim=(1e4, 1e7), ylim=(10, 1e5))
+    return ax
+
+
+
+
+
+
+
+
+
+
+
+
+
