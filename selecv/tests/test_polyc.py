@@ -72,6 +72,5 @@ class TestPolyc(unittest.TestCase):
             self.assertEqual(res31[i], res32[i])
 
 
-
 if __name__ == '__main__':
     unittest.main()
