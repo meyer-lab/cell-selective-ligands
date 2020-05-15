@@ -48,8 +48,8 @@ slope_B22 = 0.012855332053729724
 
 
 def discrim():
-    df = pd.DataFrame(columns=['Lig','Recep','value'])
-    for lig in [[8,0,0], [4,0,4], [0,8,0], [0,4,4]]:
+    df = pd.DataFrame(columns=['Lig', 'Recep', 'value'])
+    for lig in [[8, 0, 0], [4, 0, 4], [0, 8, 0], [0, 4, 4]]:
         for rec in Recep.values():
             res = polyfc(50 * 1e-9, KxStar, 8, [rec], lig, Kav)
             Lbound, Rbound = res[0], res[1]
@@ -62,8 +62,8 @@ def discrim():
 
 
 def discrim2():
-    df = pd.DataFrame(columns=['Lig','Recep','value'])
-    for lig in [[8,0,0], [4,0,4]]:
+    df = pd.DataFrame(columns=['Lig', 'Recep', 'value'])
+    for lig in [[8, 0, 0], [4, 0, 4]]:
         for rec in Recep.values():
             res = polyfc(50 * 1e-9, KxStar_C5, 8, [rec], lig, Kav)
             df = df.append({'Lig': str(lig), 'Recep': rec, 'value': res[0] * slope_C5 * (lig[0] + lig[1])}, ignore_index=True)
