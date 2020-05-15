@@ -18,7 +18,6 @@ def model_predict(df, KxStar, LigC):
         measured.append(row.intensity/row.valency)
     return predicted, measured
 
-
 def fit_slope(KxStar):
     df1 = pd.read_csv("selecv/data/csizmar_s4a.csv")
     X1, Y1 = model_predict(df1, KxStar, [1, 0, 0])
@@ -36,7 +35,6 @@ def fit_slope(KxStar):
     lr.fit(X, Y)
     ax = sns.lineplot(x='predicted', y='adjusted intensity', hue='data', style='valency', markers=True, data=df)
     return lr.score(X, Y), lr.coef_
-
 
 
 KxStar = 10**-14.714
@@ -80,7 +78,6 @@ def discrim2():
     return ax
 
 
-
 def xeno(KxStar):
     df = pd.DataFrame(columns=['Lig', 'ratio'])
     for lig in [[8,0,0], [4,0,4], [0,8,0], [0,4,4]]:
@@ -91,11 +88,4 @@ def xeno(KxStar):
     ax = sns.barplot(x="Lig", y="ratio", data=df)
     ax.set(ylim=(0, 100))
     return ax
-
-
-
-
-
-
-
 
