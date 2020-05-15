@@ -16,7 +16,7 @@ def model_predict(df, KxStar, LigC, polyfcM):
         if polyfcM:
             res = polyfc(row.monomer * 1e-9 / 8, KxStar, row.valency, [Recep["MCF"]], LigC, Kav)
         else:
-            if LigC ==[1, 0, 0]:
+            if LigC == [1, 0, 0]:
                 res = polyc(row.monomer * 1e-9 / 8, KxStar, [Recep["MCF"]], [[row.valency, 0, 8 - row.valency]], [1], Kav)
             elif LigC == [0, 1, 0]:
                 res = polyc(row.monomer * 1e-9 / 8, KxStar, [Recep["MCF"]], [[0, row.valency, 8 - row.valency]], [1], Kav)
@@ -56,8 +56,8 @@ slope_B22 = 0.012855332053729724
 
 
 def discrim():
-    df = pd.DataFrame(columns=['Lig','Recep','value'])
-    for lig in [[8,0,0], [4,0,4], [0,8,0], [0,4,4]]:
+    df = pd.DataFrame(columns=['Lig', 'Recep', 'value'])
+    for lig in [[8, 0, 0], [4, 0, 4], [0, 8, 0], [0, 4, 4]]:
         for rec in Recep.values():
             res = polyfc(50 * 1e-9, KxStar, 8, [rec], lig, Kav)
             df = df.append({'Lig': str(lig), 'Recep': rec, 'value': res[1] * slope}, ignore_index=True)
@@ -69,12 +69,12 @@ def discrim():
 
 
 def discrim2():
-    df = pd.DataFrame(columns=['Lig','Recep','value'])
-    for lig in [[8,0,0], [4,0,4]]:
+    df = pd.DataFrame(columns=['Lig', 'Recep', 'value'])
+    for lig in [[8, 0, 0], [4, 0, 4]]:
         for rec in Recep.values():
             res = polyfc(50 * 1e-9, KxStar_C5, 8, [rec], lig, Kav)
             df = df.append({'Lig': str(lig), 'Recep': rec, 'value': res[1] * slope_C5}, ignore_index=True)
-    for lig in [[0,8,0], [0,4,4]]:
+    for lig in [[0, 8, 0], [0, 4, 4]]:
         for rec in Recep.values():
             res = polyfc(50 * 1e-9, KxStar_B22, 8, [rec], lig, Kav)
             df = df.append({'Lig': str(lig), 'Recep': rec, 'value': res[1] * slope_B22}, ignore_index=True)
@@ -83,13 +83,3 @@ def discrim2():
     ax.set_yscale("log")
     ax.set(xlim=(1e4, 1e7), ylim=(10, 1e5))
     return ax
-
-
-
-
-
-
-
-
-
-
