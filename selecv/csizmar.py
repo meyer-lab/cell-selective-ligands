@@ -15,8 +15,9 @@ def model_predict(df, KxStar, LigC):
         res = polyfc(row.monomer * 1e-9 / 8, KxStar, row.valency, [Recep["MCF"]], LigC, Kav)
         Lbound, Rbound = res[0], res[1]
         predicted.append(Lbound)
-        measured.append(row.intensity/row.valency)
+        measured.append(row.intensity / row.valency)
     return predicted, measured
+
 
 def fit_slope(KxStar):
     df1 = pd.read_csv("selecv/data/csizmar_s4a.csv")
@@ -67,7 +68,7 @@ def discrim2():
         for rec in Recep.values():
             res = polyfc(50 * 1e-9, KxStar_C5, 8, [rec], lig, Kav)
             df = df.append({'Lig': str(lig), 'Recep': rec, 'value': res[0] * slope_C5 * (lig[0] + lig[1])}, ignore_index=True)
-    for lig in [[0,8,0], [0,4,4]]:
+    for lig in [[0, 8, 0], [0, 4, 4]]:
         for rec in Recep.values():
             res = polyfc(50 * 1e-9, KxStar_B22, 8, [rec], lig, Kav)
             df = df.append({'Lig': str(lig), 'Recep': rec, 'value': res[0] * slope_B22 * (lig[0] + lig[1])}, ignore_index=True)
@@ -80,12 +81,11 @@ def discrim2():
 
 def xeno(KxStar):
     df = pd.DataFrame(columns=['Lig', 'ratio'])
-    for lig in [[8,0,0], [4,0,4], [0,8,0], [0,4,4]]:
+    for lig in [[8, 0, 0], [4, 0, 4], [0, 8, 0], [0, 4, 4]]:
         mcf = polyfc(50 * 1e-9, KxStar, 8, [Recep["MCF"]], lig, Kav)[0]
         mda = polyfc(50 * 1e-9, KxStar, 8, [Recep["MDA"]], lig, Kav)[0]
-        df = df.append({'Lig': str(lig), 'ratio': (mcf/mda)}, ignore_index=True)
+        df = df.append({'Lig': str(lig), 'ratio': (mcf / mda)}, ignore_index=True)
     print(df)
     ax = sns.barplot(x="Lig", y="ratio", data=df)
     ax.set(ylim=(0, 100))
     return ax
-
