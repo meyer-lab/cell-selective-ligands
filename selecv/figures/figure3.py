@@ -89,7 +89,7 @@ def vieqPlot(ax, recCount, val):
     for ii, aff in enumerate(affs):
         vieq = polyfc(Conc / (val), KxStarP, val, recCount, [1], np.array([[aff]]))[2]  # val + 1
         for jj, bound in enumerate(vieq):
-            ligboundDF = pds.DataFrame({"Binding Valency": jj + 1, "Ligand Bound": [bound], "$K_a$": afflabs[ii]})
+            ligboundDF = pds.DataFrame({"Degree of Binding": jj + 1, "# Ligand Bound": [bound], "$K_a$": afflabs[ii]})
             vieqDF = vieqDF.append(ligboundDF)
     sns.stripplot(x="Binding Valency", y="Ligand Bound", hue="$K_a$", data=vieqDF, ax=ax)
     ax.set(yscale="log", ylim=(0.1, 1e4), title="Valency Binding " + str(recCount) + " Receptors", ylabel="Ligand Bound", xlabel="Binding Valency")

@@ -18,7 +18,7 @@ def makeFigure():
 
     subplotLabel(ax)
 
-    affinities = np.array([[10e9, 10e1], [10e1, 10e9]])
+    affinities = np.array([[10e8, 10e1], [10e1, 10e8]])
     _, populationsdf = getPopDict()
     PlotCellPops(ax[0], populationsdf)
     popCompare(ax[1], ["Pop3", "Pop2"], populationsdf, "Mix", Kav=np.array([[10e5, 10e4], [10e4, 10e5]]))
