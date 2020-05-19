@@ -80,11 +80,11 @@ def discrim2(ax, KxStarD, slopeC5, slopeB22, KavD):
     df = pd.DataFrame(columns=['Lig', 'Recep', 'value'])
     for lig in [[8, 0, 0], [4, 0, 4]]:
         for rec in Recep.values():
-            res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
+            res = polyfc(50 * 1e-9 / 8, KxStarD, 8, [rec], lig, KavD)
             df = df.append({'Lig': str(lig), 'Recep': rec, 'value': res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
     for lig in [[0, 8, 0], [0, 4, 4]]:
         for rec in Recep.values():
-            res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
+            res = polyfc(50 * 1e-9 / 8, KxStarD, 8, [rec], lig, KavD)
             df = df.append({'Lig': str(lig), 'Recep': rec, 'value': res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
     sns.lineplot(x='Recep', y='value', hue='Lig', style='Lig', markers=True, data=df, ax=ax)
     ax.set_xscale("log")
@@ -101,7 +101,7 @@ def xeno(ax, KxStarX, KavX):
         mda = polyfc(50 * 1e-9, KxStarX, 8, [Recep["MDA"]], lig, KavX)[0]
         df = df.append({'Lig': str(lig), 'ratio': (mcf / mda)}, ignore_index=True)
     sns.barplot(x="Lig", y="ratio", data=df, ax=ax)
-    #ax.set(ylim=(0, 100))
+    ax.set(ylim=(0, 200))
     return ax
 
 
