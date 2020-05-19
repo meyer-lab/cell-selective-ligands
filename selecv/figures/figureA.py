@@ -57,11 +57,11 @@ def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
 
-    contours = ax.contour(X, Y, logZ, levels=np.arange(-10, 20, 0.1), colors='black', linewidths=0.2)
+    contours = ax.contour(X, Y, logZ, levels=np.arange(-10, 20, 0.1), colors="black", linewidths=0.2)
     ax.set_xscale("log")
     ax.set_yscale("log")
     plt.clabel(contours, inline=True, fontsize=3)
-    ax.pcolor(X, Y, logZ, cmap='RdGy_r', vmin=vmin, vmax=vmax)
+    ax.pcolor(X, Y, logZ, cmap="RdGy_r", vmin=vmin, vmax=vmax)
     overlapCellPopulation(ax, abundRange)
 
 
