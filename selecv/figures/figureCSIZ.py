@@ -8,10 +8,6 @@ from ..imports import getPopDict
 from ..sampling import sampleSpec, sampleSpecC
 from ..csizmar import model_predict, fit_slope, discrim, discrim2, fitfunc, xeno
 
-ligConc = np.array([10e-10])
-# 10**-12.734, KxStar_C5 = 10**-14.693, KxStar = 10**-14.714
-KxStarP = KxStar = 10**-12.734
-
 
 def makeFigure():
     """ Make figure 4. """
