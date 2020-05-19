@@ -3,10 +3,8 @@ Figure 6. PolyC vs PolyFc.
 """
 
 import numpy as np
-from .figureCommon import subplotLabel, getSetup, PlotCellPops
-from ..imports import getPopDict
-from ..sampling import sampleSpec, sampleSpecC
-from ..csizmar import model_predict, fit_slope, discrim, discrim2, fitfunc, xeno
+from .figureCommon import subplotLabel, getSetup
+from ..csizmar import fit_slope, discrim2, fitfunc, xeno
 
 
 def makeFigure():
