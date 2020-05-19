@@ -22,7 +22,7 @@ def makeFigure():
     FitKX, FitSlopeC5, FitSlopeB22, Kav, Fitabund = np.exp(fit[0]), fit[1], fit[2], [[np.exp(fit[3])], [np.exp(fit[4])], [0]], np.exp(fit[5])
 
     fit_slope(ax[0], FitKX, FitSlopeC5, FitSlopeB22, Kav, Fitabund)
-    discrim2(ax[1], FitKX, FitSlopeC5, FitSlopeB22)
+    discrim2(ax[1], FitKX, FitSlopeC5, FitSlopeB22, Kav)
     xeno(ax[2], FitKX, Kav)
 
     return f
