@@ -41,9 +41,9 @@ class TestPolyc(unittest.TestCase):
         f = np.random.randint(1, 10)
         nl = np.random.randint(1, 10)
         nr = np.random.randint(1, 10)
-        Rtot = np.floor(100. + np.random.rand(nr) * (10. ** np.random.randint(4, 6, size=nr)))
-        LigC = np.random.rand(nl) * (10. ** np.random.randint(1, 2, size=nl))
-        Kav = np.random.rand(nl, nr) * (10. ** np.random.randint(3, 7, size=(nl, nr)))
+        Rtot = np.floor(100.0 + np.random.rand(nr) * (10.0 ** np.random.randint(4, 6, size=nr)))
+        LigC = np.random.rand(nl) * (10.0 ** np.random.randint(1, 2, size=nl))
+        Kav = np.random.rand(nl, nr) * (10.0 ** np.random.randint(3, 7, size=(nl, nr)))
 
         res = polyfc(L0, KxStar, f, Rtot, LigC, Kav)
         res2 = polyfc2(L0, KxStar, f, Rtot, LigC, Kav)
@@ -72,5 +72,5 @@ class TestPolyc(unittest.TestCase):
             self.assertEqual(res31[i], res32[i])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

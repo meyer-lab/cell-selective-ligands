@@ -32,10 +32,10 @@ def makeFigure():
     popCompare(ax[7], ["Pop6", "Pop8"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
     popCompare(ax[8], ["Pop3", "Pop4"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
     ax[8].set_ylim(0, 2)
-    #popCompare(ax[6], ["Pop5", "Pop4"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
-    #ax[6].set_ylim(0, 2)
-    #popCompare(ax[8], ["Pop5", "Pop6"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
-    #ax[6].set_ylim(0, 2)
+    # popCompare(ax[6], ["Pop5", "Pop4"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
+    # ax[6].set_ylim(0, 2)
+    # popCompare(ax[8], ["Pop5", "Pop6"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
+    # ax[6].set_ylim(0, 2)
     return f
 
 
@@ -97,7 +97,7 @@ def vieqPlot(ax, recCount, val):
 
 def ratePlot(ax):
     "Plots rate of bivalent binding over dissocation rate for monovalently bound complexes"
-    #kxstar * Ka, * val-1 * rec-1
+    # kxstar * Ka, * val-1 * rec-1
     recScan = np.logspace(0, 4, 100)
     val = np.arange(1, 5)
     affinities = [1e8, 1e6]

@@ -25,7 +25,7 @@ def makeFigure():
     popCompare(ax[2], ["Pop5", "Pop6"], populationsdf, "Aff", Kav=[4, 6])
     popCompare(ax[3], ["Pop7", "Pop8"], populationsdf, "Aff", Kav=[4, 6])
     popCompare(ax[4], ["Pop3", "Pop4"], populationsdf, "Aff", Kav=[4, 6])
-    #popCompare(ax[5], ["Pop7", "Pop8"], populationsdf, "Aff", Kav=[4, 6])
+    # popCompare(ax[5], ["Pop7", "Pop8"], populationsdf, "Aff", Kav=[4, 6])
 
     subplotLabel(ax)
 

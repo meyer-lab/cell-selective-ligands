@@ -28,13 +28,13 @@ def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund):
     "Outputs predicted vs. Experimental fluorescent intensities for C5 and B22 binding"
     df1 = pd.read_csv("selecv/data/csizmar_s4a.csv")
     X1, Y1 = model_predict(df1, KxStarF, [1, 0, 0], slopeC5, Kav2, abund)
-    df1['predicted'] = X1
-    df1['data'] = "C5"
+    df1["predicted"] = X1
+    df1["data"] = "C5"
 
     df2 = pd.read_csv("selecv/data/csizmar_s4b.csv")
     X2, Y2 = model_predict(df2, KxStarF, [0, 1, 0], slopeB22, Kav2, abund)
-    df2['predicted'] = X2
-    df2['data'] = "B22"
+    df2["predicted"] = X2
+    df2["data"] = "B22"
     df = pd.concat([df1, df2])
 
     lr = LinearRegression(fit_intercept=False)
@@ -45,16 +45,16 @@ def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund):
     lr.fit(X, Y)
     B22_score = lr.score(X, Y)
 
-    sns.lineplot(x='predicted', y='intensity', hue='data', style='valency', markers=True, data=df, ax=ax)
+    sns.lineplot(x="predicted", y="intensity", hue="data", style="valency", markers=True, data=df, ax=ax)
 
     return C5_score, B22_score
 
 
-KxStar = 10**-14.714
+KxStar = 10 ** -14.714
 slope = 0.008677777424519703
 
-KxStar_C5 = 10**-14.693
-KxStar_B22 = 10**-12.734
+KxStar_C5 = 10 ** -14.693
+KxStar_B22 = 10 ** -12.734
 
 slope_C5 = 0.008514426941736077
 slope_B22 = 0.012855332053729724
@@ -62,13 +62,13 @@ slope_B22 = 0.012855332053729724
 
 def discrim():
     "Returns predicted fluorescent values over a range of abundances"
-    df = pd.DataFrame(columns=['Lig', 'Recep', 'value'])
+    df = pd.DataFrame(columns=["Lig", "Recep", "value"])
     for lig in [[8, 0, 0], [4, 0, 4], [0, 8, 0], [0, 4, 4]]:
         for rec in Recep.values():
             res = polyfc(50 * 1e-9, KxStar, 8, [rec], lig, Kav)
             Lbound, _ = res[0], res[1]
-            df = df.append({'Lig': str(lig), 'Recep': rec, 'value': Lbound * slope * (lig[0] + lig[1])}, ignore_index=True)
-    ax = sns.lineplot(x='Recep', y='value', hue='Lig', style='Lig', markers=True, data=df)
+            df = df.append({"Lig": str(lig), "Recep": rec, "value": Lbound * slope * (lig[0] + lig[1])}, ignore_index=True)
+    ax = sns.lineplot(x="Recep", y="value", hue="Lig", style="Lig", markers=True, data=df)
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set(xlim=(1e4, 1e7), ylim=(10, 1e5))
@@ -77,16 +77,16 @@ def discrim():
 
 def discrim2(ax, KxStarD, slopeC5, slopeB22, KavD):
     "Returns predicted fluorescent values over a range of abundances with unique slopes for C5 and B22"
-    df = pd.DataFrame(columns=['Lig', 'Recep', 'value'])
+    df = pd.DataFrame(columns=["Lig", "Recep", "value"])
     for lig in [[8, 0, 0], [4, 0, 4]]:
         for rec in Recep.values():
             res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
-            df = df.append({'Lig': str(lig), 'Recep': rec, 'value': res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
+            df = df.append({"Lig": str(lig), "Recep": rec, "value": res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
     for lig in [[0, 8, 0], [0, 4, 4]]:
         for rec in Recep.values():
             res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
-            df = df.append({'Lig': str(lig), 'Recep': rec, 'value': res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
-    sns.lineplot(x='Recep', y='value', hue='Lig', style='Lig', markers=True, data=df, ax=ax)
+            df = df.append({"Lig": str(lig), "Recep": rec, "value": res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
+    sns.lineplot(x="Recep", y="value", hue="Lig", style="Lig", markers=True, data=df, ax=ax)
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set(xlim=(1e4, 1e7), ylim=(10, 1e5))
@@ -95,11 +95,11 @@ def discrim2(ax, KxStarD, slopeC5, slopeB22, KavD):
 
 def xeno(ax, KxStarX, KavX):
     "Plots Xenograft targeting ratios"
-    df = pd.DataFrame(columns=['Lig', 'ratio'])
+    df = pd.DataFrame(columns=["Lig", "ratio"])
     for lig in [[8, 0, 0], [4, 0, 4], [0, 8, 0], [0, 4, 4]]:
         mcf = polyfc(50 * 1e-9, KxStarX, 8, [Recep["MCF"]], lig, KavX)[0]
         mda = polyfc(50 * 1e-9, KxStarX, 8, [Recep["MDA"]], lig, KavX)[0]
-        df = df.append({'Lig': str(lig), 'ratio': (mcf / mda)}, ignore_index=True)
+        df = df.append({"Lig": str(lig), "ratio": (mcf / mda)}, ignore_index=True)
     sns.barplot(x="Lig", y="ratio", data=df, ax=ax)
     ax.set(ylim=(0, 200))
     return ax
@@ -120,7 +120,7 @@ def resids(x):
 
 def fitfunc():
     "Runs least squares fitting for various model parameters, and returns the minimizers"
-    x0 = np.array([np.log(10**-14.714), 0.01, 0.01, np.log(Kav[0])[0], np.log(Kav[1])[0], np.log(3.8e6)])  # KXSTAR, slopeC5, B22, KA C5, B22, receps MH-7
+    x0 = np.array([np.log(10 ** -14.714), 0.01, 0.01, np.log(Kav[0])[0], np.log(Kav[1])[0], np.log(3.8e6)])  # KXSTAR, slopeC5, B22, KA C5, B22, receps MH-7
     bnds = ((None, None), (None, None), (None, None), (None, None), (None, None), (np.log(3.8e6) * 0.999, np.log(3.8e6) * 1.001))
-    parampredicts = minimize(resids, x0, bounds=bnds, method='L-BFGS-B')
+    parampredicts = minimize(resids, x0, bounds=bnds, method="L-BFGS-B")
     return parampredicts.x
