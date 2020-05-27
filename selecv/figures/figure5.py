@@ -22,14 +22,19 @@ def makeFigure():
 
     _, populationsdf = getPopDict()
     # gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
-    _ = optimizeDesign(populationsdf, ["Pop3", "Pop2"])
+    print(optimizeDesign(populationsdf, ["Pop3", "Pop2"]))
+    print("1")
+    print(optimizeDesign(populationsdf, ["Pop4", "Pop3"]))
+    print("2")
+    print(optimizeDesign(populationsdf, ["Pop7", "Pop8"]))
+    print("3")
 
     return f
 
 
 def minSelecFunc(x, recMeansM):
     "Provides the function to be minimized to get optimal selectivity"
-    
+
     return polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**recMeansM[1][0], 10**recMeansM[1][1]], [x[3], 1-x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0] / polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**recMeansM[0][0], 10**recMeansM[0][1]], [x[3], 1-x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
 
 
@@ -41,8 +46,8 @@ def optimizeDesign(df, popList):
         recMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
         Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
 
-    xnot = np.array([np.log(1e-9), np.log(1e-12), 1, 0.5, np.log(1e8), np.log(1e1)])
-    xBnds = ((np.log(1e-11), np.log(1e-7)), (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e4), np.log(1e9)), (np.log(1e0), np.log(1e2)))
+    xnot = np.array([np.log(1e-9), np.log(1e-12), 1, 1, np.log(1e8), np.log(1e1)])
+    xBnds = ((np.log(1e-15), np.log(1e-6)), (np.log(1e-15), np.log(1e-9)), (1, 16), (1, 1), (np.log(1e4), np.log(1e9)), (np.log(1e0), np.log(1e2)))
     optimized = minimize(minSelecFunc, xnot, bounds=xBnds, method="L-BFGS-B", args=(recMeans), options={"eps": 1, "disp": True})
     optimizers = optimized.x
     optimizers = [np.exp(optimizers[0]), np.exp(optimizers[1]), optimizers[2], optimizers[3], np.exp(optimizers[4]), np.exp(optimizers[5])]
