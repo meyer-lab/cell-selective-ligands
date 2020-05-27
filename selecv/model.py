@@ -3,6 +3,7 @@ Implementation of a simple multivalent binding model.
 """
 
 import numpy as np
+
 from julia.api import Julia
 jl = Julia(compiled_modules=False)
 from julia import polyBindingModel
