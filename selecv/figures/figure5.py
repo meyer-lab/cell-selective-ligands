@@ -47,7 +47,7 @@ def optimizeDesign(df, popList):
         Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
 
     xnot = np.array([np.log(1e-9), np.log(1e-12), 1, 1, np.log(1e8), np.log(1e1)])
-    xBnds = ((np.log(1e-15), np.log(1e-6)), (np.log(1e-15), np.log(1e-9)), (1, 16), (1, 1), (np.log(1e4), np.log(1e9)), (np.log(1e0), np.log(1e2)))
+    xBnds = ((np.log(1e-15), np.log(1e-6)), (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e4), np.log(1e9)), (np.log(1e0), np.log(1e2)))
     optimized = minimize(minSelecFunc, xnot, bounds=xBnds, method="L-BFGS-B", args=(recMeans), options={"eps": 1, "disp": True})
     optimizers = optimized.x
     optimizers = [np.exp(optimizers[0]), np.exp(optimizers[1]), optimizers[2], optimizers[3], np.exp(optimizers[4]), np.exp(optimizers[5])]
