@@ -93,7 +93,9 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     :param Cplx: the monomer ligand composition of each complex
     :param Ctheta: the composition of complexes
     :param Kav: Ka for monomer ligand to receptors
-    :return: Lbound
+    :return:
+        Lbound: a list of Lbound of each complex
+        Rbound: a list of Rbound of each kind of receptor
     """
     # Consistency check
     Kav = np.array(Kav)
@@ -119,10 +121,12 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     Psi = np.ones((Kav.shape[0], Kav.shape[1] + 1))
     Psi[:, : Kav.shape[1]] *= Req * Kav * KxStar
     Psirs = np.sum(Psi, axis=1).reshape(-1, 1)
+    Psinorm = (Psi / Psirs)[:, :-1]
 
-    Lbound = L0 / KxStar * np.sum(Ctheta * np.expm1(np.dot(Cplx, np.log1p(Psirs - 1))).flatten())
-    Rbound = L0 / KxStar * np.sum(Ctheta * np.dot(Cplx, 1 - 1 / Psirs).flatten()
-                                  * np.exp(np.dot(Cplx, np.log(Psirs))).flatten())
+    Lbound = L0 / KxStar * Ctheta * np.expm1(np.dot(Cplx, np.log1p(Psirs - 1))).flatten()
+    #Rbound = L0 / KxStar * Ctheta * np.dot(Cplx, 1 - 1 / Psirs).flatten() * np.exp(np.dot(Cplx, np.log(Psirs))).flatten()
+    Rbound = L0 / KxStar * np.sum(
+        Ctheta.reshape(-1, 1) * np.dot(Cplx, Psinorm) * np.exp(np.dot(Cplx, np.log1p(Psirs - 1))), axis=0)
     return Lbound, Rbound
 
 
