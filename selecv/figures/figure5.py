@@ -8,11 +8,6 @@ from ..imports import getPopDict
 from ..sampling import sampleSpec
 from ..model import polyfc
 
-#ligConc = 10e-9
-#KxStar = 10e3
-#xNaught = [4.0, 1, 10e-9, 10e-9, 10e-9, 10e-9]  # Conc, KxStar, Valency, Mix1, aff11, aff12, aff21, aff22
-#xBnds = ((1, 32), (1, 1), (10e-9, 10e-9), (10e-9, 10e-9), (10e-9, 10e-9), (10e-9, 10e-9))
-
 
 def makeFigure():
     """ Make figure 5. """
@@ -22,12 +17,9 @@ def makeFigure():
 
     _, populationsdf = getPopDict()
     # gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
-    print(optimizeDesign(populationsdf, ["Pop3", "Pop2"]))
-    print("1")
-    print(optimizeDesign(populationsdf, ["Pop4", "Pop3"]))
-    print("2")
-    print(optimizeDesign(populationsdf, ["Pop7", "Pop8"]))
-    print("3")
+    optimizeDesign(populationsdf, ["Pop3", "Pop2"])
+    optimizeDesign(populationsdf, ["Pop4", "Pop3"])
+    optimizeDesign(populationsdf, ["Pop7", "Pop8"])
 
     return f
 
@@ -86,7 +78,6 @@ def gridSearchTry(df, popList):
                                     )[1]
 
     maxSelec = np.amax(resultsTensor)
-    # print(maxSelec)
     maxSelecCoords = np.unravel_index(np.argmax(resultsTensor), resultsTensor.shape)
     maxParams = np.array(
         [
@@ -100,6 +91,5 @@ def gridSearchTry(df, popList):
             searchdic["Aff"][maxSelecCoords[7]],
         ]
     )
-    # print(maxParams)
 
     return maxSelec, maxParams
