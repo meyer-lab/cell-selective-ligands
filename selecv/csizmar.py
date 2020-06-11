@@ -117,9 +117,9 @@ def resids(x):
     "Least squares residual function"
     valpack = np.array([x[6], x[7], x[8], x[9]])
     df1 = pd.read_csv("selecv/data/csizmar_s4a.csv")
-    X1, Y1 = model_predict(df1, np.exp(x[0]), [1, 0, 0], x[1], [[np.exp(x[3])], [np.exp(x[4])], [0]], np.exp(x[5]), valpack)
+    X1, Y1 = model_predict(df1, np.exp(x[0]), [1, 0, 0], x[1], [[np.exp(x[3])], [np.exp(x[4])], [0]], np.exp(x[5]))
     df2 = pd.read_csv("selecv/data/csizmar_s4b.csv")
-    X2, Y2 = model_predict(df2, np.exp(x[0]), [0, 1, 0], x[2], [[np.exp(x[3])], [np.exp(x[4])], [0]], np.exp(x[5]), valpack)
+    X2, Y2 = model_predict(df2, np.exp(x[0]), [0, 1, 0], x[2], [[np.exp(x[3])], [np.exp(x[4])], [0]], np.exp(x[5]))
     X1 = np.asarray(X1)
     X2 = np.asarray(X2)
     Y1 = np.asarray(Y1)
@@ -130,7 +130,7 @@ def resids(x):
 def fitfunc():
     "Runs least squares fitting for various model parameters, and returns the minimizers"
     x0 = np.array([np.log(10 ** -14.714), 0.01, 0.01, np.log(Kav[0])[0], np.log(Kav[1])[0], np.log(3.8e6), 1, 2, 4, 8])  # KXSTAR, slopeC5, slopeB22, KA C5, KA, B22, receps MH-7
-    bnds = ((None, None), (None, None), (None, None), (np.log(Kav[0])[0]*0.999, np.log(Kav[0])[0]*1.001), (np.log(Kav[1])[0]*0.999, np.log(Kav[1])[0]*1.001), (np.log(3.8e6) * 0.999, np.log(3.8e6) * 1.001), (1, 1), (1, 2), (1, 4), (1, 8))
+    bnds = ((None, None), (None, None), (None, None), (None, None), (None, None), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1), (2, 2), (4, 4), (8, 8))
     parampredicts = minimize(resids, x0, bounds=bnds, method="L-BFGS-B")
     return parampredicts.x
 
