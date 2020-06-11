@@ -27,7 +27,8 @@ def makeFigure():
 def minSelecFunc(x, recMeansM):
     "Provides the function to be minimized to get optimal selectivity"
 
-    return polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**recMeansM[1][0], 10**recMeansM[1][1]], [x[3], 1-x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0] / polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**recMeansM[0][0], 10**recMeansM[0][1]], [x[3], 1-x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
+    return polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**recMeansM[1][0], 10**recMeansM[1][1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0] / \
+        polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**recMeansM[0][0], 10**recMeansM[0][1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
 
 
 def optimizeDesign(df, popList):
