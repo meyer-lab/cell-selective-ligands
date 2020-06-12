@@ -7,6 +7,8 @@ import numpy as np
 from .figureCommon import subplotLabel, getSetup, PlotCellPops
 from ..imports import import_Rexpr, getPopDict, getAffDict
 from ..sampling import sampleSpec
+from ..csizmar import fitfunc, xeno
+
 
 ligConc = np.array([10e-9])
 KxStarP = 10e-11
@@ -20,12 +22,15 @@ def makeFigure():
 
     subplotLabel(ax)
 
+    fit = fitfunc()
+    FitKX, _, _, Kav, _ = np.exp(fit[0]), fit[1], fit[2], [[np.exp(fit[3])], [np.exp(fit[4])], [0]], np.exp(fit[5])
+
     _, affData = getAffDict()
     _, npdata, cell_names = import_Rexpr()
     _, populations = getPopDict()
     plotRealPops(ax[0], npdata, cell_names)
     PlotCellPops(ax[1], populations)
-    plotSampleConc(ax[2], populations, [-12.0, 4.0], ["Pop3", "Pop2"])
+    xeno(ax[2], FitKX, Kav)
     affPlot(ax[3], affData)
 
     return f
