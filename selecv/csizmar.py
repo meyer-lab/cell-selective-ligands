@@ -71,21 +71,6 @@ slope_C5 = 0.008514426941736077
 slope_B22 = 0.012855332053729724
 
 
-def discrim(KxStar, slope):
-    "Returns predicted fluorescent values over a range of abundances"
-    df = pd.DataFrame(columns=["Lig", "Recep", "value"])
-    for lig in [[8, 0, 0], [4, 0, 4], [0, 8, 0], [0, 4, 4]]:
-        for rec in Recep.values():
-            res = polyfc(50 * 1e-9, KxStar, 8, [rec], lig, Kav)
-            Lbound, _ = res[0], res[1]
-            df = df.append({"Lig": str(lig), "Recep": rec, "value": Lbound * slope}, ignore_index=True)
-    ax = sns.lineplot(x="Recep", y="value", hue="Lig", style="Lig", markers=True, data=df)
-    ax.set_xscale("log")
-    ax.set_yscale("log")
-    ax.set(xlim=(1e4, 1e7), ylim=(10, 1e5))
-    return ax
-
-
 def discrim2(ax, KxStarD, slopeC5, slopeB22, KavD, valencies=False):
     "Returns predicted fluorescent values over a range of abundances with unique slopes for C5 and B22"
     df = pd.DataFrame(columns=["Lig", "Recep", "value"])
@@ -151,11 +136,13 @@ def fitfunc():
 
 
 def checkVal(valency):
+    "Returns the indices of a given valency level"
     if valency == 1.0:
-        return 0
+        index = 0
     elif valency == 2.0:
-        return 1
+        index = 1
     elif valency == 4.0:
-        return 2
+        index = 2
     elif valency == 8.0:
-        return 3
+        index = 3
+    return index
