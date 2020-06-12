@@ -13,26 +13,29 @@ Kav = np.array([[5.88e7], [9.09e5], [0]])   # [C5, B22, NT]
 Recep = {"MDA": 5.2e4, "SK": 2.2e5, "LNCaP": 2.8e6, "MCF": 3.8e6}
 
 
-def model_predict(df, KxStarP, LigC, slopeP, Kav1, abund, valencies=None):
+def model_predict(df, KxStarP, LigC, slopeP, Kav1, abund, valencies=False):
     "Gathers predicted and measured fluorescent intensities for a given population"
     predicted, measured = [], []
-    if valencies.any():
+
+    if not valencies:
         for _, row in df.iterrows():
-            ind = checkVal(row.valency)
-            res = polyfc(row.monomer * 1e-9 / 8, KxStarP, 8, abund, np.array(LigC) * valencies[ind] / 8 + [0, 0, 1 - sum(np.array(LigC) * valencies[ind] / 8)], Kav1)
+            res = polyfc(row.monomer * 1e-9 / 8, KxStarP, 8, abund, np.array(LigC) * row.valency / 8 + [0, 0, 1 - sum(np.array(LigC) * row.valency / 8)], Kav1)
             Lbound, _ = res[0] * slopeP, res[1]
             predicted.append(Lbound)
             measured.append(row.intensity)
     else:
         for _, row in df.iterrows():
-            res = polyfc(row.monomer * 1e-9 / 8, KxStarP, 8, abund, np.array(LigC) * row.valency / 8 + [0, 0, 1 - sum(np.array(LigC) * row.valency / 8)], Kav1)
+            ind = checkVal(row.valency)
+            res = polyfc(row.monomer * 1e-9 / 8, KxStarP, 8, abund, np.array(LigC) * valencies[ind] / 8 + [0, 0, 1 - sum(np.array(LigC) * valencies[ind] / 8)], Kav1)
+            assert(np.array(np.array(LigC) * valencies[ind] / 8 + [0, 0, 1 - sum(np.array(LigC) * valencies[ind] / 8)]).all()
+                   == np.array(np.array(LigC) * row.valency / 8 + [0, 0, 1 - sum(np.array(LigC) * row.valency / 8)]).all())
             Lbound, _ = res[0] * slopeP, res[1]
             predicted.append(Lbound)
             measured.append(row.intensity)
     return predicted, measured
 
 
-def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund, valencies):
+def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund, valencies=False):
     "Outputs predicted vs. Experimental fluorescent intensities for C5 and B22 binding"
     df1 = pd.read_csv("selecv/data/csizmar_s4a.csv")
     X1, Y1 = model_predict(df1, KxStarF, [1, 0, 0], slopeC5, Kav2, abund, valencies)
@@ -83,17 +86,28 @@ def discrim():
     return ax
 
 
-def discrim2(ax, KxStarD, slopeC5, slopeB22, KavD, valencies):
+def discrim2(ax, KxStarD, slopeC5, slopeB22, KavD, valencies=False):
     "Returns predicted fluorescent values over a range of abundances with unique slopes for C5 and B22"
     df = pd.DataFrame(columns=["Lig", "Recep", "value"])
-    for lig in [[valencies[0], 0, 8-valencies[0]], [valencies[1], 0, 8-valencies[1]]]:
-        for rec in Recep.values():
-            res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
-            df = df.append({"Lig": str(lig), "Recep": rec, "value": res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
-    for lig in [[0, valencies[0], 8-valencies[0]], [0, valencies[1], 8-valencies[1]]]:
-        for rec in Recep.values():
-            res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
-            df = df.append({"Lig": str(lig), "Recep": rec, "value": res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
+    if not valencies:
+        for lig in [[8, 0, 0], [4, 0, 4]]:
+            for rec in Recep.values():
+                res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
+                df = df.append({"Lig": str(lig), "Recep": rec, "value": res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
+        for lig in [[0, 8, 0], [0, 4, 4]]:
+            for rec in Recep.values():
+                res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
+                df = df.append({"Lig": str(lig), "Recep": rec, "value": res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
+
+    else:
+        for lig in [[valencies[0], 0, 8 - valencies[0]], [valencies[1], 0, 8 - valencies[1]]]:
+            for rec in Recep.values():
+                res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
+                df = df.append({"Lig": str(lig), "Recep": rec, "value": res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
+        for lig in [[0, valencies[0], 8 - valencies[0]], [0, valencies[1], 8 - valencies[1]]]:
+            for rec in Recep.values():
+                res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
+                df = df.append({"Lig": str(lig), "Recep": rec, "value": res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
     sns.lineplot(x="Recep", y="value", hue="Lig", style="Lig", markers=True, data=df, ax=ax)
     ax.set_xscale("log")
     ax.set_yscale("log")
@@ -115,11 +129,12 @@ def xeno(ax, KxStarX, KavX):
 
 def resids(x):
     "Least squares residual function"
-    valpack = np.array([x[6], x[7], x[8], x[9]])
+    valpack = False  # np.array([x[6], x[7], x[8], x[9]])
+
     df1 = pd.read_csv("selecv/data/csizmar_s4a.csv")
-    X1, Y1 = model_predict(df1, np.exp(x[0]), [1, 0, 0], x[1], [[np.exp(x[3])], [np.exp(x[4])], [0]], np.exp(x[5]))
+    X1, Y1 = model_predict(df1, np.exp(x[0]), [1, 0, 0], x[1], [[np.exp(x[3])], [np.exp(x[4])], [0]], np.exp(x[5]), valpack)
     df2 = pd.read_csv("selecv/data/csizmar_s4b.csv")
-    X2, Y2 = model_predict(df2, np.exp(x[0]), [0, 1, 0], x[2], [[np.exp(x[3])], [np.exp(x[4])], [0]], np.exp(x[5]))
+    X2, Y2 = model_predict(df2, np.exp(x[0]), [0, 1, 0], x[2], [[np.exp(x[3])], [np.exp(x[4])], [0]], np.exp(x[5]), valpack)
     X1 = np.asarray(X1)
     X2 = np.asarray(X2)
     Y1 = np.asarray(Y1)
@@ -133,6 +148,7 @@ def fitfunc():
     bnds = ((None, None), (None, None), (None, None), (None, None), (None, None), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1), (2, 2), (4, 4), (8, 8))
     parampredicts = minimize(resids, x0, bounds=bnds, method="L-BFGS-B")
     return parampredicts.x
+
 
 def checkVal(valency):
     if valency == 1.0:
