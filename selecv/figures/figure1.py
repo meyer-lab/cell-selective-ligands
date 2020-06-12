@@ -23,8 +23,7 @@ def makeFigure():
     subplotLabel(ax)
 
     fit = fitfunc()
-    FitKX, FitSlopeC5, FitSlopeB22, Kav, Fitabund = np.exp(fit[0]), fit[1], fit[2], [[np.exp(fit[3])], [np.exp(fit[4])], [0]], np.exp(fit[5])
-    valencies = np.array([fit[6], fit[7], fit[8], fit[9]])
+    FitKX, _, _, Kav, _ = np.exp(fit[0]), fit[1], fit[2], [[np.exp(fit[3])], [np.exp(fit[4])], [0]], np.exp(fit[5])
 
     _, affData = getAffDict()
     _, npdata, cell_names = import_Rexpr()
