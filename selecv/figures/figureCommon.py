@@ -38,6 +38,7 @@ def subplotLabel(axs, indices=False):
         for jj, index in enumerate(indices):
             axs[index].text(-0.2, 1.25, ascii_lowercase[jj], transform=axs[index].transAxes, fontsize=16, fontweight="bold", va="top")
 
+
 def PlotCellPops(ax, df, bbox=False):
     "Plots theoretical populations"
     sampleData = sampleReceptors(df, 20000)
