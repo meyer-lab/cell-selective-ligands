@@ -18,7 +18,7 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((12, 14), (5, 3))
     _, populationsdf = getPopDict()
-    subplotLabel(ax, [0] + list(range(9, 13))
+    subplotLabel(ax, [0] + list(range(9, 13)))
     ax[13].axis("off")
     ax[14].axis("off")
     affinity(f, ax[0:9], 1e-9, 10 ** -10, [1.0], ff=1, vmin=-1, vmax=5.5)
