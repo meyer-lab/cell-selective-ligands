@@ -17,7 +17,7 @@ affinity = 10e7  # 7
 def makeFigure():
     """ Make figure 3. """
     # Get list of axis objects
-    ax, f = getSetup((9, 18), (4, 3))
+    ax, f = getSetup((9, 12), (4, 3))
     subplotLabel(ax, [0] + list(range(5, 12)))
 
     valency(f, ax[0:5], 1e-9, 10 ** -10, [1.0], Kav=[[3e6, 3e6]], vmin=0.0, vmax=9)

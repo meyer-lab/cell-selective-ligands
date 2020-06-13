@@ -4,6 +4,7 @@ Contains utilities and functions that are commonly used in the figure creation f
 from string import ascii_lowercase
 from matplotlib import gridspec, pyplot as plt
 from matplotlib.patches import Ellipse
+import matplotlib.cm as cm
 from scipy.stats import multivariate_normal
 import seaborn as sns
 import pandas as pds
@@ -209,6 +210,9 @@ def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=
     ax.set_yscale("log")
     plt.clabel(contours, inline=True, fontsize=3)
     ax.pcolor(X, Y, logZ, cmap="RdGy_r", vmin=vmin, vmax=vmax)
+    norm = plt.Normalize(vmin=vmin, vmax=vmax)
+    cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap="RdGy_r"), ax=ax)
+    cbar.set_label("Log Ligand Bound")
     overlapCellPopulation(ax, abundRange)
 
 
