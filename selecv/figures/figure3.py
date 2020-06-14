@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pds
 import seaborn as sns
 from matplotlib.lines import Line2D
-from .figureCommon import subplotLabel, getSetup, popCompare
+from .figureCommon import subplotLabel, getSetup, popCompare, valency
 from ..imports import getPopDict
 from ..model import polyfc
 
@@ -17,25 +17,22 @@ affinity = 10e7  # 7
 def makeFigure():
     """ Make figure 3. """
     # Get list of axis objects
-    ax, f = getSetup((7, 6), (3, 3))
-    subplotLabel(ax)
+    ax, f = getSetup((9, 12), (4, 3))
+    subplotLabel(ax, [0] + list(range(5, 12)))
 
+    valency(f, ax[0:5], 1e-9, 10 ** -10, [1.0], Kav=[[3e6, 3e6]], vmin=0.0, vmax=9)
     valencyScan = np.logspace(0.0, 4.0, base=2.0, num=10)
     _, populationsdf = getPopDict()
-    valDemo(ax[0])
-    ConcValPlot(ax[1])
-    vieqPlot(ax[2], 1e4, 8)
-    vieqPlot(ax[3], 1e3, 8)
-    ratePlot(ax[4])
-    popCompare(ax[5], ["Pop3", "Pop2"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
-    popCompare(ax[6], ["Pop7", "Pop8"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
-    popCompare(ax[7], ["Pop6", "Pop8"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
-    popCompare(ax[8], ["Pop3", "Pop4"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
-    ax[8].set_ylim(0, 2)
-    # popCompare(ax[6], ["Pop5", "Pop4"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
-    # ax[6].set_ylim(0, 2)
-    # popCompare(ax[8], ["Pop5", "Pop6"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
-    # ax[6].set_ylim(0, 2)
+    ratePlot(ax[5])
+    vieqPlot(ax[6], 1e4, 8)
+    vieqPlot(ax[7], 1e3, 8)
+
+    popCompare(ax[8], ["Pop3", "Pop2"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
+    popCompare(ax[9], ["Pop7", "Pop8"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
+    popCompare(ax[10], ["Pop6", "Pop8"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
+    popCompare(ax[11], ["Pop3", "Pop4"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
+    ax[11].set_ylim(0, 2)
+
     return f
 
 
@@ -91,7 +88,7 @@ def vieqPlot(ax, recCount, val):
         for jj, bound in enumerate(vieq):
             ligboundDF = pds.DataFrame({"Degree of Binding": jj + 1, "# Ligand Bound": [bound], "$K_a$": afflabs[ii]})
             vieqDF = vieqDF.append(ligboundDF)
-    sns.stripplot(x="Binding Valency", y="Ligand Bound", hue="$K_a$", data=vieqDF, ax=ax)
+    sns.stripplot(x="Degree of Binding", y="# Ligand Bound", hue="$K_a$", data=vieqDF, ax=ax)
     ax.set(yscale="log", ylim=(0.1, 1e4), title="Valency Binding " + str(recCount) + " Receptors", ylabel="Ligand Bound", xlabel="Binding Valency")
 
 
@@ -110,7 +107,7 @@ def ratePlot(ax):
             for kk, recCount in enumerate(recScan):
                 rateHolder[kk] = KxStarPl * Ka * (f - 1) * recCount
             ax.plot(recScan, rateHolder, color=colors[jj], label="Valency = " + str(f), linestyle=lines[ii])
-    ax.set(xlim=(1, 10000), xlabel="Receptor Abundance", ylabel="Forward/Reverse Rate", xscale="log", ylim=(0, 5))  # ylim=(0, 1),
+    ax.set(xlim=(1, 10000), xlabel="Receptor Abundance", ylabel="Forward/Reverse Rate", xscale="log", ylim=(0.1, 5))  # ylim=(0, 1),
     handles, _ = ax.get_legend_handles_labels()
     handles = handles[0:4]
     line = Line2D([], [], color="black", marker="_", linestyle="None", markersize=6, label="$K_a$ = 10e8")
