@@ -52,7 +52,7 @@ class TestPolyc(unittest.TestCase):
 
         self.assertTrue(abs(res[0] - res20) < res[0] * 1e-7)
         self.assertTrue(abs(res[1] - res21) < res[1] * 1e-7)
-        self.assertAlmostEqual(np.sum(res[2]), res[0])
+        self.assertTrue(abs(np.sum(res[2]) - res[0]) < res[1] * 1e-3)
 
     def test_null_monomer(self):
         # [3 0 0] should be equivalent to [3 0 5] if the last ligand has affinity 0
