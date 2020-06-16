@@ -12,7 +12,7 @@ Cplx = np.array([[1, 1]])
 Ctheta = [1.0]
 Kav = np.array([[1e6, 5e4], [5e4, 1e6]])
 
-x = np.logspace(-15, -9, num = 7)
+x = np.logspace(-15, -9, num=7)
 y = []
 
 for KxStar in x:
