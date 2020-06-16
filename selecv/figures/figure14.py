@@ -1,4 +1,4 @@
-from .figureA import complex
+from .figureCommon import complex
 
 
 def makeFigure():

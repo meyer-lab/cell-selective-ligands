@@ -6,11 +6,7 @@ from scipy.optimize import minimize
 from .figureCommon import subplotLabel, getSetup
 from ..imports import getPopDict
 from ..sampling import sampleSpec
-
-ligConc = 10e-9
-KxStar = 10e3
-xNaught = [4.0, 1, 10e-9, 10e-9, 10e-9, 10e-9]  # Conc, KxStar, Valency, Mix1, aff11, aff12, aff21, aff22
-xBnds = ((1, 32), (1, 1), (10e-9, 10e-9), (10e-9, 10e-9), (10e-9, 10e-9), (10e-9, 10e-9))
+from ..model import polyfc
 
 
 def makeFigure():
@@ -21,14 +17,18 @@ def makeFigure():
 
     _, populationsdf = getPopDict()
     # gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
-    _, _, _ = optimizeDesign(populationsdf, ["Pop3", "Pop2"])
+    optimizeDesign(populationsdf, ["Pop3", "Pop2"])
+    optimizeDesign(populationsdf, ["Pop4", "Pop3"])
+    optimizeDesign(populationsdf, ["Pop7", "Pop8"])
 
     return f
 
 
-def minSelecFunc(x, recMeansM, CovsM):
+def minSelecFunc(x, recMeansM):
     "Provides the function to be minimized to get optimal selectivity"
-    return 1 / sampleSpec(ligConc, KxStar, x[0], recMeansM, CovsM, np.array([x[1], 1 - x[1]]), np.array([[x[2], x[3]], [x[4], x[5]]]))[1]
+
+    return polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**recMeansM[1][0], 10**recMeansM[1][1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0] / \
+        polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**recMeansM[0][0], 10**recMeansM[0][1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
 
 
 def optimizeDesign(df, popList):
@@ -39,22 +39,13 @@ def optimizeDesign(df, popList):
         recMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
         Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
 
-    optimized = minimize(minSelecFunc, xNaught, bounds=xBnds, method="L-BFGS-B", args=(recMeans, Covs), options={"eps": 1, "disp": True})
-    params = optimized.x
-    optSelec = sampleSpec(
-        ligConc, KxStar, params[0], recMeans, Covs, np.array([params[1], 1 - params[1]]), np.array([[params[2], params[3]], [params[4], params[5]]])
-    )[1]
-    selecNot = sampleSpec(
-        ligConc,
-        KxStar,
-        xNaught[0],
-        recMeans,
-        Covs,
-        np.array([xNaught[1], 1 - xNaught[1]]),
-        np.array([[xNaught[2], xNaught[3]], [xNaught[4], xNaught[5]]]),
-    )[1]
+    xnot = np.array([np.log(1e-9), np.log(1e-12), 1, 1, np.log(1e8), np.log(1e1)])
+    xBnds = ((np.log(1e-15), np.log(1e-6)), (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e4), np.log(1e9)), (np.log(1e0), np.log(1e2)))
+    optimized = minimize(minSelecFunc, xnot, bounds=xBnds, method="L-BFGS-B", args=(recMeans), options={"eps": 1, "disp": True})
+    optimizers = optimized.x
+    optimizers = [np.exp(optimizers[0]), np.exp(optimizers[1]), optimizers[2], optimizers[3], np.exp(optimizers[4]), np.exp(optimizers[5])]
 
-    return optimized, optSelec, selecNot
+    return optimizers
 
 
 searchdic = {
@@ -88,7 +79,6 @@ def gridSearchTry(df, popList):
                                     )[1]
 
     maxSelec = np.amax(resultsTensor)
-    # print(maxSelec)
     maxSelecCoords = np.unravel_index(np.argmax(resultsTensor), resultsTensor.shape)
     maxParams = np.array(
         [
@@ -102,6 +92,5 @@ def gridSearchTry(df, popList):
             searchdic["Aff"][maxSelecCoords[7]],
         ]
     )
-    # print(maxParams)
 
     return maxSelec, maxParams
