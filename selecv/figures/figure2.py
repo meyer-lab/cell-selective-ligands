@@ -28,6 +28,4 @@ def makeFigure():
     popCompare(ax[11], ["Pop7", "Pop8"], populationsdf, "Aff", Kav=[4, 6])
     popCompare(ax[12], ["Pop3", "Pop4"], populationsdf, "Aff", Kav=[4, 6])
 
-
-
     return f
