@@ -1,5 +1,5 @@
 import numpy as np
-from  .figureCommon import subplotLabel, getSetup
+from .figureCommon import subplotLabel, getSetup
 from ..model import *
 import seaborn as sns
 
