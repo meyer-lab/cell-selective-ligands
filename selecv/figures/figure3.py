@@ -27,12 +27,11 @@ def makeFigure():
     vieqPlot(ax[6], 1e4, 8)
     vieqPlot(ax[7], 1e3, 8)
 
-    popCompare(ax[8], ["Pop3", "Pop2"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
-    popCompare(ax[9], ["Pop7", "Pop8"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
-    popCompare(ax[10], ["Pop6", "Pop8"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
-    popCompare(ax[11], ["Pop3", "Pop4"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
+    popCompare(ax[8], ["High/Low", "Med/Low"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
+    popCompare(ax[9], ["High/High", "Med/Med"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
+    popCompare(ax[10], ["High/Med", "Med/Med"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
+    popCompare(ax[11], ["High/Low", "High/Low"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
     ax[11].set_ylim(0, 2)
-
     return f
 
 

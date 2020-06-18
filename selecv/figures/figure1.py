@@ -18,20 +18,15 @@ val = 16.0
 def makeFigure():
     """ Make figure 1. """
     # Get list of axis objects
-    ax, f = getSetup((7, 6), (2, 2))
+    ax, f = getSetup((7, 6), (1, 1))
 
     subplotLabel(ax)
 
-    fit = fitfunc()
-    FitKX, _, _, Kav, _ = np.exp(fit[0]), fit[1], fit[2], [[np.exp(fit[3])], [np.exp(fit[4])], [0]], np.exp(fit[5])
-
-    _, affData = getAffDict()
-    _, npdata, cell_names = import_Rexpr()
+    #_, affData = getAffDict()
+    #_, npdata, cell_names = import_Rexpr()
     _, populations = getPopDict()
-    plotRealPops(ax[0], npdata, cell_names)
-    PlotCellPops(ax[1], populations)
-    xeno(ax[2], FitKX, Kav)
-    affPlot(ax[3], affData)
+    #plotRealPops(ax[0], npdata, cell_names)
+    PlotCellPops(ax[0], populations)
 
     return f
 

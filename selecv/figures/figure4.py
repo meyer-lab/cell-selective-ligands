@@ -23,10 +23,10 @@ def makeFigure():
     ax[10].axis("off")
     ax[11].axis("off")
 
-    popCompare(ax[5], ["Pop3", "Pop2"], populationsdf, "Mix", Kav=np.array([[10e5, 10e4], [10e4, 10e5]]))
-    popCompare(ax[6], ["Pop7", "Pop3", "Pop4"], populationsdf, "Mix", Kav=np.array([[10e5, 10e4], [10e4, 10e5]]))
-    popCompare(ax[7], ["Pop8", "Pop5", "Pop6"], populationsdf, "Mix", Kav=np.array([[10e5, 10e4], [10e4, 10e5]]))
-    popCompare(ax[8], ["Pop5", "Pop3", "Pop4"], populationsdf, "Mix", Kav=np.array([[10e5, 10e4], [10e4, 10e5]]))
-    popCompare(ax[9], ["Pop6", "Pop3", "Pop4"], populationsdf, "Mix", Kav=np.array([[10e5, 10e4], [10e4, 10e5]]))
+    popCompare(ax[5], ["High/Low", "Med/Low"], populationsdf, "Mix", Kav=np.array([[10e5, 10e4], [10e4, 10e5]]))
+    popCompare(ax[6], ["High/High", "High/Low", "Low/High"], populationsdf, "Mix", Kav=np.array([[10e5, 10e4], [10e4, 10e5]]))
+    popCompare(ax[7], ["Med/Med", "Med/High", "High/Med"], populationsdf, "Mix", Kav=np.array([[10e5, 10e4], [10e4, 10e5]]))
+    popCompare(ax[8], ["Med/High", "High/Low", "Low/High"], populationsdf, "Mix", Kav=np.array([[10e5, 10e4], [10e4, 10e5]]))
+    popCompare(ax[9], ["High/Med", "High/Low", "Low/High"], populationsdf, "Mix", Kav=np.array([[10e5, 10e4], [10e4, 10e5]]))
 
     return f
