@@ -99,20 +99,22 @@ def popCompare(ax, popList, df, scanKey, Kav, L0=1e-9, KxStar=10 ** -10.0, f=1):
 
 def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
     "Makes a heatmap comparing binding ratios of populations at a range of binding affinities"
-    npoints = 15
+    npoints = 3
     ticks = np.full([npoints], None)
     affScan = np.logspace(Kav[0], Kav[1], npoints)
-    ticks[0], ticks[-1] = "10e" + str(Kav[0] - 1), "10e" + str(Kav[1] - 1)
+    ticks[0], ticks[-1] = "1e" + str(Kav[0]), "1e" + str(Kav[1])
 
     sampMeans = np.zeros(npoints)
     ratioDF = pds.DataFrame(columns=affScan, index=affScan)
+    tens = np.array([10, 10])
 
     for ii, aff1 in enumerate(affScan):
         for jj, aff2 in enumerate(np.flip(affScan)):
-            _, sampMeans[jj], _ = sampleSpec(L0, KxStar, f, recMeans, Covs, np.array([1]), np.array([[aff1, aff2]]))
+            sampMeans[jj] = np.log(polyfc(L0, KxStar, f, np.power(10, recMeans[0]), [1], np.array([[aff1, aff2]]))[0] /
+                                   polyfc(L0, KxStar, f, np.power(10, recMeans[1]), [1], np.array([[aff1, aff2]]))[0])
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
-    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=12.5, cbar=Cbar)
+    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=-4, vmax=4, cbar=Cbar, cbar_kws={'label': 'log(Binding Ratio)'}, annot=True)
     ax.set(xlabel="Rec 1 Affinity ($K_a$)", ylabel="Rec 2 Affinity $K_a$)")
     ax.set_title(Title, fontsize=8)
 
@@ -153,7 +155,7 @@ def MixPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
     ax.plot(mixRatio, sampMeans, color="royalblue")
     ax.fill_between(mixRatio, underDev, overDev, color="royalblue", alpha=0.1)
     if len(Covs) == 2:
-        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 10), xlim=(0, 1))#, title=Title + " binding ratio")
+        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 10), xlim=(0, 1))  # , title=Title + " binding ratio")
         ax.set_title(Title + " ratio", fontsize=4)
     else:
         ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 4), xlim=(0, 1))
@@ -238,6 +240,8 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, offdiag=1e5, vmin=-
             abundHeatMap(axs[i2 * nAffPts + i1], abundRange,
                          L0, KxStar, [[aff1, aff2]], Comp, f=ff, Cplx=Cplx,
                          vmin=vmin, vmax=vmax, cbar=cbar)
+            plt.plot([3.3, 3.7], [2, 2], color="w", marker=2)
+            plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
             axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e} $K_2$ = {:.1e}".format(aff1, aff2))
     return fig
 
@@ -249,7 +253,7 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
 
     for i, v in enumerate(ffs):
         cbar = False
-        if i in [2, 5]:
+        if i in [2, 4]:
             cbar = True
         abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vmin=vmin, vmax=vmax, cbar=cbar)
         axs[i].set_title("$f$ = {}".format(v))
@@ -264,7 +268,7 @@ def mixture(fig, axs, L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, v
 
     for i, comp in enumerate(comps):
         cbar = False
-        if i in [2, 5]:
+        if i in [2, 4]:
             cbar = True
         abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vmin=vmin, vmax=vmax, cbar=cbar)
         axs[i].set_title("$LigC$ = [{}, {}]".format(comp, 1 - comp))
