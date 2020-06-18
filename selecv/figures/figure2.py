@@ -23,9 +23,9 @@ def makeFigure():
     ax[14].axis("off")
     affinity(f, ax[0:9], 1e-9, 10 ** -10, [1.0], ff=1, vmin=-1, vmax=5.5)
 
-    popCompare(ax[9], ["Pop3", "Pop2"], populationsdf, "Aff", Kav=[4, 6])
-    popCompare(ax[10], ["Pop5", "Pop6"], populationsdf, "Aff", Kav=[4, 6])
-    popCompare(ax[11], ["Pop7", "Pop8"], populationsdf, "Aff", Kav=[4, 6])
-    popCompare(ax[12], ["Pop3", "Pop4"], populationsdf, "Aff", Kav=[4, 6])
+    popCompare(ax[9], ["High/Low", "Med/Low"], populationsdf, "Aff", Kav=[4, 6])
+    popCompare(ax[10], ["Med/High", "High/Med"], populationsdf, "Aff", Kav=[4, 6])
+    popCompare(ax[11], ["High/High", "Med/Med"], populationsdf, "Aff", Kav=[4, 6])
+    popCompare(ax[12], ["High/Low", "Low/High"], populationsdf, "Aff", Kav=[4, 6])
 
     return f

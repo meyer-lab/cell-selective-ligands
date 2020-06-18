@@ -12,14 +12,14 @@ from ..model import polyfc
 def makeFigure():
     """ Make figure 5. """
     # Get list of axis objects
-    ax, f = getSetup((7, 6), (2, 3))
+    ax, f = getSetup((10, 8), (2, 3))
     subplotLabel(ax)
 
     _, populationsdf = getPopDict()
     # gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
-    optimizeDesign(populationsdf, ["Pop3", "Pop2"])
-    optimizeDesign(populationsdf, ["Pop4", "Pop3"])
-    optimizeDesign(populationsdf, ["Pop7", "Pop8"])
+    optimizeDesign(populationsdf, ["High/Low", "Med/Low"])
+    optimizeDesign(populationsdf, ["Low/High", "High/Low"])
+    optimizeDesign(populationsdf, ["High/High", "Med/Med"])
 
     return f
 

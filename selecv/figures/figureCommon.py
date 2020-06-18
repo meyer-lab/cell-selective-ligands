@@ -45,11 +45,15 @@ def PlotCellPops(ax, df, bbox=False):
     sns.set_palette("husl", 8)
     for pop in sampleData.Population.unique():
         popDF = sampleData.loc[sampleData["Population"] == pop]
-        sns.kdeplot(popDF.Receptor_1, popDF.Receptor_2, ax=ax, label=pop, shade=True, shade_lowest=False, legend=False)
-    if bbox:
-        ax.legend(fontsize=6, bbox_to_anchor=(1.02, 1), loc="center right")
-    else:
-        ax.legend(fontsize=7)
+        plot = sns.kdeplot(popDF.Receptor_1, popDF.Receptor_2, ax=ax, label=pop, shade=True, shade_lowest=False, legend=False)
+    plot.text(100, 100, "Low/Low", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(1000, 100, "Med/Low", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(10000, 100, "High/Low", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(100, 10000, "Low/High", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(1250, 1250, "Med/Med", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(10000, 10000, "High/High", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(8000, 1000, "High/Med", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(1000, 8000, "Med/High", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
     ax.set(xscale="log", yscale="log")
 
 
@@ -149,21 +153,22 @@ def MixPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
     ax.plot(mixRatio, sampMeans, color="royalblue")
     ax.fill_between(mixRatio, underDev, overDev, color="royalblue", alpha=0.1)
     if len(Covs) == 2:
-        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 10), xlim=(0, 1), title=Title + " binding ratio")
+        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 10), xlim=(0, 1))#, title=Title + " binding ratio")
+        ax.set_title(Title + " ratio", fontsize=4)
     else:
         ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 4), xlim=(0, 1))
-        ax.set_title(Title)
+        ax.set_title(Title, fontsize=7)
 
 
 cellPopulations = {
-    "1": [2, 2, 0.5, 0.25, 45],
-    "2": [3, 2, 0.5, 0.25, 0],
-    "3": [4, 2, 0.5, 0.25, 0],
-    "4": [2, 4, 0.3, 0.6, 0],
-    "5": [3.2, 3.7, 0.5, 0.25, 45],
-    "6": [3.7, 3.2, 0.5, 0.25, 45],
-    "7": [4, 4, 0.5, 0.25, 45],
-    "8": [3.2, 3.2, 0.25, 1, 45],
+    "Low/Low": [2, 2, 0.5, 0.25, 45],
+    "Med/Low": [3, 2, 0.5, 0.25, 0],
+    "High/Low": [4, 2, 0.5, 0.25, 0],
+    "Low/High": [2, 4, 0.3, 0.6, 0],
+    "Med/High": [3.1, 3.9, 0.5, 0.25, 45],
+    "High/Med": [3.9, 3.1, 0.5, 0.25, 45],
+    "High/High": [4, 4, 0.5, 0.25, 45],
+    "Med/Med": [3.1, 3.1, 0.25, 1, 45],
 }
 
 abundRange = (1.5, 4.5)
@@ -193,7 +198,7 @@ def overlapCellPopulation(ax, scale, data=cellPopulations):
                     color='white')
 
 
-def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=-2, vmax=4):
+def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=-2, vmax=4, cbar=False):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
@@ -210,10 +215,11 @@ def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=
     ax.set_xscale("log")
     ax.set_yscale("log")
     plt.clabel(contours, inline=True, fontsize=3)
-    ax.pcolor(X, Y, logZ, cmap="RdGy_r", vmin=vmin, vmax=vmax)
+    ax.pcolor(X, Y, logZ, cmap='viridis', vmin=vmin, vmax=vmax)
     norm = plt.Normalize(vmin=vmin, vmax=vmax)
-    cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap="RdGy_r"), ax=ax)
-    cbar.set_label("Log Ligand Bound")
+    if cbar:
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='viridis'), ax=ax)
+        cbar.set_label("Log Ligand Bound")
     overlapCellPopulation(ax, abundRange)
 
 
@@ -224,12 +230,14 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, offdiag=1e5, vmin=-
 
     affRange = (5., 7.)
     affScan = np.logspace(affRange[0], affRange[1], nAffPts)
-
     for i1, aff1 in enumerate(affScan):
         for i2, aff2 in enumerate(np.flip(affScan)):
+            cbar = False
+            if i2 * nAffPts + i1 in [2, 5, 8]:
+                cbar = True
             abundHeatMap(axs[i2 * nAffPts + i1], abundRange,
                          L0, KxStar, [[aff1, aff2]], Comp, f=ff, Cplx=Cplx,
-                         vmin=vmin, vmax=vmax)
+                         vmin=vmin, vmax=vmax, cbar=cbar)
             axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e} $K_2$ = {:.1e}".format(aff1, aff2))
     return fig
 
@@ -240,7 +248,10 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
     fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $K_x^*$={:.2e}, $LigC$={}".format(L0, Kav, KxStar, Comp))
 
     for i, v in enumerate(ffs):
-        abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vmin=vmin, vmax=vmax)
+        cbar = False
+        if i in [2, 5]:
+            cbar = True
+        abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vmin=vmin, vmax=vmax, cbar=cbar)
         axs[i].set_title("$f$ = {}".format(v))
 
     return fig
@@ -252,7 +263,10 @@ def mixture(fig, axs, L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, v
     fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $f$={}, $K_x^*$={:.2e}".format(L0, Kav, ff, KxStar))
 
     for i, comp in enumerate(comps):
-        abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vmin=vmin, vmax=vmax)
+        cbar = False
+        if i in [2, 5]:
+            cbar = True
+        abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vmin=vmin, vmax=vmax, cbar=cbar)
         axs[i].set_title("$LigC$ = [{}, {}]".format(comp, 1 - comp))
 
     return fig

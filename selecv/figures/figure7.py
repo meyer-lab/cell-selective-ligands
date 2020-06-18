@@ -11,14 +11,14 @@ def makeFigure():
     ax, f = getSetup((7, 6), (3, 3))
     subplotLabel(ax)
 
-    #bispecific_ratio(ax[0])
-    #bispecific_heatmap(ax[1])
+    # bispecific_ratio(ax[0])
+    # bispecific_heatmap(ax[1])
     bi_affinity(f, ax[0:9])
 
     return f
 
 
-def bisp_ratio(L0, KxStar, Rtot, Kav, Lbound = True):
+def bisp_ratio(L0, KxStar, Rtot, Kav, Lbound=True):
     """ Lbound of bispecific to monovalent ligand ratio """
     Lbound1, Rbound1 = polyc(L0, KxStar, Rtot, np.array([[1, 0]]), [1], Kav)
     Lbound2, Rbound2 = polyc(L0, KxStar, Rtot, np.array([[1, 1]]), [1], Kav)
@@ -40,11 +40,11 @@ def bispecific_ratio(ax):
     ax.set(xscale="log", ylim=(0, 2), title="Bispecific to monospecific Lbound ratio", xlabel="$K_x^*$", ylabel="ratio")
 
 
-def bispecific_heatmap(ax, Kav, KxStar = 1e-12, vmin=0, vmax=3, Lbound = True):
+def bispecific_heatmap(ax, Kav, KxStar=1e-12, vmin=0, vmax=3, Lbound=True):
     L0 = 1e-9
     nAbdPts = 70
     abundScan = np.logspace(1.5, 4.5, nAbdPts)
-    func = np.vectorize(lambda r1, r2: bisp_ratio(L0, KxStar, [r1, r2], Kav, Lbound = Lbound))
+    func = np.vectorize(lambda r1, r2: bisp_ratio(L0, KxStar, [r1, r2], Kav, Lbound=Lbound))
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
 
@@ -72,13 +72,3 @@ def bi_affinity(fig, axs, vmin=0, vmax=3):
             bispecific_heatmap(axs[i2 * nAffPts + i1], Kav, KxStar=1e-12, vmin=vmin, vmax=vmax)
             axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e} $K_2$ = {:.1e}".format(aff1, aff2))
     return fig
-
-
-
-
-
-
-
-
-
-
