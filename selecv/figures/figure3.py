@@ -27,10 +27,10 @@ def makeFigure():
     vieqPlot(ax[6], 1e4, 8)
     vieqPlot(ax[7], 1e3, 8)
 
-    popCompare(ax[8], ["High/Low", "Med/Low"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
-    popCompare(ax[9], ["High/High", "Med/Med"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
-    popCompare(ax[10], ["High/Med", "Med/Med"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
-    popCompare(ax[11], ["High/Low", "High/Low"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
+    popCompare(ax[8], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
+    popCompare(ax[9], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
+    popCompare(ax[10], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
+    popCompare(ax[11], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{lo}$"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], KxStar=10e-11, f=valencyScan)
     ax[11].set_ylim(0, 2)
     return f
 

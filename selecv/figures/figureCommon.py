@@ -46,14 +46,14 @@ def PlotCellPops(ax, df, bbox=False):
     for pop in sampleData.Population.unique():
         popDF = sampleData.loc[sampleData["Population"] == pop]
         plot = sns.kdeplot(popDF.Receptor_1, popDF.Receptor_2, ax=ax, label=pop, shade=True, shade_lowest=False, legend=False)
-    plot.text(100, 100, "Low/Low", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(1000, 100, "Med/Low", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(10000, 100, "High/Low", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(100, 10000, "Low/High", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(1250, 1250, "Med/Med", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(10000, 10000, "High/High", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(8000, 1000, "High/Med", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(1000, 8000, "Med/High", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(100, 100, r'$R_1^{lo}R_2^{lo}$', size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(1000, 100, r"$R_1^{med}R_2^{lo}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(10000, 100, r"$R_1^{hi}R_2^{lo}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(100, 10000, r"$R_1^{lo}R_2^{hi}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(1250, 1250, r"$R_1^{med}R_2^{med}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(10000, 10000, r"$R_1^{hi}R_2^{hi}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(8000, 1000, r"$R_1^{hi}R_2^{med}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+    plot.text(1000, 8000, r"$R_1^{med}R_2^{hi}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
     ax.set(xscale="log", yscale="log")
 
 
@@ -99,20 +99,21 @@ def popCompare(ax, popList, df, scanKey, Kav, L0=1e-9, KxStar=10 ** -10.0, f=1):
 
 def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
     "Makes a heatmap comparing binding ratios of populations at a range of binding affinities"
-    npoints = 15
+    npoints = 3
     ticks = np.full([npoints], None)
     affScan = np.logspace(Kav[0], Kav[1], npoints)
-    ticks[0], ticks[-1] = "10e" + str(Kav[0] - 1), "10e" + str(Kav[1] - 1)
+    ticks[0], ticks[-1] = "1e" + str(Kav[0]), "1e" + str(Kav[1])
 
     sampMeans = np.zeros(npoints)
     ratioDF = pds.DataFrame(columns=affScan, index=affScan)
+    tens = np.array([10, 10])
 
     for ii, aff1 in enumerate(affScan):
         for jj, aff2 in enumerate(np.flip(affScan)):
-            _, sampMeans[jj], _ = sampleSpec(L0, KxStar, f, recMeans, Covs, np.array([1]), np.array([[aff1, aff2]]))
+            sampMeans[jj] = polyfc(L0, KxStar, f, np.power(10, recMeans[0]), [1], np.array([[aff1, aff2]]))[0] / polyfc(L0, KxStar, f, np.power(10, recMeans[1]), [1], np.array([[aff1, aff2]]))[0]
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
-    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=12.5, cbar=Cbar)
+    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
     ax.set(xlabel="Rec 1 Affinity ($K_a$)", ylabel="Rec 2 Affinity $K_a$)")
     ax.set_title(Title, fontsize=8)
 
@@ -161,14 +162,14 @@ def MixPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
 
 
 cellPopulations = {
-    "Low/Low": [2, 2, 0.5, 0.25, 45],
-    "Med/Low": [3, 2, 0.5, 0.25, 0],
-    "High/Low": [4, 2, 0.5, 0.25, 0],
-    "Low/High": [2, 4, 0.3, 0.6, 0],
-    "Med/High": [3.1, 3.9, 0.5, 0.25, 45],
-    "High/Med": [3.9, 3.1, 0.5, 0.25, 45],
-    "High/High": [4, 4, 0.5, 0.25, 45],
-    "Med/Med": [3.1, 3.1, 0.25, 1, 45],
+    r"$R_1^{lo}R_2^{lo}$": [2, 2, 0.5, 0.25, 45],
+    r"$R_1^{med}R_2^{lo}$": [3, 2, 0.5, 0.25, 0],
+    r"$R_1^{hi}R_2^{lo}$": [4, 2, 0.5, 0.25, 0],
+    r"$R_1^{lo}R_2^{hi}$": [2, 4, 0.3, 0.6, 0],
+    r"$R_1^{med}R_2^{hi}$": [3.1, 3.9, 0.5, 0.25, 45],
+    r"$R_1^{hi}R_2^{med}$": [3.9, 3.1, 0.5, 0.25, 45],
+    r"$R_1^{hi}R_2^{hi}$": [4, 4, 0.5, 0.25, 45],
+    r"$R_1^{med}R_2^{med}$": [3.1, 3.1, 0.25, 1, 45],
 }
 
 abundRange = (1.5, 4.5)
@@ -215,10 +216,10 @@ def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=
     ax.set_xscale("log")
     ax.set_yscale("log")
     plt.clabel(contours, inline=True, fontsize=3)
-    ax.pcolor(X, Y, logZ, cmap='viridis', vmin=vmin, vmax=vmax)
+    ax.pcolor(X, Y, logZ, cmap='copper', vmin=vmin, vmax=vmax)
     norm = plt.Normalize(vmin=vmin, vmax=vmax)
     if cbar:
-        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='viridis'), ax=ax)
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='copper'), ax=ax)
         cbar.set_label("Log Ligand Bound")
     overlapCellPopulation(ax, abundRange)
 
@@ -238,6 +239,14 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, offdiag=1e5, vmin=-
             abundHeatMap(axs[i2 * nAffPts + i1], abundRange,
                          L0, KxStar, [[aff1, aff2]], Comp, f=ff, Cplx=Cplx,
                          vmin=vmin, vmax=vmax, cbar=cbar)
+            plt.plot([3.3, 3.7], [2, 2], color="w", marker=2)
+            plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
+            plt.plot([3.3, 3.7], [3.6, 3.2], color="w", marker=2)
+            plt.text(3.4, 3.63, "c", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
+            plt.plot([3.3, 3.8], [3.2, 3.7], color="w", marker=2)
+            plt.text(3.7, 3.85, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
+            plt.plot([2, 3.7], [3.5, 2.2], color="w", marker=2)
+            plt.text(2.3, 3.5, "e", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
             axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e} $K_2$ = {:.1e}".format(aff1, aff2))
     return fig
 
@@ -249,7 +258,7 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
 
     for i, v in enumerate(ffs):
         cbar = False
-        if i in [2, 5]:
+        if i in [2, 4]:
             cbar = True
         abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vmin=vmin, vmax=vmax, cbar=cbar)
         axs[i].set_title("$f$ = {}".format(v))
@@ -264,7 +273,7 @@ def mixture(fig, axs, L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, v
 
     for i, comp in enumerate(comps):
         cbar = False
-        if i in [2, 5]:
+        if i in [2, 4]:
             cbar = True
         abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vmin=vmin, vmax=vmax, cbar=cbar)
         axs[i].set_title("$LigC$ = [{}, {}]".format(comp, 1 - comp))

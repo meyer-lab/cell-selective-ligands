@@ -17,9 +17,9 @@ def makeFigure():
 
     _, populationsdf = getPopDict()
     # gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
-    optimizeDesign(populationsdf, ["High/Low", "Med/Low"])
-    optimizeDesign(populationsdf, ["Low/High", "High/Low"])
-    optimizeDesign(populationsdf, ["High/High", "Med/Med"])
+    optimizeDesign(populationsdf, [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"])
+    optimizeDesign(populationsdf, [r"$R_1^{lo}R_2^{hi}$", r"$R_1^{hi}R_2^{lo}$"])
+    optimizeDesign(populationsdf, [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"])
 
     return f
 
