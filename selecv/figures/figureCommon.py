@@ -199,7 +199,7 @@ def overlapCellPopulation(ax, scale, data=cellPopulations):
                     color='white')
 
 
-def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=-2, vmax=4, cbar=False):
+def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=-2, vmax=4, cbar=False, layover = True):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
@@ -221,10 +221,11 @@ def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=
     if cbar:
         cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='copper'), ax=ax)
         cbar.set_label("Log Ligand Bound")
-    overlapCellPopulation(ax, abundRange)
+    if layover:
+        overlapCellPopulation(ax, abundRange)
 
 
-def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, offdiag=1e5, vmin=-2, vmax=4):
+def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
     nAffPts = 3
 
     fig.suptitle("Lbound when $L_0$={}, $f$={}, $K_x^*$={:.2e}, $LigC$={}".format(L0, ff, KxStar, Comp))
