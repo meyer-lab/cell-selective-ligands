@@ -4,7 +4,8 @@ Figure 1. Introduce the model system.
 
 import seaborn as sns
 import numpy as np
-from .figureCommon import subplotLabel, getSetup, PlotCellPops
+from matplotlib import gridspec, pyplot as plt
+from .figureCommon import subplotLabel, getSetup, PlotCellPops, abundHeatMap
 from ..imports import import_Rexpr, getPopDict, getAffDict
 from ..sampling import sampleSpec
 from ..csizmar import fitfunc, xeno
@@ -18,7 +19,7 @@ val = 16.0
 def makeFigure():
     """ Make figure 1. """
     # Get list of axis objects
-    ax, f = getSetup((7, 6), (1, 1))
+    ax, f = getSetup((7, 4), (1, 2))
 
     subplotLabel(ax)
 
@@ -26,7 +27,8 @@ def makeFigure():
     #_, npdata, cell_names = import_Rexpr()
     _, populations = getPopDict()
     #plotRealPops(ax[0], npdata, cell_names)
-    PlotCellPops(ax[0], populations)
+    demoHeatmap(ax[0], vmin=1, vmax=5)
+    PlotCellPops(ax[1], populations)
 
     return f
 
@@ -73,3 +75,18 @@ def affPlot(ax, affDF):
     ax.set(yscale="log", ylabel="Affinity ($K_a$)")
     ax.set_xticklabels(ax.get_xticklabels(), rotation=35, rotation_mode="anchor", ha="right", fontsize=7, position=(0, 0.02))
     ax.legend()
+
+
+def demoHeatmap(ax, vmin=1, vmax=4):
+    abundHeatMap(ax, (1.5, 4.5),
+                 1e-9, 1e-12, [[1e5, 1e7]], [1.0], f=1,
+                 vmin=vmin, vmax=vmax, cbar=True, layover=False)
+
+    ax.plot([10 ** 2, 10 ** 3], [10 ** 3, 10 ** 3], color="w")
+    ax.plot([10 ** 2, 10 ** 2], [10 ** 3, 10 ** 4], color="w")
+    ax.text(10**2, 10**3, "1", size='large', color='green', weight='semibold', horizontalalignment='center',
+             verticalalignment='center', backgroundcolor='w')
+    ax.text(10**3, 10**3, "2", size='large', color='green', weight='semibold', horizontalalignment='center',
+             verticalalignment='center', backgroundcolor='w')
+    ax.text(10**2, 10**4, "3", size='large', color='green', weight='semibold', horizontalalignment='center',
+             verticalalignment='center', backgroundcolor='w')
