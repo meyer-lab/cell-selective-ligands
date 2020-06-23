@@ -85,8 +85,8 @@ def demoHeatmap(ax, vmin=1, vmax=4):
     ax.plot([10 ** 2, 10 ** 3], [10 ** 3, 10 ** 3], color="w")
     ax.plot([10 ** 2, 10 ** 2], [10 ** 3, 10 ** 4], color="w")
     ax.text(10**2, 10**3, "1", size='large', color='green', weight='semibold', horizontalalignment='center',
-             verticalalignment='center', backgroundcolor='w')
+            verticalalignment='center', backgroundcolor='w')
     ax.text(10**3, 10**3, "2", size='large', color='green', weight='semibold', horizontalalignment='center',
-             verticalalignment='center', backgroundcolor='w')
+            verticalalignment='center', backgroundcolor='w')
     ax.text(10**2, 10**4, "3", size='large', color='green', weight='semibold', horizontalalignment='center',
-             verticalalignment='center', backgroundcolor='w')
+            verticalalignment='center', backgroundcolor='w')

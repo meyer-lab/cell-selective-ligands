@@ -199,7 +199,7 @@ def overlapCellPopulation(ax, scale, data=cellPopulations):
                     color='white')
 
 
-def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=-2, vmax=4, cbar=False, layover = True):
+def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=-2, vmax=4, cbar=False, layover=True):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
