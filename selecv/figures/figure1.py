@@ -19,7 +19,7 @@ val = 16.0
 def makeFigure():
     """ Make figure 1. """
     # Get list of axis objects
-    ax, f = getSetup((7, 4), (1, 2))
+    ax, f = getSetup((7, 7), (2, 2))
 
     subplotLabel(ax)
 
@@ -27,8 +27,9 @@ def makeFigure():
     #_, npdata, cell_names = import_Rexpr()
     _, populations = getPopDict()
     #plotRealPops(ax[0], npdata, cell_names)
-    demoHeatmap(ax[0], vmin=1, vmax=5)
-    PlotCellPops(ax[1], populations)
+    demoHeatmap(ax[2], vmin=1, vmax=5)
+    PlotCellPops(ax[3], populations)
+
 
     return f
 
