@@ -154,11 +154,13 @@ def MixPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
     ax.plot(mixRatio, sampMeans, color="royalblue")
     ax.fill_between(mixRatio, underDev, overDev, color="royalblue", alpha=0.1)
     if len(Covs) == 2:
-        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 10), xlim=(0, 1))  # , title=Title + " binding ratio")
-        ax.set_title(Title + " ratio", fontsize=4)
+        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 12), xlim=(0, 1))  # , title=Title + " binding ratio")
+        ax.set_title(Title + " ratio", fontsize=7)
+        ax.grid()
     else:
-        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 4), xlim=(0, 1))
+        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 3), xlim=(0, 1))
         ax.set_title(Title, fontsize=7)
+        ax.grid()
 
 
 cellPopulations = {
