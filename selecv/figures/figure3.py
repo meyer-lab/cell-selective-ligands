@@ -30,8 +30,6 @@ def makeFigure():
     vieqPlot(ax[7], 1e3, 8)
     ratePlot(ax[8])
 
-
-    
     return f
 
 
