@@ -3,7 +3,7 @@ Figure 4. Mixtures for enhanced targeting.
 """
 
 import numpy as np
-from .figureCommon import subplotLabel, getSetup, PlotCellPops, popCompare, mixture
+from .figureCommon import subplotLabel, getSetup, popCompare, mixture
 from ..imports import getPopDict
 
 ligConc = np.array([10e-9])

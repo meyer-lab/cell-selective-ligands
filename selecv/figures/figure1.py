@@ -4,11 +4,9 @@ Figure 1. Introduce the model system.
 
 import seaborn as sns
 import numpy as np
-from matplotlib import gridspec, pyplot as plt
 from .figureCommon import subplotLabel, getSetup, PlotCellPops, abundHeatMap
-from ..imports import import_Rexpr, getPopDict, getAffDict
+from ..imports import getPopDict
 from ..sampling import sampleSpec
-from ..csizmar import fitfunc, xeno
 
 
 ligConc = np.array([10e-9])
