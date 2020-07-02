@@ -3,9 +3,7 @@ Figure 2. Explore selectivity vs. affinity.
 """
 
 import numpy as np
-import seaborn as sns
-import pandas as pds
-from .figureCommon import subplotLabel, getSetup, PlotCellPops, popCompare, affinity
+from .figureCommon import subplotLabel, getSetup, popCompare, affinity
 from ..imports import getPopDict
 
 ligConc = np.array([10e-9])
