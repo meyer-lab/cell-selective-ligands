@@ -1,7 +1,7 @@
 import numpy as np
 from .figureCommon import subplotLabel, getSetup
-from ..model import *
-from matplotlib import gridspec, pyplot as plt
+from ..model import polyc
+from matplotlib import pyplot as plt
 import seaborn as sns
 import matplotlib.cm as cm
 

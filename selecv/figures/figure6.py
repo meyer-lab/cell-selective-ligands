@@ -81,7 +81,6 @@ def CPlot(ax, df, popList, affinities, npoints):
 
 def ValencyPlotC(ax, df, valencies, popList, perc):
     "Makes a line chart comparing binding ratios of populations at multiple valencies"
-    ligconc = 10e-11
     df1 = df[df["Population"] == popList[0]]
     df2 = df[df["Population"] == popList[1]]
     recMean1 = np.array([df1["Receptor_1"].to_numpy(), df1["Receptor_2"].to_numpy()]).flatten()
@@ -91,7 +90,6 @@ def ValencyPlotC(ax, df, valencies, popList, perc):
     sampMeans, underDev, overDev = np.zeros_like(valencies), np.zeros_like(valencies), np.zeros_like(valencies)
     sampMeansC, underDevC, overDevC = np.zeros_like(valencies), np.zeros_like(valencies), np.zeros_like(valencies)
     #affinities = [10e5, 10e6, 10e7]
-    concs = [10e-11, 10e-10, 10e-9]
     labels = ["Low Affinity", "High Affinity"]
     colors = ["lime", "blue"]
     affinities = np.array([[[10e6, 10e1], [10e1, 10e6]], [[10e8, 10e1], [10e1, 10e8]]])
