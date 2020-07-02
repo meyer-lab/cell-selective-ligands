@@ -30,7 +30,6 @@ def makeFigure():
     demoHeatmap(ax[2], vmin=1, vmax=5)
     PlotCellPops(ax[3], populations)
 
-
     return f
 
 
