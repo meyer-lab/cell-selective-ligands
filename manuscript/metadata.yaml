@@ -1,5 +1,5 @@
 ---
-title: "Exploiting multivalency for engineering cell-selective therapies"
+title: "Exploiting multivalency to engineer cell-selective therapies"
 keywords:
   - bioengineering
   - protein therapies
@@ -10,14 +10,16 @@ authors:
     github: borcuttjahns
     name: Brian Orcutt-Jahns
     initials: BOJ
+    orcid: 0000-0002-1436-1224
     affiliations:
       - Department of Bioengineering, University of California, Los Angeles
   -
     github: cyrillustan
-    name: Cyrillus Tan
+    name: Zhixin Cyrillus Tan
     initials: CT
+    orcid: 0000-0002-5498-5509
     affiliations:
-      - Department of Bioinformatics, University of California, Los Angeles
+      - Bioinformatics Interdepartmental Program, University of California, Los Angeles
   -
     github: aarmey
     name: Aaron S. Meyer
@@ -27,6 +29,6 @@ authors:
     email: a@asmlab.org
     affiliations:
       - Department of Bioengineering, University of California, Los Angeles
-      - Department of Bioinformatics, University of California, Los Angeles
+      - Bioinformatics Interdepartmental Program, University of California, Los Angeles
       - Jonsson Comprehensive Cancer Center, University of California, Los Angeles
       - Eli and Edythe Broad Center of Regenerative Medicine and Stem Cell Research, University of California, Los Angeles
