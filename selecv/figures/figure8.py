@@ -6,7 +6,7 @@ from .figureCommon import getSetup
 from ..model import polyc
 
 def makeFigure(KxStar = 1e-12):
-    ax, f = getSetup((14, 9), (3, 2))
+    ax, f = getSetup((14, 9), (3, 4))
 
     L0 = 1e-9
     Comp = [0.5, 0.5]
