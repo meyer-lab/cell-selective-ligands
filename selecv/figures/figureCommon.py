@@ -302,7 +302,7 @@ def mixture(fig, axs, L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, v
             cbar = True
         abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vmin=vmin, vmax=vmax, cbar=cbar)
         axs[i].set(xlabel="Receptor 1 Abundance", ylabel='Receptor 2 Abundance')
-        axs[i].set_title("Ligand 1 in Mixture = {}%".format(comp*100))
+        axs[i].set_title("Ligand 1 in Mixture = {}%".format(comp * 100))
 
     return fig
 
