@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from selecv.figures.figureCommon import overlayCartoon
 import sys
 from logging import basicConfig, INFO, info
 from time import time

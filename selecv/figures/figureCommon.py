@@ -9,6 +9,7 @@ from scipy.stats import multivariate_normal
 import seaborn as sns
 import pandas as pds
 import numpy as np
+import svgutils.transform as st
 from ..sampling import sampleSpec
 from ..model import polyc, polyfc
 
@@ -37,6 +38,20 @@ def subplotLabel(axs, indices=False):
     else:
         for jj, index in enumerate(indices):
             axs[index].text(-0.2, 1.25, ascii_lowercase[jj], transform=axs[index].transAxes, fontsize=16, fontweight="bold", va="top")
+
+
+def overlayCartoon(figFile, cartoonFile, x, y, scalee=1, scale_x=1, scale_y=1):
+    """ Add cartoon to a figure file. """
+
+    # Overlay Figure cartoons
+    template = st.fromfile(figFile)
+    cartoon = st.fromfile(cartoonFile).getroot()
+
+    cartoon.moveto(x, y, scale=scalee)
+    cartoon.scale_xy(scale_x, scale_y)
+
+    template.append(cartoon)
+    template.save(figFile)
 
 
 def PlotCellPops(ax, df, bbox=False):
@@ -113,7 +128,10 @@ def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
             sampMeans[jj] = polyfc(L0, KxStar, f, np.power(10, recMeans[0]), [1], np.array([[aff1, aff2]]))[0] / polyfc(L0, KxStar, f, np.power(10, recMeans[1]), [1], np.array([[aff1, aff2]]))[0]
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
-    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
+    if ratioDF.max().max() < 15:
+        sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=10, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
+    else:
+        sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
     ax.set(xlabel="Rec 1 Affinity ($K_a$)", ylabel="Rec 2 Affinity $K_a$)")
     ax.set_title(Title, fontsize=8)
 
@@ -230,8 +248,6 @@ def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=
 def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
     nAffPts = 3
 
-    fig.suptitle("Lbound when $L_0$={}, $f$={}, $K_x^*$={:.2e}, $LigC$={}".format(L0, ff, KxStar, Comp))
-
     affRange = (5., 7.)
     affScan = np.logspace(affRange[0], affRange[1], nAffPts)
     for i1, aff1 in enumerate(affScan):
@@ -242,6 +258,7 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
             abundHeatMap(axs[i2 * nAffPts + i1], abundRange,
                          L0, KxStar, [[aff1, aff2]], Comp, f=ff, Cplx=Cplx,
                          vmin=vmin, vmax=vmax, cbar=cbar)
+            axs[i2 * nAffPts + i1].set(xlabel="Receptor 1 Abundance", ylabel='Receptor 2 Abundance')
             plt.plot([3.3, 3.7], [2, 2], color="w", marker=2)
             plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
             plt.plot([3.3, 3.7], [3.6, 3.2], color="w", marker=2)
@@ -257,20 +274,19 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
 def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None, vmin=-2, vmax=4):
     ffs = [1, 4, 16]
 
-    fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $K_x^*$={:.2e}, $LigC$={}".format(L0, Kav, KxStar, Comp))
-
     for i, v in enumerate(ffs):
         cbar = False
         if i in [2]:
             cbar = True
         abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vmin=vmin, vmax=vmax, cbar=cbar)
+        axs[i].set(xlabel="Receptor 1 Abundance", ylabel='Receptor 2 Abundance')
         plt.plot([3.32, 3.7], [2, 2], color="w", marker=2)
         plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
         plt.plot([3.3, 3.8], [3.2, 3.7], color="w", marker=2)
         plt.text(3.65, 3.8, "c", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
         plt.plot([3.1, 3.1], [3.4, 3.7], color="w", marker=1, markersize=4)
         plt.text(3.25, 3.55, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        axs[i].set_title("$f$ = {}".format(v))
+        axs[i].set_title("Valency = {}".format(v))
 
     return fig
 
@@ -285,7 +301,8 @@ def mixture(fig, axs, L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, v
         if i in [2, 4]:
             cbar = True
         abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vmin=vmin, vmax=vmax, cbar=cbar)
-        axs[i].set_title("$LigC$ = [{}, {}]".format(comp, 1 - comp))
+        axs[i].set(xlabel="Receptor 1 Abundance", ylabel='Receptor 2 Abundance')
+        axs[i].set_title("Ligand 1 in Mixture = {}%".format(comp*100))
 
     return fig
 
