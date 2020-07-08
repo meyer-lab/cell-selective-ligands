@@ -5,19 +5,20 @@ import matplotlib.cm as cm
 from .figureCommon import getSetup
 from ..model import polyc
 
-def makeFigure(KxStar = 1e-12):
+
+def makeFigure(KxStar=1e-12):
     ax, f = getSetup((14, 9), (3, 4))
 
     L0 = 1e-9
     Comp = [0.5, 0.5]
     Kav = [[1e7, 1e5], [1e5, 1e6]]
 
-    competeHeatmap(ax[0], L0, KxStar, [[1, 1], [1, 0]], Comp, Kav, title = "[1, 0] ratio", ratio = True)
-    competeHeatmap(ax[1], L0, KxStar, [[1, 1], [0, 1]], Comp, Kav, title = "[0, 1] ratio", ratio = True)
-    competeHeatmap(ax[2], L0, KxStar, [[1, 1], [2, 0]], Comp, Kav, title = "[2, 0] ratio", ratio = True)
-    competeHeatmap(ax[3], L0, KxStar, [[1, 1], [0, 2]], Comp, Kav, title = "[0, 2] ratio", ratio = True)
-    competeHeatmap(ax[4], L0, KxStar, [[1, 1], [2, 1]], Comp, Kav, title = "[2, 1] ratio", ratio = True)
-    competeHeatmap(ax[5], L0, KxStar, [[1, 1], [1, 2]], Comp, Kav, title = "[1, 2] ratio", ratio = True)
+    competeHeatmap(ax[0], L0, KxStar, [[1, 1], [1, 0]], Comp, Kav, title="[1, 0] ratio", ratio=True)
+    competeHeatmap(ax[1], L0, KxStar, [[1, 1], [0, 1]], Comp, Kav, title="[0, 1] ratio", ratio=True)
+    competeHeatmap(ax[2], L0, KxStar, [[1, 1], [2, 0]], Comp, Kav, title="[2, 0] ratio", ratio=True)
+    competeHeatmap(ax[3], L0, KxStar, [[1, 1], [0, 2]], Comp, Kav, title="[0, 2] ratio", ratio=True)
+    competeHeatmap(ax[4], L0, KxStar, [[1, 1], [2, 1]], Comp, Kav, title="[2, 1] ratio", ratio=True)
+    competeHeatmap(ax[5], L0, KxStar, [[1, 1], [1, 2]], Comp, Kav, title="[1, 2] ratio", ratio=True)
     competeHeatmap(ax[6], L0, KxStar, [[1, 1], [1, 0]], Comp, Kav, title="[1, 0] Lbound", ratio=False)
     competeHeatmap(ax[7], L0, KxStar, [[1, 1], [0, 1]], Comp, Kav, title="[0, 1] Lbound", ratio=False)
     competeHeatmap(ax[8], L0, KxStar, [[1, 1], [2, 0]], Comp, Kav, title="[2, 0] Lbound", ratio=False)
@@ -29,7 +30,7 @@ def makeFigure(KxStar = 1e-12):
     return f
 
 
-def Cplx1to2Ratio(L0, KxStar, Rtot, Cplx, Ctheta, Kav, ratio = True):
+def Cplx1to2Ratio(L0, KxStar, Rtot, Cplx, Ctheta, Kav, ratio=True):
     """ Always LigCplx 1 / LigCplx 0 """
     Lbound, Rbound = polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav)
     if ratio:
@@ -38,12 +39,12 @@ def Cplx1to2Ratio(L0, KxStar, Rtot, Cplx, Ctheta, Kav, ratio = True):
         return Lbound[1]
 
 
-def competeHeatmap(ax, L0, KxStar, Cplx, Comp, Kav, vrange=(-3, 3), cbar=True, layover=False, title = "", ratio = True):
+def competeHeatmap(ax, L0, KxStar, Cplx, Comp, Kav, vrange=(-3, 3), cbar=True, layover=False, title="", ratio=True):
     abundRange = 2, 6
     nAbdPts = 70
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
-    func = np.vectorize(lambda abund1, abund2: Cplx1to2Ratio(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav, ratio = ratio))
+    func = np.vectorize(lambda abund1, abund2: Cplx1to2Ratio(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav, ratio=ratio))
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
 
@@ -62,4 +63,3 @@ def competeHeatmap(ax, L0, KxStar, Cplx, Comp, Kav, vrange=(-3, 3), cbar=True, l
             cbar.set_label("Log Cplx2 Lbound")
     if layover:
         overlapCellPopulation(ax, abundRange)
-
