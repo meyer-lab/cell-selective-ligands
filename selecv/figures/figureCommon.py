@@ -232,14 +232,14 @@ def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
 
-    contours = ax.contour(X, Y, logZ, levels=np.arange(-10, 20, 0.3), colors="black", linewidths=0.5)
+    contours = ax.contour(X, Y, logZ, levels=np.arange(-10, 20, 0.5), colors="black", linewidths=0.5)
     ax.set_xscale("log")
     ax.set_yscale("log")
-    plt.clabel(contours, inline=True, fontsize=3)
-    ax.pcolor(X, Y, logZ, cmap='cividis', vmin=vmin, vmax=vmax)
+    plt.clabel(contours, inline=True, fontsize=6)
+    ax.pcolor(X, Y, logZ, cmap='summer', vmin=vmin, vmax=vmax)
     norm = plt.Normalize(vmin=vmin, vmax=vmax)
     if cbar:
-        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='cividis'), ax=ax)
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='summer'), ax=ax)
         cbar.set_label("Log Ligand Bound")
     if layover:
         overlapCellPopulation(ax, abundRange)
