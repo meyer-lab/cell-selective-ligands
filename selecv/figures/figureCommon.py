@@ -132,7 +132,7 @@ def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=10, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
     else:
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
-    ax.set(xlabel="Rec 1 Affinity ($K_a$)", ylabel="Rec 2 Affinity $K_a$)")
+    ax.set(xlabel="Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Rec 2 Affinity ($K_a$, in M$^{-1}$)")
     ax.set_title(Title, fontsize=8)
 
 
@@ -258,7 +258,7 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
             abundHeatMap(axs[i2 * nAffPts + i1], abundRange,
                          L0, KxStar, [[aff1, aff2]], Comp, f=ff, Cplx=Cplx,
                          vmin=vmin, vmax=vmax, cbar=cbar)
-            axs[i2 * nAffPts + i1].set(xlabel="Receptor 1 Abundance", ylabel='Receptor 2 Abundance')
+            axs[i2 * nAffPts + i1].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance(#/cell)')
             plt.plot([3.3, 3.7], [2, 2], color="w", marker=2)
             plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
             plt.plot([3.3, 3.7], [3.6, 3.2], color="w", marker=2)
@@ -279,7 +279,7 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
         if i in [2]:
             cbar = True
         abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vmin=vmin, vmax=vmax, cbar=cbar)
-        axs[i].set(xlabel="Receptor 1 Abundance", ylabel='Receptor 2 Abundance')
+        axs[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
         plt.plot([3.32, 3.7], [2, 2], color="w", marker=2)
         plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
         plt.plot([3.3, 3.8], [3.2, 3.7], color="w", marker=2)
@@ -301,7 +301,7 @@ def mixture(fig, axs, L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, v
         if i in [2, 4]:
             cbar = True
         abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vmin=vmin, vmax=vmax, cbar=cbar)
-        axs[i].set(xlabel="Receptor 1 Abundance", ylabel='Receptor 2 Abundance')
+        axs[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
         axs[i].set_title("Ligand 1 in Mixture = {}%".format(comp * 100))
 
     return fig
