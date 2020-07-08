@@ -76,15 +76,14 @@ def affPlot(ax, affDF):
 
 
 def demoHeatmap(ax, vmin=1, vmax=4):
-    abundHeatMap(ax, (1.5, 4.5),
-                 1e-9, 1e-12, [[1e5, 1e7]], [1.0], f=1,
+    abundHeatMap(ax, (1.5, 4.5), 1e-9, 1e-12, [[1e5, 1e7]], [1.0], f=1,
                  vmin=vmin, vmax=vmax, cbar=True, layover=False)
 
     ax.plot([10 ** 2, 10 ** 3], [10 ** 3, 10 ** 3], color="w")
     ax.plot([10 ** 2, 10 ** 2], [10 ** 3, 10 ** 4], color="w")
-    ax.text(10**2, 10**3, "1", size='large', color='green', weight='semibold', horizontalalignment='center',
+    ax.text(10**2, 10**3, "1", size='large', color='red', weight='semibold', horizontalalignment='center',
             verticalalignment='center', backgroundcolor='w')
-    ax.text(10**3, 10**3, "2", size='large', color='green', weight='semibold', horizontalalignment='center',
+    ax.text(10**3, 10**3, "2", size='large', color='red', weight='semibold', horizontalalignment='center',
             verticalalignment='center', backgroundcolor='w')
-    ax.text(10**2, 10**4, "3", size='large', color='green', weight='semibold', horizontalalignment='center',
+    ax.text(10**2, 10**4, "3", size='large', color='red', weight='semibold', horizontalalignment='center',
             verticalalignment='center', backgroundcolor='w')

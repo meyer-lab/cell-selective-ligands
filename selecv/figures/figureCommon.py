@@ -216,7 +216,7 @@ def overlapCellPopulation(ax, scale, data=cellPopulations):
                     horizontalalignment='center',
                     verticalalignment='center',
                     fontweight='bold',
-                    color='white')
+                    color='red')
 
 
 def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=-2, vmax=4, cbar=False, layover=True):
@@ -258,7 +258,7 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
             abundHeatMap(axs[i2 * nAffPts + i1], abundRange,
                          L0, KxStar, [[aff1, aff2]], Comp, f=ff, Cplx=Cplx,
                          vmin=vmin, vmax=vmax, cbar=cbar)
-            axs[i2 * nAffPts + i1].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance(#/cell)')
+            axs[i2 * nAffPts + i1].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
             plt.plot([3.3, 3.7], [2, 2], color="w", marker=2)
             plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
             plt.plot([3.3, 3.7], [3.6, 3.2], color="w", marker=2)
@@ -267,7 +267,7 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
             plt.text(3.7, 3.85, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
             plt.plot([2, 3.7], [3.5, 2.2], color="w", marker=2)
             plt.text(2.3, 3.5, "e", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-            axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e} $K_2$ = {:.1e}".format(aff1, aff2))
+            axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e} M$^{-1}$ $K_2$ = {:.1e} M$^{-1}$".format(aff1, aff2))
     return fig
 
 
@@ -294,7 +294,7 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
 def mixture(fig, axs, L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, vmax=4):
     comps = [0.0, 0.2, 0.5, 0.8, 1.0]
 
-    fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $f$={}, $K_x^*$={:.2e}".format(L0, Kav, ff, KxStar))
+    #fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $f$={}, $K_x^*$={:.2e}".format(L0, Kav, ff, KxStar))
 
     for i, comp in enumerate(comps):
         cbar = False
@@ -311,7 +311,7 @@ def complex(L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], vmin=-2, vmax=4):
     cplx = [0, 2, 4]
     axs, fig = getSetup((8, 8), (len(cplx), len(cplx)))
 
-    fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $K_x^*$={:.2e}".format(L0, Kav, KxStar))
+    #fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $K_x^*$={:.2e}".format(L0, Kav, KxStar))
 
     for i1, cplx1 in enumerate(cplx):
         for i2, cplx2 in enumerate(np.flip(cplx)):
