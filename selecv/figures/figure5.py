@@ -35,7 +35,7 @@ def minSelecFunc(x, tMeans, offTMeans):
     for means in offTMeans:
         offTargetBound += polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**means[0], 10**means[1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
 
-    return offTargetBound / targetBound
+    return (offTargetBound) / (targetBound)
 
 
 def optimizeDesign(ax, df, targetPop):
@@ -53,10 +53,9 @@ def optimizeDesign(ax, df, targetPop):
     xnot = np.array([np.log(1e-9), np.log(1e-12), 1, 1, np.log(1e7), np.log(1e2)])
 
     for strat in strats:
-        print(targetPop, strat)
         xBnds = bndsDict[strat]
         optimized = minimize(minSelecFunc, xnot, bounds=xBnds, method="L-BFGS-B", args=(targMeans, offTargMeans), options={"eps": 1, "disp": True})
-        stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([1 / optimized.fun])})
+        stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
         optDF = optDF.append(stratRow, ignore_index=True)
 
     sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax)
