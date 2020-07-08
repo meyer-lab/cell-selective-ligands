@@ -2,6 +2,8 @@
 Figure 5.
 """
 import numpy as np
+import pandas as pd
+import seaborn as sns
 from scipy.optimize import minimize
 from .figureCommon import subplotLabel, getSetup
 from ..imports import getPopDict
@@ -17,35 +19,55 @@ def makeFigure():
 
     _, populationsdf = getPopDict()
     # gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
-    optimizeDesign(populationsdf, [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"])
-    optimizeDesign(populationsdf, [r"$R_1^{lo}R_2^{hi}$", r"$R_1^{hi}R_2^{lo}$"])
-    optimizeDesign(populationsdf, [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"])
+    optimizeDesign(ax[0], populationsdf, [r"$R_1^{hi}R_2^{lo}$"])
+    optimizeDesign(ax[1], populationsdf, [r"$R_1^{hi}R_2^{hi}$"])
+    optimizeDesign(ax[2], populationsdf, [r"$R_1^{med}R_2^{med}$"])
 
     return f
 
 
-def minSelecFunc(x, recMeansM):
+def minSelecFunc(x, tMeans, offTMeans):
     "Provides the function to be minimized to get optimal selectivity"
+    offTargetBound = 0
 
-    return polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**recMeansM[1][0], 10**recMeansM[1][1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0] / \
-        polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**recMeansM[0][0], 10**recMeansM[0][1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
+    targetBound = polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**tMeans[0][0], 10**tMeans[0][1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
+
+    for means in offTMeans:
+        offTargetBound += polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**means[0], 10**means[1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
+
+    return (offTargetBound) / (targetBound)
 
 
-def optimizeDesign(df, popList):
+def optimizeDesign(ax, df, targetPop):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another"
-    recMeans, Covs = [], []
-    for _, pop in enumerate(popList):
+    targMeans, offTargMeans = [], []
+    for _, pop in enumerate(df["Population"].unique()):
         dfPop = df[df["Population"] == pop]
-        recMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
-        Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
+        if pop == targetPop[0]:
+            targMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+        else:
+            offTargMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
 
-    xnot = np.array([np.log(1e-9), np.log(1e-12), 1, 1, np.log(1e8), np.log(1e1)])
-    xBnds = ((np.log(1e-15), np.log(1e-6)), (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e4), np.log(1e9)), (np.log(1e0), np.log(1e2)))
-    optimized = minimize(minSelecFunc, xnot, bounds=xBnds, method="L-BFGS-B", args=(recMeans), options={"eps": 1, "disp": True})
-    optimizers = optimized.x
-    optimizers = [np.exp(optimizers[0]), np.exp(optimizers[1]), optimizers[2], optimizers[3], np.exp(optimizers[4]), np.exp(optimizers[5])]
+    optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
+    strats = ["Affinity", "Mixture", "Valency", "All"]
+    xnot = np.array([np.log(1e-9), np.log(1e-12), 1, 1, np.log(1e7), np.log(1e2)])
 
-    return optimizers
+    for strat in strats:
+        xBnds = bndsDict[strat]
+        optimized = minimize(minSelecFunc, xnot, bounds=xBnds, method="L-BFGS-B", args=(targMeans, offTargMeans), options={"eps": 1, "disp": True})
+        stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
+        optDF = optDF.append(stratRow, ignore_index=True)
+
+    sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax)
+    ax.set(title="Optimization of " + targetPop[0])
+
+
+bndsDict = {
+    "Affinity": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 1), (1, 1), (np.log(1e0), np.log(1e10)), (np.log(1e0), np.log(1e5))),
+    "Mixture": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 1), (0, 1), (np.log(1e5), np.log(1e9)), (np.log(1e0), np.log(1e5))),
+    "Valency": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 16), (1, 1), (np.log(1e0), np.log(1e10)), (np.log(1e0), np.log(1e5))),
+    "All": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e5), np.log(1e9)), (np.log(1e0), np.log(1e5)))
+}
 
 
 searchdic = {
