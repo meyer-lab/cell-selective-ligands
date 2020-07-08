@@ -1,96 +1,65 @@
-"""
-Figure 5.
-"""
 import numpy as np
-from scipy.optimize import minimize
-from .figureCommon import subplotLabel, getSetup
-from ..imports import getPopDict
-from ..sampling import sampleSpec
-from ..model import polyfc
+from matplotlib import pyplot as plt
+import seaborn as sns
+import matplotlib.cm as cm
+from .figureCommon import getSetup
+from ..model import polyc
 
+def makeFigure(KxStar = 1e-12):
+    ax, f = getSetup((14, 9), (3, 4))
 
-def makeFigure():
-    """ Make figure 5. """
-    # Get list of axis objects
-    ax, f = getSetup((10, 8), (2, 3))
-    subplotLabel(ax)
+    L0 = 1e-9
+    Comp = [0.5, 0.5]
+    Kav = [[1e7, 1e5], [1e5, 1e6]]
 
-    _, populationsdf = getPopDict()
-    # gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
-    optimizeDesign(populationsdf, [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"])
-    optimizeDesign(populationsdf, [r"$R_1^{lo}R_2^{hi}$", r"$R_1^{hi}R_2^{lo}$"])
-    optimizeDesign(populationsdf, [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"])
+    competeHeatmap(ax[0], L0, KxStar, [[1, 1], [1, 0]], Comp, Kav, title = "[1, 0] ratio", ratio = True)
+    competeHeatmap(ax[1], L0, KxStar, [[1, 1], [0, 1]], Comp, Kav, title = "[0, 1] ratio", ratio = True)
+    competeHeatmap(ax[2], L0, KxStar, [[1, 1], [2, 0]], Comp, Kav, title = "[2, 0] ratio", ratio = True)
+    competeHeatmap(ax[3], L0, KxStar, [[1, 1], [0, 2]], Comp, Kav, title = "[0, 2] ratio", ratio = True)
+    competeHeatmap(ax[4], L0, KxStar, [[1, 1], [2, 1]], Comp, Kav, title = "[2, 1] ratio", ratio = True)
+    competeHeatmap(ax[5], L0, KxStar, [[1, 1], [1, 2]], Comp, Kav, title = "[1, 2] ratio", ratio = True)
+    competeHeatmap(ax[6], L0, KxStar, [[1, 1], [1, 0]], Comp, Kav, title="[1, 0] Lbound", ratio=False)
+    competeHeatmap(ax[7], L0, KxStar, [[1, 1], [0, 1]], Comp, Kav, title="[0, 1] Lbound", ratio=False)
+    competeHeatmap(ax[8], L0, KxStar, [[1, 1], [2, 0]], Comp, Kav, title="[2, 0] Lbound", ratio=False)
+    competeHeatmap(ax[9], L0, KxStar, [[1, 1], [0, 2]], Comp, Kav, title="[0, 2] Lbound", ratio=False)
+    competeHeatmap(ax[10], L0, KxStar, [[1, 1], [2, 1]], Comp, Kav, title="[2, 1] Lbound", ratio=False)
+    competeHeatmap(ax[11], L0, KxStar, [[1, 1], [1, 2]], Comp, Kav, title="[1, 2] Lbound", ratio=False)
 
+    f.suptitle("$K_x^* = ${}".format(KxStar))
     return f
 
 
-def minSelecFunc(x, recMeansM):
-    "Provides the function to be minimized to get optimal selectivity"
-
-    return polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**recMeansM[1][0], 10**recMeansM[1][1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0] / \
-        polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**recMeansM[0][0], 10**recMeansM[0][1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
-
-
-def optimizeDesign(df, popList):
-    "Runs optimization and determines optimal parameters for selectivity of one population vs. another"
-    recMeans, Covs = [], []
-    for _, pop in enumerate(popList):
-        dfPop = df[df["Population"] == pop]
-        recMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
-        Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
-
-    xnot = np.array([np.log(1e-9), np.log(1e-12), 1, 1, np.log(1e8), np.log(1e1)])
-    xBnds = ((np.log(1e-15), np.log(1e-6)), (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e4), np.log(1e9)), (np.log(1e0), np.log(1e2)))
-    optimized = minimize(minSelecFunc, xnot, bounds=xBnds, method="L-BFGS-B", args=(recMeans), options={"eps": 1, "disp": True})
-    optimizers = optimized.x
-    optimizers = [np.exp(optimizers[0]), np.exp(optimizers[1]), optimizers[2], optimizers[3], np.exp(optimizers[4]), np.exp(optimizers[5])]
-
-    return optimizers
+def Cplx1to2Ratio(L0, KxStar, Rtot, Cplx, Ctheta, Kav, ratio = True):
+    """ Always LigCplx 1 / LigCplx 0 """
+    Lbound, Rbound = polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav)
+    if ratio:
+        return Lbound[1] / Lbound[0]
+    else:
+        return Lbound[1]
 
 
-searchdic = {
-    "L0": np.logspace(-11, -8, 4),
-    "Kx": np.logspace(-12, -8, 5),
-    "Val": np.logspace(0.0, 4.0, base=2.0, num=5),
-    "Mix": np.linspace(0, 0.5, 2),
-    "Aff": np.logspace(5, 9, 2),
-}
+def competeHeatmap(ax, L0, KxStar, Cplx, Comp, Kav, vrange=(-3, 3), cbar=True, layover=False, title = "", ratio = True):
+    abundRange = 2, 6
+    nAbdPts = 70
+    abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
+    func = np.vectorize(lambda abund1, abund2: Cplx1to2Ratio(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav, ratio = ratio))
+    X, Y = np.meshgrid(abundScan, abundScan)
+    logZ = np.log(func(X, Y))
 
-def gridSearchTry(df, popList):
-    """Grid search for best params for selectivity. Works but slowly. Probably won't use."""
-    recMeans, Covs = [], []
-    for ii, pop in enumerate(popList):
-        dfPop = df[df["Population"] == pop]
-        recMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
-        Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
+    contours = ax.contour(X, Y, logZ, levels=np.arange(-10, 20, 0.4), colors="black", linewidths=0.5)
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_title(title)
+    plt.clabel(contours, inline=True, fontsize=5)
+    ax.pcolor(X, Y, logZ, cmap='summer', vmin=vrange[0], vmax=vrange[1])
+    norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
+    if cbar:
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='summer'), ax=ax)
+        if ratio:
+            cbar.set_label("Log Cplx2 to Cplx1 ratio")
+        else:
+            cbar.set_label("Log Cplx2 Lbound")
+    if layover:
+        overlapCellPopulation(ax, abundRange)
 
-    resultsTensor = np.zeros([4, 5, 5, 3, 5, 5, 5, 5])
-    for ii, conc in enumerate(searchdic["L0"]):
-        for jj, kx in enumerate(searchdic["Kx"]):
-            for kk, val in enumerate(searchdic["Val"]):
-                for ll, mix in enumerate(searchdic["Mix"]):
-                    for mm, aff1 in enumerate(searchdic["Aff"]):
-                        for nn, aff2 in enumerate(searchdic["Aff"]):
-                            for oo, aff3 in enumerate(searchdic["Aff"]):
-                                for pp, aff4 in enumerate(searchdic["Aff"]):
-                                    resultsTensor[ii, jj, kk, ll, mm, nn, oo, pp] = sampleSpec(
-                                        conc, kx, val, recMeans, Covs, np.array([mix, 1 - mix]), np.array([[aff1, aff2], [aff3, aff4]])
-                                    )[1]
-
-    maxSelec = np.amax(resultsTensor)
-    maxSelecCoords = np.unravel_index(np.argmax(resultsTensor), resultsTensor.shape)
-    maxParams = np.array(
-        [
-            searchdic["L0"][maxSelecCoords[0]],
-            searchdic["Kx"][maxSelecCoords[1]],
-            searchdic["Val"][maxSelecCoords[2]],
-            searchdic["Mix"][maxSelecCoords[3]],
-            searchdic["Aff"][maxSelecCoords[4]],
-            searchdic["Aff"][maxSelecCoords[5]],
-            searchdic["Aff"][maxSelecCoords[6]],
-            searchdic["Aff"][maxSelecCoords[7]],
-        ]
-    )
-
-    return maxSelec, maxParams
