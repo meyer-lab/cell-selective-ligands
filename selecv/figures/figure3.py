@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pds
 import seaborn as sns
 from matplotlib.lines import Line2D
-from .figureCommon import subplotLabel, getSetup, popCompare, valency
+from .figureCommon import subplotLabel, getSetup, popCompare, heatmap
 from ..imports import getPopDict
 from ..model import polyfc
 
@@ -31,6 +31,26 @@ def makeFigure():
     ratePlot(ax[8])
 
     return f
+
+
+def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None, vmin=-2, vmax=4):
+    ffs = [1, 4, 16]
+
+    for i, v in enumerate(ffs):
+        cbar = False
+        if i in [2]:
+            cbar = True
+        heatmap(axs[i], L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vrange=(vmin, vmax), cbar=cbar)
+        axs[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
+        plt.plot([3.32, 3.7], [2, 2], color="w", marker=2)
+        plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        plt.plot([3.3, 3.8], [3.2, 3.7], color="w", marker=2)
+        plt.text(3.65, 3.8, "c", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        plt.plot([3.1, 3.1], [3.4, 3.7], color="w", marker=1, markersize=4)
+        plt.text(3.25, 3.55, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        axs[i].set_title("Valency = {}".format(v))
+
+    return fig
 
 
 def valDemo(ax):

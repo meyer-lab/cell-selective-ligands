@@ -3,7 +3,7 @@ Figure 4. Mixtures for enhanced targeting.
 """
 
 import numpy as np
-from .figureCommon import subplotLabel, getSetup, popCompare, mixture
+from .figureCommon import subplotLabel, getSetup, popCompare, heatmap
 from ..imports import getPopDict
 
 ligConc = np.array([10e-9])
@@ -27,3 +27,17 @@ def makeFigure():
     popCompare(ax[8], [r"$R_1^{med}R_2^{hi}$", r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{hi}$"], populationsdf, "Mix", Kav=np.array([[10e5, 10e4], [10e4, 10e5]]))
 
     return f
+
+
+def mixture(fig, axs, L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, vmax=4):
+    comps = [0.0, 0.2, 0.5, 0.8, 1.0]
+
+    for i, comp in enumerate(comps):
+        cbar = False
+        if i in [2, 4]:
+            cbar = True
+        heatmap(axs[i], L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vrange=(vmin, vmax), cbar=cbar)
+        axs[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
+        axs[i].set_title("Ligand 1 in Mixture = {}%".format(comp * 100))
+
+    return fig
