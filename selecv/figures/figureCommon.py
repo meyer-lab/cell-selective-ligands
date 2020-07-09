@@ -132,7 +132,7 @@ def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=10, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
     else:
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
-    ax.set(xlabel="Rec 1 Affinity ($K_a M^{-1}$)", ylabel="Rec 2 Affinity ($K_a$ M^{-1}$)")
+    ax.set(xlabel="Rec 1 Affinity ($K_a$ $M^{-1}$)", ylabel="Rec 2 Affinity ($K_a$ $M^{-1}$)")
     ax.set_title(Title, fontsize=8)
 
 
@@ -265,7 +265,7 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
             plt.text(3.7, 3.85, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
             plt.plot([2, 3.7], [3.5, 2.2], color="w", marker=2)
             plt.text(2.3, 3.5, "e", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-            axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e} $M^{-1}$ $K_2$ = {:.1e} $M^{-1}$".format(aff1, aff2))
+            axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e} $K_2$ = {:.1e}".format(aff1, aff2))
     return fig
 
 
@@ -297,7 +297,7 @@ def mixture(fig, axs, L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, v
         if i in [2, 4]:
             cbar = True
         abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vmin=vmin, vmax=vmax, cbar=cbar)
-        axs[i].set(xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel='Receptor 2 Abundance ($cell^{-1}$)')
+        axs[i].set(xlabel="Receptor 1 Abundance ($cell^{-1}))", ylabel='Receptor 2 Abundance ($cell^{-1})')
         axs[i].set_title("Ligand 1 in Mixture = {}%".format(comp * 100))
 
     return fig
