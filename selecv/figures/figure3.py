@@ -23,9 +23,9 @@ def makeFigure():
     valency(f, ax[0:3], 1e-9, 10 ** -10, [1.0], Kav=[[3e6, 3e6]], vmin=0.0, vmax=9)
     valencyScan = np.logspace(0.0, 4.0, base=2.0, num=10)
     _, populationsdf = getPopDict()
-    popCompare(ax[3], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
-    popCompare(ax[4], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
-    popCompare(ax[5], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-10, 10e-9, 10e-8], f=valencyScan)
+    popCompare(ax[3], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-9], f=valencyScan)
+    popCompare(ax[4], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-9], f=valencyScan)
+    popCompare(ax[5], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-9], f=valencyScan)
     vieqPlot(ax[6], 1e4, 8)
     vieqPlot(ax[7], 1e3, 8)
     ratePlot(ax[8])
@@ -83,9 +83,9 @@ def vieqPlot(ax, recCount, val):
     for ii, aff in enumerate(affs):
         vieq = polyfc(Conc / (val), KxStarP, val, recCount, [1], np.array([[aff]]))[2]  # val + 1
         for jj, bound in enumerate(vieq):
-            ligboundDF = pds.DataFrame({"Degree of Binding": jj + 1, "# Ligand Bound": [bound], "$K_a$": afflabs[ii]})
+            ligboundDF = pds.DataFrame({"Degree of Binding": jj + 1, "# Ligand Bound": [bound], "$K_a (M^{-1})$": afflabs[ii]})
             vieqDF = vieqDF.append(ligboundDF)
-    sns.stripplot(x="Degree of Binding", y="# Ligand Bound", hue="$K_a$", data=vieqDF, ax=ax)
+    sns.stripplot(x="Degree of Binding", y="# Ligand Bound", hue="$K_a (M^{-1})$", data=vieqDF, ax=ax)
     ax.set(yscale="log", ylim=(0.1, 1e4), title="Valency of Binding to " + str(recCount) + " Receptors", ylabel="Ligand Bound", xlabel="Binding Valency")
 
 
@@ -107,8 +107,8 @@ def ratePlot(ax):
     ax.set(xlim=(1, 10000), xlabel="Receptor Abundance", ylabel="Forward/Reverse Rate", xscale="log", ylim=(0.1, 5))  # ylim=(0, 1),
     handles, _ = ax.get_legend_handles_labels()
     handles = handles[0:4]
-    line = Line2D([], [], color="black", marker="_", linestyle="None", markersize=6, label="$K_a$ = 10e8")
-    point = Line2D([], [], color="black", marker=".", linestyle="None", markersize=6, label="$K_a$ = 10e6")
+    line = Line2D([], [], color="black", marker="_", linestyle="None", markersize=6, label="$K_a (M^{-1})$ = 10e8")
+    point = Line2D([], [], color="black", marker=".", linestyle="None", markersize=6, label="$K_a (M^{-1})$ = 10e6")
     handles.append(line)
     handles.append(point)
     ax.legend(handles=handles, prop={"size": 6})

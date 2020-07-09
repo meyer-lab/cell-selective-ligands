@@ -132,28 +132,26 @@ def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=10, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
     else:
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
-    ax.set(xlabel="Rec 1 Affinity ($K_a$)", ylabel="Rec 2 Affinity $K_a$)")
+    ax.set(xlabel="Rec 1 Affinity ($K_a M^{-1}$)", ylabel="Rec 2 Affinity ($K_a$ M^{-1}$)")
     ax.set_title(Title, fontsize=8)
 
 
 def ValencyPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
     "Makes a line chart comparing binding ratios of populations at multiple valencies"
     assert len(f) > 1
-    assert len(L0) > 1
-    assert len(L0) == len(Kav)
     sampMeans, underDev, overDev = np.zeros_like(f), np.zeros_like(f), np.zeros_like(f)
-    labels = ["Low Affinity/Conc", "Med Affinity/Conc", "High Affinity/Conc"]
+    labels = ["Low Affinity", "Med Affinity", "High Affinity"]
     colors = ["lime", "blue", "red"]
 
     for ii, aff in enumerate(Kav):
         for jj, val in enumerate(f):
             underDev[jj], sampMeans[jj], overDev[jj] = sampleSpec(
-                L0[ii] / val, KxStar, val, [recMeans[0], recMeans[1]], [Covs[0], Covs[1]], np.array([1]), np.array([[aff, aff]])
+                L0 / val, KxStar, val, [recMeans[0], recMeans[1]], [Covs[0], Covs[1]], np.array([1]), np.array([[aff, aff]])
             )
 
         ax.plot(f, sampMeans, color=colors[ii], label=labels[ii])
         ax.fill_between(f, underDev, overDev, color=colors[ii], alpha=0.1)
-    ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 100))
+    ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 60))
     ax.set_xticks((4, 8, 12, 16))
     ax.legend(prop={"size": 6})
 
@@ -258,7 +256,7 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
             abundHeatMap(axs[i2 * nAffPts + i1], abundRange,
                          L0, KxStar, [[aff1, aff2]], Comp, f=ff, Cplx=Cplx,
                          vmin=vmin, vmax=vmax, cbar=cbar)
-            axs[i2 * nAffPts + i1].set(xlabel="Receptor 1 Abundance", ylabel='Receptor 2 Abundance')
+            axs[i2 * nAffPts + i1].set(xlabel="Receptor 1 Abundance ($cell^{-1}$)", ylabel='Receptor 2 Abundance ($cell^{-1}$)')
             plt.plot([3.3, 3.7], [2, 2], color="w", marker=2)
             plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
             plt.plot([3.3, 3.7], [3.6, 3.2], color="w", marker=2)
@@ -267,7 +265,7 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
             plt.text(3.7, 3.85, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
             plt.plot([2, 3.7], [3.5, 2.2], color="w", marker=2)
             plt.text(2.3, 3.5, "e", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-            axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e} $K_2$ = {:.1e}".format(aff1, aff2))
+            axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e} $M^{-1}$ $K_2$ = {:.1e} $M^{-1}$".format(aff1, aff2))
     return fig
 
 
@@ -279,7 +277,7 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
         if i in [2]:
             cbar = True
         abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vmin=vmin, vmax=vmax, cbar=cbar)
-        axs[i].set(xlabel="Receptor 1 Abundance", ylabel='Receptor 2 Abundance')
+        axs[i].set(xlabel="Receptor 1 Abundance ($cell^{-1}$)", ylabel='Receptor 2 Abundance ($cell^{-1}$)')
         plt.plot([3.32, 3.7], [2, 2], color="w", marker=2)
         plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
         plt.plot([3.3, 3.8], [3.2, 3.7], color="w", marker=2)
@@ -294,14 +292,12 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
 def mixture(fig, axs, L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, vmax=4):
     comps = [0.0, 0.2, 0.5, 0.8, 1.0]
 
-    fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $f$={}, $K_x^*$={:.2e}".format(L0, Kav, ff, KxStar))
-
     for i, comp in enumerate(comps):
         cbar = False
         if i in [2, 4]:
             cbar = True
         abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vmin=vmin, vmax=vmax, cbar=cbar)
-        axs[i].set(xlabel="Receptor 1 Abundance", ylabel='Receptor 2 Abundance')
+        axs[i].set(xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel='Receptor 2 Abundance ($cell^{-1}$)')
         axs[i].set_title("Ligand 1 in Mixture = {}%".format(comp * 100))
 
     return fig
