@@ -222,7 +222,7 @@ def overlapCellPopulation(ax, scale, data=cellPopulations):
                     color='white')
 
 
-def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), cbar=False, layover=True):
+def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title="", cbar=False, layover=True):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
     abundRange = (1.5, 4.5)
@@ -236,9 +236,10 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), cbar=F
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
 
-    contours = ax.contour(X, Y, logZ, levels=np.arange(-10, 20, 0.5), colors="black", linewidths=0.5)
+    contours = ax.contour(X, Y, logZ, levels=np.arange(-10, 20, 0.3), colors="black", linewidths=0.5)
     ax.set_xscale("log")
     ax.set_yscale("log")
+    ax.set_title(title)
     plt.clabel(contours, inline=True, fontsize=6)
     ax.pcolor(X, Y, logZ, cmap='summer', vmin=vrange[0], vmax=vrange[1])
     norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
