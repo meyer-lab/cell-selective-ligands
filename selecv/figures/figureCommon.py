@@ -132,7 +132,7 @@ def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=10, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
     else:
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
-    ax.set(xlabel="Rec 1 Affinity ($K_a$ $M^{-1}$)", ylabel="Rec 2 Affinity ($K_a$ $M^{-1}$)")
+    ax.set(xlabel="Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Rec 2 Affinity ($K_a$, in M$^{-1}$)")
     ax.set_title(Title, fontsize=8)
 
 
@@ -190,7 +190,7 @@ cellPopulations = {
     r"$R_1^{med}R_2^{med}$": [3.1, 3.1, 0.25, 1, 45],
 }
 
-abundRange = (1.5, 4.5)
+
 
 
 def overlapCellPopulation(ax, scale, data=cellPopulations):
@@ -208,18 +208,24 @@ def overlapCellPopulation(ax, scale, data=cellPopulations):
                                  angle=item[4],
                                  facecolor="blue",
                                  fill=True,
-                                 alpha=0.5,
+                                 alpha=0.8,
                                  linewidth=1))
         ax_new.text(item[0], item[1], label,
                     horizontalalignment='center',
                     verticalalignment='center',
-                    fontweight='bold',
+                    fontweight='heavy',
+                    color='black')
+        ax_new.text(item[0], item[1], label,
+                    horizontalalignment='center',
+                    verticalalignment='center',
+                    fontweight='light',
                     color='white')
 
 
-def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=-2, vmax=4, cbar=False, layover=True):
+def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title="", cbar=False, layover=True):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
+    abundRange = (1.5, 4.5)
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
     if f is None:
@@ -233,85 +239,13 @@ def abundHeatMap(ax, abundRange, L0, KxStar, Kav, Comp, f=None, Cplx=None, vmin=
     contours = ax.contour(X, Y, logZ, levels=np.arange(-10, 20, 0.3), colors="black", linewidths=0.5)
     ax.set_xscale("log")
     ax.set_yscale("log")
-    plt.clabel(contours, inline=True, fontsize=3)
-    ax.pcolor(X, Y, logZ, cmap='cividis', vmin=vmin, vmax=vmax)
-    norm = plt.Normalize(vmin=vmin, vmax=vmax)
+    ax.set_title(title)
+    plt.clabel(contours, inline=True, fontsize=6)
+    ax.pcolor(X, Y, logZ, cmap='summer', vmin=vrange[0], vmax=vrange[1])
+    norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
     if cbar:
-        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='cividis'), ax=ax)
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='summer'), ax=ax)
         cbar.set_label("Log Ligand Bound")
     if layover:
         overlapCellPopulation(ax, abundRange)
 
-
-def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
-    nAffPts = 3
-
-    affRange = (5., 7.)
-    affScan = np.logspace(affRange[0], affRange[1], nAffPts)
-    for i1, aff1 in enumerate(affScan):
-        for i2, aff2 in enumerate(np.flip(affScan)):
-            cbar = False
-            if i2 * nAffPts + i1 in [2, 5, 8]:
-                cbar = True
-            abundHeatMap(axs[i2 * nAffPts + i1], abundRange,
-                         L0, KxStar, [[aff1, aff2]], Comp, f=ff, Cplx=Cplx,
-                         vmin=vmin, vmax=vmax, cbar=cbar)
-            axs[i2 * nAffPts + i1].set(xlabel="Receptor 1 Abundance ($cell^{-1}$)", ylabel='Receptor 2 Abundance ($cell^{-1}$)')
-            plt.plot([3.3, 3.7], [2, 2], color="w", marker=2)
-            plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-            plt.plot([3.3, 3.7], [3.6, 3.2], color="w", marker=2)
-            plt.text(3.4, 3.63, "c", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-            plt.plot([3.3, 3.8], [3.2, 3.7], color="w", marker=2)
-            plt.text(3.7, 3.85, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-            plt.plot([2, 3.7], [3.5, 2.2], color="w", marker=2)
-            plt.text(2.3, 3.5, "e", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-            axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e} $K_2$ = {:.1e}".format(aff1, aff2))
-    return fig
-
-
-def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None, vmin=-2, vmax=4):
-    ffs = [1, 4, 16]
-
-    for i, v in enumerate(ffs):
-        cbar = False
-        if i in [2]:
-            cbar = True
-        abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vmin=vmin, vmax=vmax, cbar=cbar)
-        axs[i].set(xlabel="Receptor 1 Abundance ($cell^{-1}$)", ylabel='Receptor 2 Abundance ($cell^{-1}$)')
-        plt.plot([3.32, 3.7], [2, 2], color="w", marker=2)
-        plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        plt.plot([3.3, 3.8], [3.2, 3.7], color="w", marker=2)
-        plt.text(3.65, 3.8, "c", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        plt.plot([3.1, 3.1], [3.4, 3.7], color="w", marker=1, markersize=4)
-        plt.text(3.25, 3.55, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        axs[i].set_title("Valency = {}".format(v))
-
-    return fig
-
-
-def mixture(fig, axs, L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, vmax=4):
-    comps = [0.0, 0.2, 0.5, 0.8, 1.0]
-
-    for i, comp in enumerate(comps):
-        cbar = False
-        if i in [2, 4]:
-            cbar = True
-        abundHeatMap(axs[i], abundRange, L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vmin=vmin, vmax=vmax, cbar=cbar)
-        axs[i].set(xlabel="Receptor 1 Abundance ($cell^{-1}))", ylabel='Receptor 2 Abundance ($cell^{-1})')
-        axs[i].set_title("Ligand 1 in Mixture = {}%".format(comp * 100))
-
-    return fig
-
-
-def complex(L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], vmin=-2, vmax=4):
-    cplx = [0, 2, 4]
-    axs, fig = getSetup((8, 8), (len(cplx), len(cplx)))
-
-    fig.suptitle("Lbound when $L_0$={}, $Kav$={}, $K_x^*$={:.2e}".format(L0, Kav, KxStar))
-
-    for i1, cplx1 in enumerate(cplx):
-        for i2, cplx2 in enumerate(np.flip(cplx)):
-            abundHeatMap(axs[i2 * len(cplx) + i1], abundRange, L0, KxStar, Kav, [1],
-                         Cplx=[[cplx1, cplx2]], vmin=vmin, vmax=vmax)
-            axs[i2 * len(cplx) + i1].set_title("$Cplx$ = [{}, {}]".format(cplx1, cplx2))
-    return fig
