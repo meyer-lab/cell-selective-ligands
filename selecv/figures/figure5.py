@@ -60,10 +60,12 @@ def optimizeDesign(ax, df, targetPop):
         optDF = optDF.append(stratRow, ignore_index=True)
         optParams = optimized.x
         if i < 4:
-            abundHeatMap(ax[i+1], abundRange, optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]], [optParams[3], 1-optParams[3]], f=optParams[2], vmin=2, vmax=12, cbar=False, layover=True)
+            abundHeatMap(ax[i + 1], abundRange, optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
+                         [optParams[3], 1 - optParams[3]], f=optParams[2], vmin=2, vmax=12, cbar=False, layover=True)
         else:
-            abundHeatMap(ax[i+1], abundRange, optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]], [optParams[3], 1-optParams[3]], f=optParams[2], vmin=2, vmax=12, cbar=True, layover=True)
-        ax[i+1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
+            abundHeatMap(ax[i + 1], abundRange, optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
+                         [optParams[3], 1 - optParams[3]], f=optParams[2], vmin=2, vmax=12, cbar=True, layover=True)
+        ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
 
     sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax[0])
     ax[0].set(title="Optimization of " + targetPop[0])
