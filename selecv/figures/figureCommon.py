@@ -191,8 +191,6 @@ cellPopulations = {
 }
 
 
-
-
 def overlapCellPopulation(ax, scale, data=cellPopulations):
     ax_new = ax.twinx().twiny()
     ax_new.set_xscale("linear")
@@ -248,4 +246,3 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
         cbar.set_label("Log Ligand Bound")
     if layover:
         overlapCellPopulation(ax, abundRange)
-
