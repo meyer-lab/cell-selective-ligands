@@ -1,12 +1,11 @@
 """
-Figure 6. Comparation and combination of various strategies
+Figure 5.
 """
-
 import numpy as np
 import pandas as pd
 import seaborn as sns
 from scipy.optimize import minimize
-from .figureCommon import subplotLabel, getSetup
+from .figureCommon import subplotLabel, getSetup, heatmap
 from ..imports import getPopDict
 from ..sampling import sampleSpec
 from ..model import polyfc
@@ -15,14 +14,14 @@ from ..model import polyfc
 def makeFigure():
     """ Make figure 5. """
     # Get list of axis objects
-    ax, f = getSetup((10, 8), (2, 3))
+    ax, f = getSetup((16, 8), (3, 6))
     subplotLabel(ax)
 
     _, populationsdf = getPopDict()
     # gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
-    optimizeDesign(ax[0], populationsdf, [r"$R_1^{hi}R_2^{lo}$"])
-    optimizeDesign(ax[1], populationsdf, [r"$R_1^{hi}R_2^{hi}$"])
-    optimizeDesign(ax[2], populationsdf, [r"$R_1^{med}R_2^{med}$"])
+    optimizeDesign(ax[0:6], populationsdf, [r"$R_1^{lo}R_2^{hi}$"])
+    optimizeDesign(ax[6:12], populationsdf, [r"$R_1^{hi}R_2^{hi}$"])
+    optimizeDesign(ax[12:18], populationsdf, [r"$R_1^{med}R_2^{med}$"])
 
     return f
 
@@ -50,24 +49,33 @@ def optimizeDesign(ax, df, targetPop):
             offTargMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
 
     optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
-    strats = ["Affinity", "Mixture", "Valency", "All"]
-    xnot = np.array([np.log(1e-9), np.log(1e-12), 1, 1, np.log(1e7), np.log(1e2)])
+    strats = ["Xnot", "Affinity", "Mixture", "Valency", "All"]
+    xnot = np.array([np.log(1e-9), np.log(1e-12), 1, 1, np.log(1e6), np.log(1e6)])
 
-    for strat in strats:
+    for i, strat in enumerate(strats):
         xBnds = bndsDict[strat]
         optimized = minimize(minSelecFunc, xnot, bounds=xBnds, method="L-BFGS-B", args=(targMeans, offTargMeans), options={"eps": 1, "disp": True})
         stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
         optDF = optDF.append(stratRow, ignore_index=True)
+        optParams = optimized.x
+        if i < 4:
+            heatmap(ax[i + 1], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
+                    [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=(2, 12), cbar=False, layover=True)
+        else:
+            heatmap(ax[i + 1], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
+                    [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=(2, 12), cbar=True, layover=True)
+        ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
 
-    sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax)
-    ax.set(title="Optimization of " + targetPop[0])
+    sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax[0])
+    ax[0].set(title="Optimization of " + targetPop[0])
 
 
 bndsDict = {
-    "Affinity": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 1), (1, 1), (np.log(1e0), np.log(1e10)), (np.log(1e0), np.log(1e5))),
-    "Mixture": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 1), (0, 1), (np.log(1e5), np.log(1e9)), (np.log(1e0), np.log(1e5))),
-    "Valency": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 16), (1, 1), (np.log(1e0), np.log(1e10)), (np.log(1e0), np.log(1e5))),
-    "All": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e5), np.log(1e9)), (np.log(1e0), np.log(1e5)))
+    "Xnot": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-12), np.log(1e-12)), (1, 1), (1, 1), (np.log(1e6), np.log(1e6)), (np.log(1e6), np.log(1e6))),
+    "Affinity": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 1), (1, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10))),
+    "Mixture": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 1), (0, 1), (np.log(1e6), np.log(1e10)), (np.log(1e2), np.log(1e6))),
+    "Valency": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 16), (1, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10))),
+    "All": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
 }
 
 
