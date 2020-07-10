@@ -4,6 +4,7 @@ Figure 3. Exploration of Valency.
 import numpy as np
 import pandas as pds
 import seaborn as sns
+from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
 from .figureCommon import subplotLabel, getSetup, popCompare, heatmap
 from ..imports import getPopDict

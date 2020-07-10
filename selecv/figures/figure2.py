@@ -3,6 +3,7 @@ Figure 2. Explore selectivity vs. affinity.
 """
 
 import numpy as np
+from matplotlib import pyplot as plt
 from .figureCommon import subplotLabel, getSetup, popCompare, heatmap
 from ..imports import getPopDict
 
