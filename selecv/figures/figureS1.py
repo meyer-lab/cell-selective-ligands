@@ -1,5 +1,5 @@
 """
-Figure 6. PolyC vs PolyFc.
+Figure S1. Plotting Csizmar reimplementation
 """
 
 import numpy as np

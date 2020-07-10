@@ -1,6 +1,7 @@
 """
-Figure 5.
+Figure 6. Comparation and combination of various strategies
 """
+
 import numpy as np
 import pandas as pd
 import seaborn as sns

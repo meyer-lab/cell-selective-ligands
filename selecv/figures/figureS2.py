@@ -1,6 +1,7 @@
 """
-Figure 5.
+Figure S2. Old functions for optimization
 """
+
 import numpy as np
 from scipy.optimize import minimize
 from .figureCommon import subplotLabel, getSetup

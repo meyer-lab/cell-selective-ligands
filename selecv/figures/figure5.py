@@ -1,3 +1,7 @@
+"""
+Figure 5. Heterovalent and bispecific
+"""
+
 import numpy as np
 from .figureCommon import getSetup, heatmap
 from ..model import polyc

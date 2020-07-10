@@ -1,5 +1,5 @@
 """
-Figure 6. PolyC vs PolyFc.
+Figure S3. PolyC vs PolyFc.
 """
 
 import numpy as np
