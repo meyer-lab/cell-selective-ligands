@@ -246,3 +246,32 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
         cbar.set_label("Log Ligand Bound")
     if layover:
         overlapCellPopulation(ax, abundRange)
+
+
+def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=True):
+    assert bool(f is None) != bool(Cplx is None)
+    nAbdPts = 70
+    abundRange = (1.5, 4.5)
+    abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
+
+    if f is None:
+        func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0])
+    else:
+        func = np.vectorize(lambda abund1, abund2: polyfc(L0, KxStar, f, [abund1, abund2], Comp, Kav)[0])
+
+    func0 = func(10**R0[0], 10**R0[1])
+    X, Y = np.meshgrid(abundScan, abundScan)
+    Z = func(X, Y) / func0
+
+    contours = ax.contour(X, Y, Z, levels=np.logspace(-10, 10, 101), colors="black", linewidths=0.5)
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_title(title)
+    plt.clabel(contours, inline=True, fontsize=6)
+    ax.pcolor(X, Y, Z, cmap='summer', vmin=vrange[0], vmax=vrange[1])
+    norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
+    if cbar:
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='summer'), ax=ax)
+        cbar.set_label("Relative Ligand Bound")
+    if layover:
+        overlapCellPopulation(ax, abundRange)
