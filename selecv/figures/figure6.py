@@ -24,7 +24,9 @@ def makeFigure():
 
     return f
 
+
 _, df = getPopDict()
+
 
 def minSelecFunc(x, tMeans, offTMeans):
     "Provides the function to be minimized to get optimal selectivity"
@@ -37,6 +39,7 @@ def minSelecFunc(x, tMeans, offTMeans):
 
     return (offTargetBound) / (targetBound)
 
+
 def genOnevsAll(targetPop):
     targMeans, offTargMeans = [], []
     for _, pop in enumerate(df["Population"].unique()):
@@ -48,7 +51,7 @@ def genOnevsAll(targetPop):
     return targMeans, offTargMeans
 
 
-def optimize(pmOptNo, targMeans, offTargMeans, L0, KxStar, f, LigC, Kav, bound = None):
+def optimize(pmOptNo, targMeans, offTargMeans, L0, KxStar, f, LigC, Kav, bound=None):
     """ A more general purpose optimizer """
     # OPT = [log L0, log KxStar, f, LigC[0], log Ka(diag), log Ka(offdiag)]
     Kav = np.array(Kav)
@@ -56,10 +59,10 @@ def optimize(pmOptNo, targMeans, offTargMeans, L0, KxStar, f, LigC, Kav, bound =
     Bnds = [(i, i) for i in xnot]
     for pmopt in pmOptNo:
         Bnds[pmopt] = optBnds[pmopt]
-    if bound != None:
+    if bound is not None:
         Bnds = bound
     optimized = minimize(minSelecFunc, xnot, bounds=np.array(Bnds), method="L-BFGS-B", args=(targMeans, offTargMeans),
-                        options={"eps": 1, "disp": True})
+                         options={"eps": 1, "disp": True})
     return optimized
 
 
@@ -72,7 +75,7 @@ def optimizeDesign(ax, targetPop):
     pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
 
     for i, strat in enumerate(strats):
-        optimized = optimize(pmOpts[i], targMeans, offTargMeans, 1e-9, 1e-12, 1, [1, 0], np.ones((2,2))*1e6, bound = bndsDict[strat])
+        optimized = optimize(pmOpts[i], targMeans, offTargMeans, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
         stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
         optDF = optDF.append(stratRow, ignore_index=True)
         optParams = optimized.x
