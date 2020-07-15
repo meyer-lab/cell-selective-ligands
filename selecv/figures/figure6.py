@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from scipy.optimize import minimize
-from .figureCommon import subplotLabel, getSetup, heatmap
+from .figureCommon import subplotLabel, getSetup, heatmap, heatmapNorm
 from ..imports import getPopDict
 from ..sampling import sampleSpec
 from ..model import polyfc
@@ -18,9 +18,9 @@ def makeFigure():
     subplotLabel(ax)
 
     # gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
-    optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"])
-    optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"])
-    optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"])
+    optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"], vrange=(0, 3))
+    optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 1.5))
+    optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 10))
 
     return f
 
@@ -41,6 +41,7 @@ def minSelecFunc(x, tMeans, offTMeans):
 
 
 def genOnevsAll(targetPop):
+    assert isinstance(targetPop, list)
     targMeans, offTargMeans = [], []
     for _, pop in enumerate(df["Population"].unique()):
         dfPop = df[df["Population"] == pop]
@@ -66,7 +67,7 @@ def optimize(pmOptNo, targMeans, offTargMeans, L0, KxStar, f, LigC, Kav, bound=N
     return optimized
 
 
-def optimizeDesign(ax, targetPop):
+def optimizeDesign(ax, targetPop, vrange=(0,5)):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another"
     targMeans, offTargMeans = genOnevsAll(targetPop)
 
@@ -80,11 +81,11 @@ def optimizeDesign(ax, targetPop):
         optDF = optDF.append(stratRow, ignore_index=True)
         optParams = optimized.x
         if i < 4:
-            heatmap(ax[i + 1], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
-                    [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=(2, 12), cbar=False, layover=True)
+            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
+                    [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=True)
         else:
-            heatmap(ax[i + 1], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
-                    [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=(2, 12), cbar=True, layover=True)
+            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
+                    [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=True, layover=True)
         ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
 
     sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax[0])
