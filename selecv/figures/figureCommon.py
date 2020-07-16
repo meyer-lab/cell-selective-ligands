@@ -191,7 +191,7 @@ cellPopulations = {
 }
 
 
-def overlapCellPopulation(ax, scale, data=cellPopulations):
+def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[]):
     ax_new = ax.twinx().twiny()
     ax_new.set_xscale("linear")
     ax_new.set_yscale("linear")
@@ -204,7 +204,7 @@ def overlapCellPopulation(ax, scale, data=cellPopulations):
                                  width=item[2],
                                  height=item[3],
                                  angle=item[4],
-                                 facecolor="blue",
+                                 facecolor=("red" if label in highlight else "blue"),
                                  fill=True,
                                  alpha=0.8,
                                  linewidth=1))
@@ -248,7 +248,7 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
         overlapCellPopulation(ax, abundRange)
 
 
-def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=True):
+def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=True, highlight=[]):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
     abundRange = (1.5, 4.5)
@@ -274,4 +274,4 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
         cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='summer'), ax=ax)
         cbar.set_label("Relative Ligand Bound")
     if layover:
-        overlapCellPopulation(ax, abundRange)
+        overlapCellPopulation(ax, abundRange, highlight=highlight)
