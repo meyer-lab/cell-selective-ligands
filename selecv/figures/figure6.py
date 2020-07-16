@@ -67,7 +67,7 @@ def optimize(pmOptNo, targMeans, offTargMeans, L0, KxStar, f, LigC, Kav, bound=N
     return optimized
 
 
-def optimizeDesign(ax, targetPop, vrange=(0,5)):
+def optimizeDesign(ax, targetPop, vrange=(0, 5)):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another"
     targMeans, offTargMeans = genOnevsAll(targetPop)
 
@@ -82,10 +82,10 @@ def optimizeDesign(ax, targetPop, vrange=(0,5)):
         optParams = optimized.x
         if i < 4:
             heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
-                    [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=True, highlight=targetPop[0])
+                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=True, highlight=targetPop[0])
         else:
             heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
-                    [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=True, layover=True, highlight=targetPop[0])
+                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=True, layover=True, highlight=targetPop[0])
         ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
 
     sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax[0])
