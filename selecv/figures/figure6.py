@@ -80,6 +80,8 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
         stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
         optDF = optDF.append(stratRow, ignore_index=True)
         optParams = optimized.x
+        optParams[0:2] = np.exp(optParams[0:2])
+        optParams[4::] = np.exp(optParams[4::])
         if i < 4:
             heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
                         [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=True, highlight=targetPop[0])
