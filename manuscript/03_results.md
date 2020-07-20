@@ -54,6 +54,10 @@ Example: [@pmid:28886385]
 
 ![**Ligand mixtures with non-overlapping responses can enhance selectivity.** a) Heat/contour maps of multivalent ligands bound to cell populations given their expression profiles of two receptors. A mixture of monovalent ligands is used, with ligand 1 binding to receptor 1 and 2 with association constants of $1x10^6$ and $1x10^5$ $/frac{1}{M}$ respectively, and ligand 2 binding to receptors 1 and 2 with association constants of $1x10^5 M^{-1}$ and $1x10^6 M^{-1}$ respectively. b-e) Ratio of ligand bound to cell populations exposed to monovalent mixtures of ligand one and 2. For c-e, the ratio of the target population to the single off target population with the greatest ligand bound is plotted. b) Ligand bound ratio of $R_1^{hi}R_2^{lo}$ to $R_1^{med}R_2^{lo}$, c) $R_1^{hi}R_2^{hi}$ to $R_1^{hi}R_2^{lo}$ and $R_1^{lo}R_2^{hi}$, d) $R_1^{med}R_2^{med}$ to $R_1^{med}R_2^{hi}$ and $R_1^{hi}R_2^{med}$, e) $R_1^{med}R_2^{hi}$ to $R_1^{hi}R_2^{lo}$ and $R_1^{lo}R_2^{hi}$.](./output/figure4.svg){#fig:mixture}
 
+### Heterovalent bispecific ligands
+
+![**Bispecific ligands exhibit interesting effects when they can only be activated when both subunits bind.**](./output/figure5.svg){#fig:bispecific}
+
 ### Combining Strategies For Superior Selectivity
 
 Example: [@pmid:30145356]
