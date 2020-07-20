@@ -21,7 +21,7 @@ def makeFigure():
              (r"$R_1^{med}R_2^{hi}$", r"$R_1^{hi}R_2^{med}$"), (r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{hi}$")]
 
     for i, s in enumerate([[1, 1], [2, 0], [0, 2]]):
-        heatmap(ax[i], L0*0.5, KxStar, Kav, [1.0], Cplx=[s], vrange=(-7, 3), title="{} Lig fully bound".format(s))
+        heatmap(ax[i], L0*0.5, KxStar, Kav, [1.0], Cplx=[s], vrange=(-7, 3), title="{} log fully bound".format(s))
         ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
 
     for i, pair in enumerate(pairs):
