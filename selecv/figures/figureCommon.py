@@ -227,14 +227,14 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
     if f is None:
-        func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0])
+        func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[2][0])
     else:
         func = np.vectorize(lambda abund1, abund2: polyfc(L0, KxStar, f, [abund1, abund2], Comp, Kav)[0])
 
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
 
-    contours = ax.contour(X, Y, logZ, levels=np.arange(-10, 20, 0.3), colors="black", linewidths=0.5)
+    contours = ax.contour(X, Y, logZ, levels=np.arange(-20, 20, 0.5), colors="black", linewidths=0.5)
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(title)
@@ -255,7 +255,7 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
     if f is None:
-        func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0])
+        func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[2][0])
     else:
         func = np.vectorize(lambda abund1, abund2: polyfc(L0, KxStar, f, [abund1, abund2], Comp, Kav)[0])
 
