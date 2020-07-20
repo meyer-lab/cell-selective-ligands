@@ -1,5 +1,5 @@
 """
-Figure 5.
+Figure 6.
 """
 import numpy as np
 import pandas as pd
@@ -12,7 +12,7 @@ from ..model import polyfc
 
 
 def makeFigure():
-    """ Make figure 5. """
+    """ Make figure 6. """
     # Get list of axis objects
     ax, f = getSetup((16, 8), (3, 6))
     subplotLabel(ax)

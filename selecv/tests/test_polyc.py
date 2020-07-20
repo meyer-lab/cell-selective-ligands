@@ -73,6 +73,20 @@ class TestPolyc(unittest.TestCase):
             self.assertEqual(res21[i], res22[i])
             self.assertEqual(res31[i], res32[i])
 
+    def test_Lfbnd(self):
+        L0 = np.random.rand() * 10.0 ** np.random.randint(-15, -5)
+        KxStar = np.random.rand() * 10.0 ** np.random.randint(-15, -5)
+        nl = 4
+        nr = np.random.randint(1, 10)
+        Rtot = np.floor(100.0 + np.random.rand(nr) * (10.0 ** np.random.randint(4, 6, size=nr)))
+        Kav = np.random.rand(nl, nr) * (10.0 ** np.random.randint(3, 7, size=(nl, nr)))
+        Cplx = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
+        Ctheta = np.random.rand(4)
+        Ctheta = Ctheta / sum(Ctheta)
+
+        res = polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav)
+        self.assertAlmostEqual(np.sum(res[0]), np.sum(res[2]))
+
 
 if __name__ == "__main__":
     unittest.main()
