@@ -63,6 +63,6 @@ def spaceParams(optParams, nPoints, strats):
     return animParams, flatten(stratList)
 
 
-def flatten():
+def flatten(l):
     "Flattens a list to 1D"
     return [item for sublist in l for item in sublist]
