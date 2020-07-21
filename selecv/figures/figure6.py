@@ -82,6 +82,7 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
         optParams = optimized.x
         optParams[0:2] = np.exp(optParams[0:2])
         optParams[4::] = np.exp(optParams[4::])
+
         if i < 4:
             heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
                         [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=True, highlight=targetPop[0])
@@ -157,3 +158,24 @@ def gridSearchTry(df, popList):
     )
 
     return maxSelec, maxParams
+
+
+def optimizeDesignAnim(targetPop):
+    "Runs optimization and determines optimal parameters for selectivity of one population vs. another"
+    targMeans, offTargMeans = genOnevsAll(targetPop)
+
+    optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
+    strats = ["Xnot", "Affinity", "Mixture", "Valency", "All"]
+    pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
+    optParamsHold = np.zeros([len(strats), 6])
+
+    for i, strat in enumerate(strats):
+        optimized = optimize(pmOpts[i], targMeans, offTargMeans, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+        stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
+        optDF = optDF.append(stratRow, ignore_index=True)
+        optParams = optimized.x
+        optParams[0:2] = np.exp(optParams[0:2])
+        optParams[4::] = np.exp(optParams[4::])
+        optParamsHold[i, :] = optParams
+
+    return optParamsHold, strats
