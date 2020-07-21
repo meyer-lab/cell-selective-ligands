@@ -1,12 +1,14 @@
-from .figureCommon import getSetup, heatmapNorm
-from .figure6 import optimizeDesignAnim, genOnevsAll, minSelecFunc
+"""
+Figure for creating Animations.
+"""
+
+import copy
 import numpy as np
-import matplotlib.animation
-import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-import copy
 from celluloid import Camera
+from .figureCommon import getSetup, heatmapNorm
+from .figure6 import optimizeDesignAnim, genOnevsAll, minSelecFunc
 
 
 def makeFigure():
@@ -61,4 +63,6 @@ def spaceParams(optParams, nPoints, strats):
     return animParams, flatten(stratList)
 
 
-def flatten(l): return [item for sublist in l for item in sublist]
+def flatten():
+    "Flattens a list to 1D"
+    return [item for sublist in l for item in sublist]
