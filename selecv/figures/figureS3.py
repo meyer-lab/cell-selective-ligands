@@ -7,8 +7,8 @@ from .figureCommon import subplotLabel, getSetup, PlotCellPops
 from ..imports import getPopDict
 from ..sampling import sampleSpec, sampleSpecC
 
-ligConc = np.array([10e-10])
-KxStarP = 10e-11
+ligConc = np.array([1e-9])
+KxStarP = 1e-10
 val = 2.0
 
 
@@ -19,7 +19,7 @@ def makeFigure():
 
     subplotLabel(ax)
 
-    affinities = np.array([[10e8, 10e1], [10e1, 10e8]])
+    affinities = np.array([[1e9, 1e2], [1e2, 1e9]])
     valencyScan = np.logspace(0.0, 5.0, base=2.0, num=10)
     _, populationsdf = getPopDict()
     # ValencyPlotC(ax[0], populationsdf, valencyScan, ["Pop3", "Pop4"], 0.5)

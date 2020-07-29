@@ -10,9 +10,9 @@ from .figureCommon import subplotLabel, getSetup, popCompare, heatmap
 from ..imports import getPopDict
 from ..model import polyfc
 
-ligConc = np.array([10e-9])
-KxStarP = 10e-11
-affinity = 10e7  # 7
+ligConc = np.array([1e-8])
+KxStarP = 1e-10
+affinity = 1e8  # 7
 
 
 def makeFigure():
@@ -24,9 +24,9 @@ def makeFigure():
     valency(f, ax[0:3], 1e-9, 10 ** -10, [1.0], Kav=[[3e6, 3e6]], vmin=0.0, vmax=9)
     valencyScan = np.logspace(0.0, 4.0, base=2.0, num=10)
     _, populationsdf = getPopDict()
-    popCompare(ax[3], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-9], f=valencyScan)
-    popCompare(ax[4], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-9], f=valencyScan)
-    popCompare(ax[5], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Valency", Kav=[10e5, 10e6, 10e7], L0=[10e-9], f=valencyScan)
+    popCompare(ax[3], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], populationsdf, "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
+    popCompare(ax[4], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
+    popCompare(ax[5], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
     vieqPlot(ax[6], 1e4, 8)
     vieqPlot(ax[7], 1e3, 8)
     ratePlot(ax[8])
@@ -56,7 +56,7 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
 
 def valDemo(ax):
     "Demonstrate effect of valency"
-    affs = [10e7, 10e6]
+    affs = [1e8, 1e7]
     colors = ["royalblue", "orange", "limegreen", "orangered"]
     lines = ["-", ":"]
     nPoints = 100
@@ -89,7 +89,7 @@ def ConcValPlot(ax):
     for conc in concScan:
         for jj, recCount in enumerate(recScan):
             percHold[jj] = polyfc(conc / valency, KxStarP, valency, recCount, [1], np.array([[affinity]]))[0] / recCount
-        ax.plot(recScan, percHold, label=str(conc * 10e8) + " nM")
+        ax.plot(recScan, percHold, label=str(conc * 1e9) + " nM")
 
     ax.set(xlim=(1, 100000000), xlabel="Receptor Abundance", ylabel="Lig Bound / Receptor", xscale="log")  # ylim=(0, 1),
     ax.legend(prop={"size": 6})
@@ -128,8 +128,8 @@ def ratePlot(ax):
     ax.set(xlim=(1, 10000), xlabel="Receptor Abundance", ylabel="Forward/Reverse Rate", xscale="log", ylim=(0.1, 5))  # ylim=(0, 1),
     handles, _ = ax.get_legend_handles_labels()
     handles = handles[0:4]
-    line = Line2D([], [], color="black", marker="_", linestyle="None", markersize=6, label="$K_a (M^{-1})$ = 10e8")
-    point = Line2D([], [], color="black", marker=".", linestyle="None", markersize=6, label="$K_a (M^{-1})$ = 10e6")
+    line = Line2D([], [], color="black", marker="_", linestyle="None", markersize=6, label="$K_a (M^{-1})$ = 1e8")
+    point = Line2D([], [], color="black", marker=".", linestyle="None", markersize=6, label="$K_a (M^{-1})$ = 1e6")
     handles.append(line)
     handles.append(point)
     ax.legend(handles=handles, prop={"size": 6})
