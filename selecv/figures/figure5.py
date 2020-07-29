@@ -11,7 +11,8 @@ from ..model import polyc, polyfc
 
 
 pairs = [(r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"), (r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"),
-             (r"$R_1^{med}R_2^{hi}$", r"$R_1^{hi}R_2^{med}$"), (r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{hi}$")]
+         (r"$R_1^{med}R_2^{hi}$", r"$R_1^{hi}R_2^{med}$"), (r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{hi}$")]
+
 
 def makeFigure():
     ax, f = getSetup((11, 11), (3, 3))
@@ -24,7 +25,7 @@ def makeFigure():
     for i, KxStar in enumerate([1e-12, 1e-10, 1e-14]):
         heatmap(ax[i], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=True, title="[1, 1] log fully bound with Kx*={}".format(KxStar))
         ax[0].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
-        heatmap(ax[i+3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=False, title="[1, 1] log Lbound with Kx*={}".format(KxStar))
+        heatmap(ax[i + 3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=False, title="[1, 1] log Lbound with Kx*={}".format(KxStar))
         ax[0].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
 
     KxStarFully(ax[6], L0, Kav, fully=False)
@@ -57,7 +58,7 @@ def selectivity(pop1name, pop2name, L0, KxStar, Cplx, Ctheta, Kav, all=False, fu
                 / polyc(L0, KxStar, np.power(10, pop2), Cplx, Ctheta, Kav)[2][0]
         else:
             return polyc(L0, KxStar, np.power(10, pop1), Cplx, Ctheta, Kav)[0][0] \
-                   / polyc(L0, KxStar, np.power(10, pop2), Cplx, Ctheta, Kav)[0][0]
+                / polyc(L0, KxStar, np.power(10, pop2), Cplx, Ctheta, Kav)[0][0]
 
 
 def affHeatMap(ax, pop1name, pop2name, L0, KxStar, Cbar=True):
