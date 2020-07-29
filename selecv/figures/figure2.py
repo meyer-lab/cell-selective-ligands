@@ -7,8 +7,8 @@ from matplotlib import pyplot as plt
 from .figureCommon import subplotLabel, getSetup, popCompare, heatmap
 from ..imports import getPopDict
 
-ligConc = np.array([10e-9])
-KxStarP = 10e-11
+ligConc = np.array([1e-8])
+KxStarP = 1e-10
 val = 1.0
 
 

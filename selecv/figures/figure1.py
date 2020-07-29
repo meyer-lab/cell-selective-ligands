@@ -9,8 +9,8 @@ from ..imports import getPopDict
 from ..sampling import sampleSpec
 
 
-ligConc = np.array([10e-9])
-KxStarP = 10e-11
+ligConc = np.array([1e-8])
+KxStarP = 1e-10
 val = 16.0
 
 
@@ -53,7 +53,7 @@ def plotSampleConc(ax, df, concRange, popList):
 
     for ii, conc in enumerate(concScan):
         underDev[ii], sampMeans[ii], overDev[ii] = sampleSpec(
-            conc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[10e-9, 10e-9]])
+            conc, KxStarP, val, [recMean1, recMean2], [Cov1, Cov2], np.array([1]), np.array([[1e-8, 1e-8]])
         )
 
     sampMeans *= np.sum(np.power(10, recMean2)) / np.sum(np.power(10, recMean1))
