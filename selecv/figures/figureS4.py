@@ -45,7 +45,7 @@ def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
 
 
 def optimizeDesignDL(ax, targetPop, fDL, affDL):
-    "Runs optimization and determines optimal parameters for selectivity of one population vs. another"
+    "Runs optimization and determines optimal parameters for selectivity of one population vs. another with inclusion of dead ligand"
     targMeans, offTargMeans = genOnevsAll(targetPop)
     
     npoints = 3
@@ -62,11 +62,8 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL):
         for jj, aff2 in enumerate(np.flip(affScan)):
             optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, affDL),options={"eps": 1, "disp": True})
             sampMeans[jj] = 7/optimized.fun
-        
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
-    print(ratioDF)
-    print(ratioDF.iloc[0, 0])
     ratioDF = ratioDF.divide(ratioDF.iloc[0, 0])
     Cbar=True
 
