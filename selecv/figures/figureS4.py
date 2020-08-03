@@ -47,7 +47,7 @@ def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
 def optimizeDesignDL(ax, targetPop, fDL, affDL):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another with inclusion of dead ligand"
     targMeans, offTargMeans = genOnevsAll(targetPop)
-    
+
     npoints = 3
     ticks = np.full([npoints], None)
     affScan = np.logspace(affDL[0], affDL[1], npoints)
@@ -60,12 +60,12 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL):
 
     for ii, aff1 in enumerate(affScan):
         for jj, aff2 in enumerate(np.flip(affScan)):
-            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [aff1, aff2]),options={"eps": 1, "disp": True})
-            sampMeans[jj] = 7/optimized.fun
+            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [aff1, aff2]), options={"eps": 1, "disp": True})
+            sampMeans[jj] = 7 / optimized.fun
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
-    ratioDF = ratioDF.divide(ratioDF.iloc[npoints-1, 0])
-    Cbar=True
+    ratioDF = ratioDF.divide(ratioDF.iloc[npoints - 1, 0])
+    Cbar = True
 
     sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=2, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
 
