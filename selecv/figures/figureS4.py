@@ -1,13 +1,12 @@
 """
-Figure 7.
+Figure S4.
 """
 import numpy as np
 import pandas as pd
 import seaborn as sns
 from scipy.optimize import minimize
-from .figureCommon import subplotLabel, getSetup, heatmap, heatmapNorm
+from .figureCommon import subplotLabel, getSetup
 from ..imports import getPopDict
-from ..sampling import sampleSpec
 from .figure6 import genOnevsAll
 from ..model import polyc
 
@@ -32,7 +31,7 @@ _, df = getPopDict()
 
 
 def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
-    "Provides the function to be minimized to get optimal selectivity"
+    "Provides the function to be minimized to get optimal selectivity with addition of dead ligand"
     offTargetBound = 0
 
     #print(polyc(np.exp(x[0]), np.exp(x[1]), [10**tMeans[0][0], 10**tMeans[0][1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]])))
@@ -47,8 +46,8 @@ def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
 def optimizeDesignDL(ax, targetPop, fDL, affDL):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another with inclusion of dead ligand"
     targMeans, offTargMeans = genOnevsAll(targetPop)
-    
-    npoints = 3
+
+    npoints = 5
     ticks = np.full([npoints], None)
     affScan = np.logspace(affDL[0], affDL[1], npoints)
     ticks[0], ticks[-1] = "1e" + str(affDL[0]), "1e" + str(affDL[1])
@@ -60,16 +59,14 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL):
 
     for ii, aff1 in enumerate(affScan):
         for jj, aff2 in enumerate(np.flip(affScan)):
-            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, affDL),options={"eps": 1, "disp": True})
-            sampMeans[jj] = 7/optimized.fun
+            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [aff1, aff2]), options={"eps": 1, "disp": True})
+            sampMeans[jj] = 7 / optimized.fun
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
-    ratioDF = ratioDF.divide(ratioDF.iloc[0, 0])
-    Cbar=True
+    ratioDF = ratioDF.divide(ratioDF.iloc[npoints - 1, 0])
+    Cbar = True
 
-    if ratioDF.max().max() < 15:
-        sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=10, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
-    else:
-        sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
+    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=2, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
+
     ax.set(xlabel="Dead Ligand Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Dead Ligand Rec 2 Affinity ($K_a$, in M$^{-1}$)")
     ax.set_title(targetPop, fontsize=8)

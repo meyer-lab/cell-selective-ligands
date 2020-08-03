@@ -46,10 +46,10 @@ def makeFigure():
             selecDF.loc[(selecDF["Strategy"] == strat), "Selectivity"] = (7 / minSelecFunc(selecRow, targMeans, offTargMeans))
             sns.barplot(x="Strategy", y="Selectivity", data=selecDF, ax=ax[1])
             heatmapNorm(ax[0], targMeans[0], optParamsR[0], optParamsR[1], [[optParamsR[4], optParamsR[5]], [optParamsR[4], optParamsR[5]]],
-                    [optParamsR[3], 1 - optParamsR[3]], f=optParamsR[2], vrange=vrange, cbar=True, layover=overlay, highlight=targetPop[0])
+                        [optParamsR[3], 1 - optParamsR[3]], f=optParamsR[2], vrange=vrange, cbar=True, layover=overlay, highlight=targetPop[0])
         else:
             heatmapNorm(ax[0], targMeans[0], optParamsR[0], optParamsR[1], [[optParamsR[4], optParamsR[5]], [optParamsR[4], optParamsR[5]]],
-                    [optParamsR[3], 1 - optParamsR[3]], f=optParamsR[2], vrange=vrange, cbar=True, layover=overlay, highlight=False)
+                        [optParamsR[3], 1 - optParamsR[3]], f=optParamsR[2], vrange=vrange, cbar=True, layover=overlay, highlight=False)
         ax[0].set(xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
         camera.snap()
 
