@@ -60,16 +60,14 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL):
 
     for ii, aff1 in enumerate(affScan):
         for jj, aff2 in enumerate(np.flip(affScan)):
-            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, affDL),options={"eps": 1, "disp": True})
+            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [aff1, aff2]),options={"eps": 1, "disp": True})
             sampMeans[jj] = 7/optimized.fun
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
-    ratioDF = ratioDF.divide(ratioDF.iloc[0, 0])
+    ratioDF = ratioDF.divide(ratioDF.iloc[npoints-1, 0])
     Cbar=True
 
-    if ratioDF.max().max() < 15:
-        sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=10, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
-    else:
-        sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
+    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=2, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
+
     ax.set(xlabel="Dead Ligand Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Dead Ligand Rec 2 Affinity ($K_a$, in M$^{-1}$)")
     ax.set_title(targetPop, fontsize=8)
