@@ -1,13 +1,12 @@
 """
-Figure 7.
+Figure S4.
 """
 import numpy as np
 import pandas as pd
 import seaborn as sns
 from scipy.optimize import minimize
-from .figureCommon import subplotLabel, getSetup, heatmap, heatmapNorm
+from .figureCommon import subplotLabel, getSetup
 from ..imports import getPopDict
-from ..sampling import sampleSpec
 from .figure6 import genOnevsAll
 from ..model import polyc
 
@@ -32,7 +31,7 @@ _, df = getPopDict()
 
 
 def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
-    "Provides the function to be minimized to get optimal selectivity"
+    "Provides the function to be minimized to get optimal selectivity with addition of dead ligand"
     offTargetBound = 0
 
     #print(polyc(np.exp(x[0]), np.exp(x[1]), [10**tMeans[0][0], 10**tMeans[0][1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]])))
@@ -48,7 +47,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another with inclusion of dead ligand"
     targMeans, offTargMeans = genOnevsAll(targetPop)
 
-    npoints = 3
+    npoints = 5
     ticks = np.full([npoints], None)
     affScan = np.logspace(affDL[0], affDL[1], npoints)
     ticks[0], ticks[-1] = "1e" + str(affDL[0]), "1e" + str(affDL[1])
