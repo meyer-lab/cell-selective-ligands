@@ -7,7 +7,7 @@ import seaborn as sns
 from scipy.optimize import minimize
 from .figureCommon import subplotLabel, getSetup, heatmap, heatmapNorm
 from ..imports import getPopDict
-from ..sampling import sampleSpec
+from ..sampling import sampleSpec, sigmaPop
 from ..model import polyfc
 
 
@@ -28,31 +28,52 @@ def makeFigure():
 _, df = getPopDict()
 
 
-def minSelecFunc(x, tMeans, offTMeans):
+def genPopMeans(popName):
+    assert isinstance(popName, list)
+    res = []
+    for name in popName:
+        dfPop = df[df["Population"] == name]
+        res.append(np.array([dfPop["Receptor_1"].to_numpy()[0], dfPop["Receptor_2"].to_numpy()[0]]))
+    return res
+
+
+def minSelecFunc(x, tPops, offTPops):
     "Provides the function to be minimized to get optimal selectivity"
     offTargetBound = 0
+    tMeans, offTMeans = genPopMeans(tPops), genPopMeans(offTPops)
 
-    targetBound = polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**tMeans[0][0], 10**tMeans[0][1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
-
+    targetBound = polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**tMeans[0][0], 10**tMeans[0][1]], [x[3], 1 - x[3]],
+                         np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
     for means in offTMeans:
-        offTargetBound += polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**means[0], 10**means[1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
+        offTargetBound += polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**means[0], 10**means[1]], [x[3], 1 - x[3]],
+                                 np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
 
     return (offTargetBound) / (targetBound)
 
 
 def genOnevsAll(targetPop):
     assert isinstance(targetPop, list)
-    targMeans, offTargMeans = [], []
+    targPops, offTargPops = [], []
     for _, pop in enumerate(df["Population"].unique()):
-        dfPop = df[df["Population"] == pop]
-        if pop == targetPop[0]:
-            targMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+        if pop in targetPop:
+            targPops.append(pop)
         else:
-            offTargMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
-    return targMeans, offTargMeans
+            offTargPops.append(pop)
+    return targPops, offTargPops
 
 
-def optimize(pmOptNo, targMeans, offTargMeans, L0, KxStar, f, LigC, Kav, bound=None):
+def minSigmaVar(x, tPops, offTPops):
+    targetBound, offTargetBound = 0, 0
+    for tPop in tPops:
+        targetBound += sum(sigmaPop(tPop, np.exp(x[0]), np.exp(x[1]), x[2], [x[3], 1 - x[3]],
+                                np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]), quantity=0))
+    for offTPop in offTPops:
+        offTargetBound += sum(sigmaPop(offTPop, np.exp(x[0]), np.exp(x[1]), x[2], [x[3], 1 - x[3]],
+                                   np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]), quantity=0))
+    return (offTargetBound) / (targetBound)
+
+
+def optimize(pmOptNo, targPops, offTargPops, L0, KxStar, f, LigC, Kav, bound=None):
     """ A more general purpose optimizer """
     # OPT = [log L0, log KxStar, f, LigC[0], log Ka(diag), log Ka(offdiag)]
     Kav = np.array(Kav)
@@ -62,21 +83,23 @@ def optimize(pmOptNo, targMeans, offTargMeans, L0, KxStar, f, LigC, Kav, bound=N
         Bnds[pmopt] = optBnds[pmopt]
     if bound is not None:
         Bnds = bound
-    optimized = minimize(minSelecFunc, xnot, bounds=np.array(Bnds), method="L-BFGS-B", args=(targMeans, offTargMeans),
+    print(targPops, offTargPops)
+    optimized = minimize(minSigmaVar, xnot, bounds=np.array(Bnds), method="L-BFGS-B", args=(targPops, offTargPops),
                          options={"eps": 1, "disp": True})
     return optimized
 
 
 def optimizeDesign(ax, targetPop, vrange=(0, 5)):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another"
-    targMeans, offTargMeans = genOnevsAll(targetPop)
+    targPops, offTargPops = genOnevsAll(targetPop)
+    targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
 
     optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
     strats = ["Xnot", "Affinity", "Mixture", "Valency", "All"]
     pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
 
     for i, strat in enumerate(strats):
-        optimized = optimize(pmOpts[i], targMeans, offTargMeans, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+        optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
         stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
         optDF = optDF.append(stratRow, ignore_index=True)
         optParams = optimized.x
