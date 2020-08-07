@@ -83,9 +83,10 @@ class TestPolyc(unittest.TestCase):
         Cplx = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
         Ctheta = np.random.rand(4)
         Ctheta = Ctheta / sum(Ctheta)
-
         res = polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav)
         self.assertAlmostEqual(np.sum(res[0]), np.sum(res[2]))
+        for i in range(len(res[0])):
+            self.assertAlmostEqual(res[0][i], np.sum(res[1], axis=1)[i])
 
 
 if __name__ == "__main__":
