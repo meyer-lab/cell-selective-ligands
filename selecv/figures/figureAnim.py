@@ -14,13 +14,18 @@ from .figure6 import optimizeDesignAnim, genOnevsAll, minSelecFunc
 def makeFigure():
     """ Make figure 6. """
     # Get list of axis objects
-    ax, f = getSetup((8, 3), (1, 2))
+    overlay = False
+    if overlay:
+        ax, f = getSetup((8, 3), (1, 2))
+    else:
+        ax, f = getSetup((8, 3), (1, 2))
     camera = Camera(f)
-    npointsAn = 25
+    npointsAn = 35
     vrange = (0, 3)
-    targetPop = [r"$R_1^{lo}R_2^{hi}$"]
+    targetPop = [r"$R_1^{hi}R_2^{hi}$"]
     targMeans, offTargMeans = genOnevsAll(targetPop)
     selecDF = pd.DataFrame(columns=["Xnot", "Affinity", "Mixture", "Valency", "All"])
+    overlay = False
 
     optParamsFrame, strats = optimizeDesignAnim(targetPop)
     optParamsFrame, stratList = spaceParams(optParamsFrame, npointsAn, strats)
@@ -29,19 +34,23 @@ def makeFigure():
     XnotRow[4::] = np.log(XnotRow[4::])
     XnotSelec = 7 / minSelecFunc(XnotRow, targMeans, offTargMeans)
 
-    selecDF = pd.DataFrame({"Strat": ["Xnot", "Affinity", "Mixture", "Valency", "All"], "Selectivity": np.tile(XnotSelec, [5])})
+    selecDF = pd.DataFrame({"Strategy": ["Xnot", "Affinity", "Mixture", "Valency", "All"], "Selectivity": np.tile(XnotSelec, [5])})
 
     for i in range(0, optParamsFrame.shape[0]):
         optParamsR = optParamsFrame[i, :]
         strat = stratList[i]
-        selecRow = copy.copy(optParamsR)
-        selecRow[0:2] = np.log(selecRow[0:2])
-        selecRow[4::] = np.log(selecRow[4::])
-        selecDF.loc[(selecDF["Strat"] == strat), "Selectivity"] = (7 / minSelecFunc(selecRow, targMeans, offTargMeans))
-        heatmapNorm(ax[0], targMeans[0], optParamsR[0], optParamsR[1], [[optParamsR[4], optParamsR[5]], [optParamsR[4], optParamsR[5]]],
-                    [optParamsR[3], 1 - optParamsR[3]], f=optParamsR[2], vrange=vrange, cbar=True, layover=True, highlight=targetPop[0])
+        if overlay:
+            selecRow = copy.copy(optParamsR)
+            selecRow[0:2] = np.log(selecRow[0:2])
+            selecRow[4::] = np.log(selecRow[4::])
+            selecDF.loc[(selecDF["Strategy"] == strat), "Selectivity"] = (7 / minSelecFunc(selecRow, targMeans, offTargMeans))
+            sns.barplot(x="Strategy", y="Selectivity", data=selecDF, ax=ax[1])
+            heatmapNorm(ax[0], targMeans[0], optParamsR[0], optParamsR[1], [[optParamsR[4], optParamsR[5]], [optParamsR[4], optParamsR[5]]],
+                        [optParamsR[3], 1 - optParamsR[3]], f=optParamsR[2], vrange=vrange, cbar=True, layover=overlay, highlight=targetPop[0])
+        else:
+            heatmapNorm(ax[0], targMeans[0], optParamsR[0], optParamsR[1], [[optParamsR[4], optParamsR[5]], [optParamsR[4], optParamsR[5]]],
+                        [optParamsR[3], 1 - optParamsR[3]], f=optParamsR[2], vrange=vrange, cbar=True, layover=overlay, highlight=False)
         ax[0].set(xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
-        sns.barplot(x="Strat", y="Selectivity", data=selecDF, ax=ax[1])
         camera.snap()
 
     anim = camera.animate()
