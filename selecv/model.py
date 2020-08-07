@@ -128,7 +128,8 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     Rbound = L0 / KxStar * Ctheta.reshape(-1, 1) * np.dot(Cplx, Psinorm) * np.exp(np.dot(Cplx, np.log1p(Psirs - 1)))
     Lfbnd = L0 / KxStar * Ctheta * np.exp(np.dot(Cplx, np.log(Psirs - 1))).flatten()
     assert len(Lbound) == len(Ctheta)
-    #assert len(Rbound) == len(Rtot)
+    assert Rbound.shape[0] == len(Ctheta)
+    assert Rbound.shape[1] == len(Rtot)
     return Lbound, Rbound, Lfbnd
 
 
