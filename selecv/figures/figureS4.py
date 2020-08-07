@@ -14,20 +14,19 @@ from ..model import polyc
 def makeFigure():
     """ Make figure S4. """
     # Get list of axis objects
-    ax, f = getSetup((18, 12), (2, 3))
+    ax, f = getSetup((18, 24), (4, 3))
     subplotLabel(ax)
     affDLsub = np.array([0, 15])
-    fDLsub = 4
 
-    # gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
-    optimizeDesignDL(ax[0], [r"$R_1^{lo}R_2^{hi}$"], fDLsub, affDLsub)
-    optimizeDesignDL(ax[1], [r"$R_1^{hi}R_2^{hi}$"], fDLsub, affDLsub)
-    optimizeDesignDL(ax[2], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
+    fDLsub = 1
+    optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{lo}R_2^{hi}$"], fDLsub, affDLsub)
+    optParams, DLaffs = optimizeDesignDL(ax[1], [r"$R_1^{hi}R_2^{hi}$"], fDLsub, affDLsub)
+    optParams, DLaffs = optimizeDesignDL(ax[2], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
 
     fDLsub = 4
-    optimizeDesignDL(ax[3], [r"$R_1^{lo}R_2^{hi}$"], fDLsub, affDLsub)
-    optimizeDesignDL(ax[4], [r"$R_1^{hi}R_2^{hi}$"], fDLsub, affDLsub)
-    optimizeDesignDL(ax[5], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
+    optParams, DLaffs = optimizeDesignDL(ax[6], [r"$R_1^{lo}R_2^{hi}$"], fDLsub, affDLsub)
+    optParams, DLaffs = optimizeDesignDL(ax[7], [r"$R_1^{hi}R_2^{hi}$"], fDLsub, affDLsub)
+    optParams, DLaffs = optimizeDesignDL(ax[8], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
 
     return f
 
@@ -88,19 +87,20 @@ def modifyCellPops(cellPopsOriginal, optLig, dLigAff, fDL):
     "Modify cell pops by amount of dead ligand binding"
     x = optLig
     for i, row in cellPopsOriginal.items():
-        Rbound = polyc(np.exp(x[0]), np.exp(x[1]), [10**row[0], 10**row[2]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[dLigAff[0], dLigAff[1]], [np.exp(x[4]), np.exp(x[5])]]))[1][0]
+        Rbound = polyc(np.exp(x[0]), np.exp(x[1]), [10**row[0], 10**row[2]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[dLigAff[0], dLigAff[1]], [np.exp(x[4]), np.exp(x[5])]]))[1][0, :]
         row[0:2] = row[0:2] - Rbound
         cellPopsOriginal[i] = row
     return cellPopsOriginal
 
 
-def heatmapDL(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title="", cbar=False, layover=True, fully=False):
+def heatmapDL(ax, L0, KxStar, Kav, Comp, modPops, f=None, Cplx=None, vrange=(-2, 4), title="", cbar=False):
+    "Makes a heatmap with modified cell population abundances according to dead ligand binding"
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
     abundRange = (1.5, 4.5)
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
-    func = np.vectorize(lambda abund1, abund2: polyfc(L0, KxStar, f, [abund1, abund2], Comp, Kav)[0])
+    func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0][0])
 
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
@@ -115,5 +115,4 @@ def heatmapDL(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), titl
     if cbar:
         cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
         cbar.set_label("Log Ligand Bound")
-    if layover:
-        overlapCellPopulation(ax, abundRange)
+    overlapCellPopulation(ax, abundRange, data=ModPops)
