@@ -4,8 +4,9 @@ Figure S4.
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from matplotlib import gridspec, pyplot as plt
 from scipy.optimize import minimize
-from .figureCommon import subplotLabel, getSetup, cellPopulations, overlapCellPopulations
+from .figureCommon import subplotLabel, getSetup, cellPopulations, overlapCellPopulation
 from ..imports import getPopDict
 from .figure6 import genOnevsAll
 from ..model import polyc
@@ -20,18 +21,37 @@ def makeFigure():
 
     fDLsub = 1
     optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{lo}R_2^{hi}$"], fDLsub, affDLsub)
+    modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
+    heatmapDL(ax[6], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], modPop, f=None, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
+
     optParams, DLaffs = optimizeDesignDL(ax[1], [r"$R_1^{hi}R_2^{hi}$"], fDLsub, affDLsub)
+    modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
+    heatmapDL(ax[7], optParams[0], optParams[1], np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], modPop, f=None, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
+
     optParams, DLaffs = optimizeDesignDL(ax[2], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
+    modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
+    heatmapDL(ax[8], optParams[0], optParams[1], np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], modPop, f=None, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
 
     fDLsub = 4
     optParams, DLaffs = optimizeDesignDL(ax[6], [r"$R_1^{lo}R_2^{hi}$"], fDLsub, affDLsub)
+    modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
+    heatmapDL(ax[9], optParams[0], optParams[1], np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], modPop, f=None, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
+
     optParams, DLaffs = optimizeDesignDL(ax[7], [r"$R_1^{hi}R_2^{hi}$"], fDLsub, affDLsub)
+    modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
+    heatmapDL(ax[10], optParams[0], optParams[1], np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], modPop, f=None, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
+
     optParams, DLaffs = optimizeDesignDL(ax[8], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
+    modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
+    heatmapDL(ax[11], optParams[0], optParams[1], np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], modPop, f=None, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
 
     return f
-
-
-_, df = getPopDict()
 
 
 def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
@@ -75,9 +95,10 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL):
     ax.set(xlabel="Dead Ligand Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Dead Ligand Rec 2 Affinity ($K_a$, in M$^{-1}$)")
     ax.set_title(targetPop, fontsize=8)
 
-    maxindices = argmax(ratioDF.to_numpy())
-    maxaff1 = affscan[maxindices[0]]
-    maxaff2 = affscan[-1*maxindices[1]]
+    maxindices = ratioDF.to_numpy()
+    i, j = np.unravel_index(maxindices.argmax(), maxindices.shape)
+    maxaff1 = affScan[i]
+    maxaff2 = affScan[j + 1 - npoints]
     optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [maxaff1, maxaff2]), options={"eps": 1, "disp": True})
 
     return optimized.x, np.array([maxaff1, maxaff2])
@@ -88,7 +109,7 @@ def modifyCellPops(cellPopsOriginal, optLig, dLigAff, fDL):
     x = optLig
     for i, row in cellPopsOriginal.items():
         Rbound = polyc(np.exp(x[0]), np.exp(x[1]), [10**row[0], 10**row[2]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[dLigAff[0], dLigAff[1]], [np.exp(x[4]), np.exp(x[5])]]))[1][0, :]
-        row[0:2] = row[0:2] - Rbound
+        row[0:2] = np.log10(10 ** np.array(row[0:2]) - Rbound)
         cellPopsOriginal[i] = row
     return cellPopsOriginal
 
@@ -97,10 +118,11 @@ def heatmapDL(ax, L0, KxStar, Kav, Comp, modPops, f=None, Cplx=None, vrange=(-2,
     "Makes a heatmap with modified cell population abundances according to dead ligand binding"
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
-    abundRange = (1.5, 4.5)
+    abunds = np.array(list(modPops.values()))[:, 0:2]
+    abundRange = (np.amin(abunds) - 1, np.amax(abunds) + 1)
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
-    func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0][0])
+    func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0][1])
 
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
@@ -115,4 +137,4 @@ def heatmapDL(ax, L0, KxStar, Kav, Comp, modPops, f=None, Cplx=None, vrange=(-2,
     if cbar:
         cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
         cbar.set_label("Log Ligand Bound")
-    overlapCellPopulation(ax, abundRange, data=ModPops)
+    overlapCellPopulation(ax, abundRange, data=modPops)
