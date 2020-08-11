@@ -17,7 +17,7 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((18, 24), (4, 3))
     subplotLabel(ax)
-    affDLsub = np.array([0, 15])
+    affDLsub = np.array([0, 12])
 
     fDLsub = 1
     optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{lo}R_2^{hi}$"], fDLsub, affDLsub)
@@ -58,7 +58,6 @@ def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
     "Provides the function to be minimized to get optimal selectivity with addition of dead ligand"
     offTargetBound = 0
 
-    #print(polyc(np.exp(x[0]), np.exp(x[1]), [10**tMeans[0][0], 10**tMeans[0][1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]])))
     targetBound = polyc(np.exp(x[0]), np.exp(x[1]), [10**tMeans[0][0], 10**tMeans[0][1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]]))[0][1]
 
     for means in offTMeans:
@@ -97,8 +96,8 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL):
 
     maxindices = ratioDF.to_numpy()
     i, j = np.unravel_index(maxindices.argmax(), maxindices.shape)
-    maxaff1 = affScan[i]
-    maxaff2 = affScan[j + 1 - npoints]
+    maxaff1 = affScan[j]
+    maxaff2 = affScan[npoints - 1 - i]
     optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [maxaff1, maxaff2]), options={"eps": 1, "disp": True})
 
     return optimized.x, np.array([maxaff1, maxaff2])
@@ -108,6 +107,7 @@ def modifyCellPops(cellPopsOriginal, optLig, dLigAff, fDL):
     "Modify cell pops by amount of dead ligand binding"
     x = optLig
     for i, row in cellPopsOriginal.items():
+        print(polyc(np.exp(x[0]), np.exp(x[1]), [10**row[0], 10**row[2]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[dLigAff[0], dLigAff[1]], [np.exp(x[4]), np.exp(x[5])]]))[1])
         Rbound = polyc(np.exp(x[0]), np.exp(x[1]), [10**row[0], 10**row[2]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[dLigAff[0], dLigAff[1]], [np.exp(x[4]), np.exp(x[5])]]))[1][0, :]
         row[0:2] = np.log10(10 ** np.array(row[0:2]) - Rbound)
         cellPopsOriginal[i] = row
