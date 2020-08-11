@@ -23,7 +23,7 @@ def makeFigure():
     optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{lo}R_2^{hi}$"], fDLsub, affDLsub)
     modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
     heatmapDL(ax[6], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-     [0.5, 0.5], modPop Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
+              [0.5, 0.5], modPop, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
 
     optParams, DLaffs = optimizeDesignDL(ax[1], [r"$R_1^{hi}R_2^{hi}$"], fDLsub, affDLsub)
     modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
