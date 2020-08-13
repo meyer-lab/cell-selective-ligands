@@ -5,10 +5,10 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import copy
-from matplotlib import gridspec, pyplot as plt
+from matplotlib import pyplot as plt
+import matplotlib.cm as cm
 from scipy.optimize import minimize
 from .figureCommon import subplotLabel, getSetup, cellPopulations, overlapCellPopulation
-from ..imports import getPopDict
 from .figure6 import genOnevsAll
 from ..model import polyc
 
@@ -29,8 +29,7 @@ def makeFigure():
     modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
     heatmapDL(ax[7], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
               [0.5, 0.5], modPop, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
-    
-    
+
     optParams, DLaffs = optimizeDesignDL(ax[2], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
     modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
     heatmapDL(ax[8], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
@@ -51,7 +50,7 @@ def makeFigure():
     modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
     heatmapDL(ax[11], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
               [0.5, 0.5], modPop, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
-    
+
     return f
 
 
@@ -62,7 +61,7 @@ def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
 
     for means in offTMeans:
         offTargetBound += polyc(np.exp(x[0]), np.exp(x[1]), [10**means[0], 10**means[1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]]))[0][1]
-    
+
     return (offTargetBound) / (targetBound)
 
 
@@ -77,7 +76,6 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL):
     bounds = ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
     xnot = np.array([np.log(1e-9), np.log(1e-9), 1, 1, np.log(10e8), np.log(10e6)])
 
-    
     ratioDF = pd.DataFrame(columns=affScan, index=affScan)
 
     for ii, aff1 in enumerate(affScan):
@@ -96,7 +94,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL):
     ax.set_title(targetPop, fontsize=8)
 
     maxindices = ratioDF.to_numpy()
-    i, j = np.unravel_index(maxindices.argmax(), maxindices.shape)
+    (i, j) = np.unravel_index(maxindices.argmax(), maxindices.shape)
     maxaff1 = affScan[j]
     maxaff2 = affScan[npoints - 1 - i]
     optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [maxaff1, maxaff2]), options={"eps": 1, "disp": True})
