@@ -29,7 +29,7 @@ def makeFigure():
     modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
     heatmapDL(ax[7], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
               [0.5, 0.5], modPop, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
-
+    
     optParams, DLaffs = optimizeDesignDL(ax[2], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
     modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
     heatmapDL(ax[8], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
@@ -57,12 +57,11 @@ def makeFigure():
 def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
     "Provides the function to be minimized to get optimal selectivity with addition of dead ligand"
     offTargetBound = 0
-
     targetBound = polyc(np.exp(x[0]), np.exp(x[1]), [10**tMeans[0][0], 10**tMeans[0][1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]]))[0][1]
 
     for means in offTMeans:
         offTargetBound += polyc(np.exp(x[0]), np.exp(x[1]), [10**means[0], 10**means[1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]]))[0][1]
-
+    
     return (offTargetBound) / (targetBound)
 
 
@@ -74,13 +73,14 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL):
     ticks = np.full([npoints], None)
     affScan = np.logspace(affDL[0], affDL[1], npoints)
     ticks[0], ticks[-1] = "1e" + str(affDL[0]), "1e" + str(affDL[1])
-    bounds = ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
+    bounds = ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e2), np.log(1e8)), (np.log(1e2), np.log(1e8)))
     xnot = np.array([np.log(1e-9), np.log(1e-9), 1, 1, np.log(10e8), np.log(10e6)])
 
-    sampMeans = np.zeros(npoints)
+    
     ratioDF = pd.DataFrame(columns=affScan, index=affScan)
 
     for ii, aff1 in enumerate(affScan):
+        sampMeans = np.zeros(npoints)
         for jj, aff2 in enumerate(np.flip(affScan)):
             optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [aff1, aff2]), options={"eps": 1, "disp": True})
             sampMeans[jj] = 7 / optimized.fun
@@ -107,8 +107,8 @@ def modifyCellPops(cellPopsOriginal, optLig, dLigAff, fDL):
     "Modify cell pops by amount of dead ligand binding"
     x = optLig
     for i, row in cellPopsOriginal.items():
-        print(polyc(np.exp(x[0]), np.exp(x[1]), [10**row[0], 10**row[2]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[dLigAff[0], dLigAff[1]], [np.exp(x[4]), np.exp(x[5])]]))[1])
-        Rbound = polyc(np.exp(x[0]), np.exp(x[1]), [10**row[0], 10**row[2]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[dLigAff[0], dLigAff[1]], [np.exp(x[4]), np.exp(x[5])]]))[1][0, :]
+        #print(polyc(np.exp(x[0]), np.exp(x[1]), [10**row[0], 10**row[1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[dLigAff[0], dLigAff[1]], [np.exp(x[4]), np.exp(x[5])]]))[1])
+        Rbound = polyc(np.exp(x[0]), np.exp(x[1]), [10**row[0], 10**row[1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[dLigAff[0], dLigAff[1]], [np.exp(x[4]), np.exp(x[5])]]))[1][0, :]
         row[0:2] = np.log10(10 ** np.array(row[0:2]) - Rbound)
         cellPopsOriginal[i] = row
     return cellPopsOriginal
