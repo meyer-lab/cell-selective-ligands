@@ -16,19 +16,19 @@ cellPopulations = {
     r"$R_1^{med}R_2^{lo}$": [3, 2, 0.5, 0.25, 0],
     r"$R_1^{hi}R_2^{lo}$": [4, 2, 0.5, 0.25, 0],
     r"$R_1^{lo}R_2^{hi}$": [2, 4, 0.3, 0.6, 0],
-    r"$R_1^{med}R_2^{hi}$": [3.1, 3.9, 0.5, 0.25, 45],
-    r"$R_1^{hi}R_2^{med}$": [3.9, 3.1, 0.5, 0.25, 45],
+    r"$R_1^{med}R_2^{hi}$": [3.0, 3.9, 0.5, 0.25, 45],
+    r"$R_1^{hi}R_2^{med}$": [3.9, 3.0, 0.5, 0.25, 45],
     r"$R_1^{hi}R_2^{hi}$": [4, 4, 0.5, 0.25, 45],
     r"$R_1^{med}R_2^{med}$": [3.1, 3.1, 0.25, 1, 45],
 }
 
-def sigmapts(name):
+def sigmapts(name, h = np.sqrt(3)):
     l = cellPopulations[name]
     x = np.array([l[0], l[1]])
     rot = np.array([[np.cos(np.deg2rad(l[4])), -np.sin(np.deg2rad(l[4]))], [np.sin(np.deg2rad(l[4])), np.cos(np.deg2rad(l[4]))]])
     srlamb = np.diag([l[2], l[3]]) #np.diag(np.sqrt([l[2], l[3]]))
     srcov = rot @ srlamb @ np.transpose(rot)
-    h = np.sqrt(3)
+    h = 0.1 #np.sqrt(3)
     return np.power(10, [x, x+h*srcov[:,0], x-h*srcov[:,0], x+h*srcov[:,1], x-h*srcov[:,1]])
 
 
