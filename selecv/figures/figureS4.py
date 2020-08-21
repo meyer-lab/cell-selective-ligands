@@ -16,40 +16,47 @@ from ..model import polyc
 def makeFigure():
     """ Make figure S4. """
     # Get list of axis objects
-    ax, f = getSetup((18, 24), (4, 3))
+    ax, f = getSetup((18, 24), (6, 3))
     subplotLabel(ax)
     affDLsub = np.array([0, 10])
 
-    fDLsub = 1
-    optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{lo}R_2^{hi}$"], fDLsub, affDLsub)
-    modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
-    heatmapDL(ax[6], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], modPop, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
-    optParams, DLaffs = optimizeDesignDL(ax[1], [r"$R_1^{hi}R_2^{hi}$"], fDLsub, affDLsub)
-    modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
-    heatmapDL(ax[7], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], modPop, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
-
-    optParams, DLaffs = optimizeDesignDL(ax[2], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
-    modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
-    heatmapDL(ax[8], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], modPop, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
-
     fDLsub = 4
-    optParams, DLaffs = optimizeDesignDL(ax[3], [r"$R_1^{lo}R_2^{hi}$"], fDLsub, affDLsub)
-    modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
-    heatmapDL(ax[9], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], modPop, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
 
-    optParams, DLaffs = optimizeDesignDL(ax[4], [r"$R_1^{hi}R_2^{hi}$"], fDLsub, affDLsub)
-    modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
+    optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{med}R_2^{lo}$"], fDLsub, affDLsub, specPops=[r"$R_1^{hi}R_2^{lo}$"])
+    heatmapDL(ax[1], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False)
+    heatmapDL(ax[2], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False, dead=True)
+
+    optParams, DLaffs = optimizeDesignDL(ax[3], [r"$R_1^{hi}R_2^{hi}$"], fDLsub, affDLsub, specPops=[r"$R_1^{med}R_2^{med}$"])
+    heatmapDL(ax[4], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False)
+    heatmapDL(ax[5], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False, dead=True)
+
+    optParams, DLaffs = optimizeDesignDL(ax[6], [r"$R_1^{hi}R_2^{med}$"], fDLsub, affDLsub, specPops=[r"$R_1^{hi}R_2^{med}$"])
+    heatmapDL(ax[7], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False)
+    heatmapDL(ax[8], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False, dead=True)
+
+    optParams, DLaffs = optimizeDesignDL(ax[9], [r"$R_1^{hi}R_2^{hi}$"], fDLsub, affDLsub)
     heatmapDL(ax[10], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], modPop, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
-
-    optParams, DLaffs = optimizeDesignDL(ax[5], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
-    modPop = modifyCellPops(cellPopulations, optParams, DLaffs, fDLsub)
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False)
     heatmapDL(ax[11], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], modPop, Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), title="", cbar=False)
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False, dead=True)
+
+    optParams, DLaffs = optimizeDesignDL(ax[12], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
+    heatmapDL(ax[13], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False)
+    heatmapDL(ax[14], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False, dead=True)
+
+    optParams, DLaffs = optimizeDesignDL(ax[15], [r"$R_1^{hi}R_2^{lo}$"], fDLsub, affDLsub)
+    heatmapDL(ax[16], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False)
+    heatmapDL(ax[17], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False, dead=True)
 
     return f
 
@@ -65,9 +72,9 @@ def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
     return (offTargetBound) / (targetBound)
 
 
-def optimizeDesignDL(ax, targetPop, fDL, affDL):
+def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another with inclusion of dead ligand"
-    targMeans, offTargMeans = genOnevsAll(targetPop)
+    targMeans, offTargMeans = genOnevsAll(targetPop, specPops)
 
     npoints = 5
     ticks = np.full([npoints], None)
@@ -91,7 +98,10 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL):
     sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=2, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
 
     ax.set(xlabel="Dead Ligand Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Dead Ligand Rec 2 Affinity ($K_a$, in M$^{-1}$)")
-    ax.set_title(targetPop, fontsize=8)
+    if specPops:
+        ax.set_title(targetPop[0] + " and Dead ligand of Valency " + str(fDL) + " vs " + specPops[0], fontsize=8)
+    else:
+        ax.set_title(targetPop[0] + " and Dead ligand of Valency " + str(fDL) + " vs all", fontsize=8)
 
     maxindices = ratioDF.to_numpy()
     (i, j) = np.unravel_index(maxindices.argmax(), maxindices.shape)
@@ -102,25 +112,19 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL):
     return optimized.x, np.array([maxaff1, maxaff2])
 
 
-def modifyCellPops(cellPopsOriginal, optLig, dLigAff, fDL):
-    "Modify cell pops by amount of dead ligand binding"
-    x = optLig
-    cellPopsNew = copy.copy(cellPopsOriginal)
-    for i, row in cellPopsNew.items():
-        Rbound = polyc(np.exp(x[0]), np.exp(x[1]), [10**row[0], 10**row[1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[dLigAff[0], dLigAff[1]], [np.exp(x[4]), np.exp(x[5])]]))[1][0, :]
-        row[0:2] = np.log10(10 ** np.array(row[0:2]) - Rbound)
-        cellPopsNew[i] = row
-    return cellPopsNew
-
-
-def heatmapDL(ax, L0, KxStar, Kav, Comp, modPops, Cplx=None, vrange=(-2, 4), title="", cbar=True):
+def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cbar=True, dead=False):
     "Makes a heatmap with modified cell population abundances according to dead ligand binding"
     nAbdPts = 70
-    abunds = np.array(list(modPops.values()))[:, 0:2]
+    abunds = np.array(list(cellPopulations.values()))[:, 0:2]
     abundRange = (np.amin(abunds) - 1, np.amax(abunds) + 1)
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
-    func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0][1])
+    if dead:
+        func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0][0])
+        title = "Dead Ligand Bound"
+    else:
+        func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0][1])
+        title = "Live Ligand Bound"
 
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
@@ -132,7 +136,8 @@ def heatmapDL(ax, L0, KxStar, Kav, Comp, modPops, Cplx=None, vrange=(-2, 4), tit
     plt.clabel(contours, inline=True, fontsize=6)
     ax.pcolor(X, Y, logZ, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
     norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
+    ax.set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
     if cbar:
         cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
         cbar.set_label("Log Ligand Bound")
-    overlapCellPopulation(ax, abundRange, data=modPops)
+    overlapCellPopulation(ax, abundRange, data=cellPopulations)
