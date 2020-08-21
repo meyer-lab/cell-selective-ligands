@@ -40,15 +40,23 @@ def minSelecFunc(x, tMeans, offTMeans):
     return (offTargetBound) / (targetBound)
 
 
-def genOnevsAll(targetPop):
+def genOnevsAll(targetPop, specPops=False):
     assert isinstance(targetPop, list)
     targMeans, offTargMeans = [], []
-    for _, pop in enumerate(df["Population"].unique()):
-        dfPop = df[df["Population"] == pop]
-        if pop == targetPop[0]:
-            targMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
-        else:
-            offTargMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+    if specPops:
+        for _, pop in enumerate(df["Population"].unique()):
+            dfPop = df[df["Population"] == pop]
+            if pop == targetPop[0]:
+                targMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+            elif pop in specPops:
+                offTargMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+    else:
+        for _, pop in enumerate(df["Population"].unique()):
+            dfPop = df[df["Population"] == pop]
+            if pop == targetPop[0]:
+                targMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+            else:
+                offTargMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
     return targMeans, offTargMeans
 
 
