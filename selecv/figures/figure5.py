@@ -23,7 +23,7 @@ def makeFigure():
     Kav = [[1e7, 1e5], [1e5, 1e6]]
 
     for i, KxStar in enumerate([1e-10, 1e-12, 1e-14]):
-        cbar = True if i==2 else False
+        cbar = True if i == 2 else False
         heatmap(ax[i], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=True,
                 title="[1, 1] log fully bound with Kx*={}".format(KxStar), cbar=cbar)
         ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
@@ -32,12 +32,11 @@ def makeFigure():
         ax[i+3].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
         normHeatmap(ax[i + 6], L0, KxStar, Kav, vrange=(-14, 0),
                     title="Tethered normalized by untethered with Kx*={}".format(KxStar), cbar=cbar)
-        ax[i+6].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
-
+        ax[i + 6].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
 
     KxStarFully(ax[9], L0, Kav, fully=False)
     KxStarFully(ax[10], L0, Kav, fully=True)
-    KxStarFully(ax[11], L0, Kav, ylim=(-8, 9),  tetherComp=True)
+    KxStarFully(ax[11], L0, Kav, ylim=(-8, 9), tetherComp=True)
 
     """for i, s in enumerate([[1, 1], [2, 0], [0, 2]]):
         heatmap(ax[i], L0 * 0.5, KxStar, Kav, [1.0], Cplx=[s], vrange=(-7, 3), title="{} log fully bound".format(s))
@@ -51,6 +50,7 @@ def makeFigure():
     composition(ax[9], pairs, L0, KxStar, Kav, [[1, 1], [2, 0]], all=True)"""
 
     return f
+
 
 def tetheredYN(L0, KxStar, Rtot, Kav, fully=True):
     if fully:
