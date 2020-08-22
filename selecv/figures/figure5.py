@@ -29,7 +29,7 @@ def makeFigure():
         ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
         heatmap(ax[i + 3], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(-4, 7), fully=True,
                 title="Mixture of bivalent log Lbound with Kx*={}".format(KxStar), cbar=cbar)
-        ax[i+3].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
+        ax[i + 3].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
         normHeatmap(ax[i + 6], L0, KxStar, Kav, vrange=(-14, 0),
                     title="Tethered normalized by untethered with Kx*={}".format(KxStar), cbar=cbar)
         ax[i + 6].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
@@ -55,12 +55,12 @@ def makeFigure():
 def tetheredYN(L0, KxStar, Rtot, Kav, fully=True):
     if fully:
         return polyc(L0, KxStar, Rtot, [[1, 1]], [1.0], Kav)[2][0] / \
-               np.sum(polyc(L0, KxStar, Rtot, [[2, 0], [0, 2]], [0.5, 0.5], Kav)[2])
-               #polyfc(L0*2, KxStar, 1, Rtot, [0.5, 0.5], Kav)[0]
+            np.sum(polyc(L0, KxStar, Rtot, [[2, 0], [0, 2]], [0.5, 0.5], Kav)[2])
+        #polyfc(L0*2, KxStar, 1, Rtot, [0.5, 0.5], Kav)[0]
     else:
         return polyc(L0, KxStar, Rtot, [[1, 1]], [1.0], Kav)[0][0] / \
-               np.sum(polyc(L0, KxStar, Rtot, [[2, 0], [0, 2]], [0.5, 0.5], Kav)[2])
-               #polyfc(L0*2, KxStar, 1, Rtot, [0.5, 0.5], Kav)[0]
+            np.sum(polyc(L0, KxStar, Rtot, [[2, 0], [0, 2]], [0.5, 0.5], Kav)[2])
+        #polyfc(L0*2, KxStar, 1, Rtot, [0.5, 0.5], Kav)[0]
 
 
 def normHeatmap(ax, L0, KxStar, Kav, vrange=(-4, 2), title="", cbar=False, fully=True, layover=True):
@@ -92,13 +92,13 @@ def selectivity(pop1name, pop2name, L0, KxStar, Cplx, Ctheta, Kav, fully=True, u
     pop2 = cellPopulations[pop2name][0], cellPopulations[pop2name][1]
     if untethered:
         return polyfc(L0, KxStar, 1, np.power(10, pop1), [0.5, 0.5], Kav)[0] \
-               / polyfc(L0, KxStar, 1, np.power(10, pop2), [0.5, 0.5], Kav)[0]
+            / polyfc(L0, KxStar, 1, np.power(10, pop2), [0.5, 0.5], Kav)[0]
     if fully:
         return np.sum(polyc(L0, KxStar, np.power(10, pop1), Cplx, Ctheta, Kav)[2]) \
             / np.sum(polyc(L0, KxStar, np.power(10, pop2), Cplx, Ctheta, Kav)[2])
     else:
         return np.sum(polyc(L0, KxStar, np.power(10, pop1), Cplx, Ctheta, Kav)[0]) \
-               / np.sum(polyc(L0, KxStar, np.power(10, pop2), Cplx, Ctheta, Kav)[0])
+            / np.sum(polyc(L0, KxStar, np.power(10, pop2), Cplx, Ctheta, Kav)[0])
 
 
 def affHeatMap(ax, pop1name, pop2name, L0, KxStar, Cbar=True):
@@ -137,7 +137,7 @@ def KxStarFully(ax, L0, Kav, ylim=(-7, 5), fully=False, tetherComp=False):
         for j, KxStar in enumerate(Kxaxis):
             if tetherComp:
                 sHolder[j] = selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=True, untethered=False) \
-                             / selectivity(pair[0], pair[1], L0, KxStar, [[2, 0], [0, 2]], [0.5, 0.5], Kav, fully=True)
+                    / selectivity(pair[0], pair[1], L0, KxStar, [[2, 0], [0, 2]], [0.5, 0.5], Kav, fully=True)
             else:
                 sHolder[j] = np.log(selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=fully, untethered=False))
         ax.plot(Kxaxis, sHolder, color=colors[i], label=pair[0] + " to " + pair[1], linestyle="-")
