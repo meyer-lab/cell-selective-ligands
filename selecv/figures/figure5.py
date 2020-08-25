@@ -31,7 +31,7 @@ def makeFigure():
                 title="Mixture of bivalent log Lbound with Kx*={}".format(KxStar), cbar=cbar)
         ax[i + 3].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
         normHeatmap(ax[i + 6], L0, KxStar, Kav, vrange=(-14, 0),
-                    title="Tethered normalized by untethered with Kx*={}".format(KxStar), cbar=cbar)
+                    title="Bispecific normalized by bivalent with Kx*={}".format(KxStar), cbar=cbar)
         ax[i + 6].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
 
     KxStarFully(ax[9], L0, Kav, fully=False)
