@@ -74,7 +74,7 @@ def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
 
 def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another with inclusion of dead ligand"
-    targPops, offTargPops = genOnevsAll(targetPop)
+    targPops, offTargPops = genOnevsAll(targetPop, specPops)
     targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
 
     npoints = 5
