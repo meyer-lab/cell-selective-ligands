@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 import matplotlib.cm as cm
 from scipy.optimize import minimize
 from .figureCommon import subplotLabel, getSetup, cellPopulations, overlapCellPopulation
-from .figure6 import genOnevsAll
+from .figure6 import genOnevsAll, genPopMeans
 from ..model import polyc
 
 
@@ -74,7 +74,8 @@ def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
 
 def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another with inclusion of dead ligand"
-    targMeans, offTargMeans = genOnevsAll(targetPop, specPops)
+    targPops, offTargPops = genOnevsAll(targetPop)
+    targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
 
     npoints = 5
     ticks = np.full([npoints], None)

@@ -53,22 +53,22 @@ def minSelecFunc(x, tPops, offTPops):
 
 def genOnevsAll(targetPop, specPops=False):
     assert isinstance(targetPop, list)
-    targMeans, offTargMeans = [], []
+    targPops, offTargPops = [], []
     if specPops:
         for _, pop in enumerate(df["Population"].unique()):
             dfPop = df[df["Population"] == pop]
             if pop == targetPop[0]:
-                targMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+                targPops.append(pop)
             elif pop in specPops:
-                offTargMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+                offTargPops.append(pop)
     else:
         for _, pop in enumerate(df["Population"].unique()):
             dfPop = df[df["Population"] == pop]
             if pop == targetPop[0]:
-                targMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+                targPops.append(pop)
             else:
-                offTargMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
-    return targMeans, offTargMeans
+                offTargPops.append(pop)
+    return targPops, offTargPops
 
 
 def minSigmaVar(x, tPops, offTPops):
@@ -194,7 +194,8 @@ def gridSearchTry(df, popList):
 
 def optimizeDesignAnim(targetPop):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another"
-    targMeans, offTargMeans = genOnevsAll(targetPop)
+    targPops, offTargPops = genOnevsAll(targetPop)
+    targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
 
     optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
     strats = ["Xnot", "Affinity", "Mixture", "Valency", "All"]
