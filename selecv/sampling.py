@@ -22,30 +22,22 @@ cellPopulations = {
     r"$R_1^{med}R_2^{med}$": [3.1, 3.1, 0.25, 1, 45],
 }
 
-def sigmapts(name, h = np.sqrt(3)):
+def sigmapts(name, h=None):
+    if h is None:
+        h = np.sqrt(3)
     l = cellPopulations[name]
     x = np.array([l[0], l[1]])
     rot = np.array([[np.cos(np.deg2rad(l[4])), -np.sin(np.deg2rad(l[4]))], [np.sin(np.deg2rad(l[4])), np.cos(np.deg2rad(l[4]))]])
     srlamb = np.diag([l[2], l[3]]) #np.diag(np.sqrt([l[2], l[3]]))
     srcov = rot @ srlamb @ np.transpose(rot)
-    h = 0.1 #np.sqrt(3)
     return np.power(10, [x, x+h*srcov[:,0], x-h*srcov[:,0], x+h*srcov[:,1], x-h*srcov[:,1]])
 
 
-def sigmaPop(name, L0, KxStar, f, LigC, Kav, quantity=0):
-    return [polyfc(L0, KxStar, f, Rtot, LigC, Kav)[quantity] for Rtot in sigmapts(name)]
+def sigmaPop(name, L0, KxStar, f, LigC, Kav, quantity=0, h=None):
+    return [polyfc(L0, KxStar, f, Rtot, LigC, Kav)[quantity] for Rtot in sigmapts(name, h = h)]
 
-def sigmaPopC(name, L0, KxStar, Cplx, Ctheta, Kav, quantity=0):
-    return [polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav)[quantity] for Rtot in sigmapts(name)]
-
-def sigmaSpec(pop1, pop2, L0, KxStar, f, LigC, Kav, quantity=0):
-    pop1s = sigmaPop(pop1, L0, KxStar, f, LigC, Kav, quantity=quantity)
-    pop2s = sigmaPop(pop2, L0, KxStar, f, LigC, Kav, quantity=quantity)
-    quotients = []
-    for s1 in pop1s:
-        for s2 in pop2s:
-            quotients.append(s1/s2)
-    return np.quantile(quotients, [0.1, 0.5, 0.9])
+def sigmaPopC(name, L0, KxStar, Cplx, Ctheta, Kav, quantity=0, h=None):
+    return [polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav)[quantity] for Rtot in sigmapts(name, h = h)]
 
 
 def sampleSpec(L0, KxStar, f, RtotMeans, RtotCovs, LigC, Kav):
