@@ -16,6 +16,7 @@ pairs = [(r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"), (r"$R_1^{hi}R_2^{hi}$"
 
 
 def makeFigure():
+    """ main function for Figure 5 """
     ax, f = getSetup((10, 12), (4, 3))
     subplotLabel(ax, list(range(0, 9)))
 
@@ -38,7 +39,8 @@ def makeFigure():
     KxStarFully(ax[10], L0, Kav, fully=True)
     KxStarFully(ax[11], L0, Kav, ylim=(-8, 9), tetherComp=True)
 
-    """for i, s in enumerate([[1, 1], [2, 0], [0, 2]]):
+    """
+    for i, s in enumerate([[1, 1], [2, 0], [0, 2]]):
         heatmap(ax[i], L0 * 0.5, KxStar, Kav, [1.0], Cplx=[s], vrange=(-7, 3), title="{} log fully bound".format(s))
         ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
 
@@ -47,12 +49,14 @@ def makeFigure():
 
     composition(ax[7], pairs, L0, KxStar, Kav, [[1, 1], [2, 0]])
     composition(ax[8], pairs, L0, KxStar, Kav, [[2, 0], [1, 1]])
-    composition(ax[9], pairs, L0, KxStar, Kav, [[1, 1], [2, 0]], all=True)"""
+    composition(ax[9], pairs, L0, KxStar, Kav, [[1, 1], [2, 0]], all=True)
+    """
 
     return f
 
 
 def tetheredYN(L0, KxStar, Rtot, Kav, fully=True):
+    """ Calcalate the ratio between  """
     if fully:
         return polyc(L0, KxStar, Rtot, [[1, 1]], [1.0], Kav)[2][0] / \
             np.sum(polyc(L0, KxStar, Rtot, [[2, 0], [0, 2]], [0.5, 0.5], Kav)[2])
@@ -64,6 +68,7 @@ def tetheredYN(L0, KxStar, Rtot, Kav, fully=True):
 
 
 def normHeatmap(ax, L0, KxStar, Kav, vrange=(-4, 2), title="", cbar=False, fully=True, layover=True):
+    """ Make a heatmap normalized by another binding value """
     nAbdPts = 70
     abundRange = (1.5, 4.5)
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
@@ -102,6 +107,7 @@ def selectivity(pop1name, pop2name, L0, KxStar, Cplx, Ctheta, Kav, fully=True, u
 
 
 def affHeatMap(ax, pop1name, pop2name, L0, KxStar, Cbar=True):
+    """ Calculate selectivity with 2d affinities """
     npoints = 50
     affRange = (4, 8)
     ticks = np.full([npoints], None)
@@ -128,6 +134,7 @@ def affHeatMap(ax, pop1name, pop2name, L0, KxStar, Cbar=True):
 
 
 def KxStarFully(ax, L0, Kav, ylim=(-7, 5), fully=False, tetherComp=False):
+    """ Line plot for selectivity with different KxStar """
     nPoints = 50
     Kxaxis = np.logspace(-15, -7, nPoints)
 
@@ -156,24 +163,3 @@ def KxStarFully(ax, L0, Kav, ylim=(-7, 5), fully=False, tetherComp=False):
             ax.set_title("Log selectivity varies with Kx* for Lbound")
     ax.legend(loc='lower right', fancybox=True, framealpha=1)
 
-
-"""def composition(ax, pairs, L0, KxStar, Kav, Cplx, ylim=(-5, 17), all=False):
-    nPoints = 20
-    xaxis = np.linspace(0.01, 1, nPoints)
-
-    colors = ["royalblue", "orange", "limegreen", "orangered"]
-    sHolder = np.zeros((nPoints))
-    for i, pair in enumerate(pairs):
-        for j, Ctheta0 in enumerate(xaxis):
-            sHolder[j] = np.log(selectivity(pair[0], pair[1], L0, KxStar, Cplx, [Ctheta0, 1 - Ctheta0], Kav, all=all))
-        ax.plot(xaxis, sHolder, color=colors[i], label=pair[0] + " to " + pair[1], linestyle="-")
-
-    if all:
-        ax.set(xlim=(0, 1), ylim=ylim, xlabel="Composition of " + str(Cplx[0]),
-               ylabel="Log selectivity of all complexes")
-        ax.set_title("Composition of " + str(Cplx[0]) + " vs selectivity of all")
-    else:
-        ax.set(xlim=(0, 1), ylim=ylim, xlabel="Composition of " + str(Cplx[0]),
-               ylabel="Log selectivity of " + str(Cplx[0]))
-        ax.set_title("Composition vs selectivity of " + str(Cplx[0]))
-    ax.legend(loc='upper left', fancybox=True, framealpha=1)"""
