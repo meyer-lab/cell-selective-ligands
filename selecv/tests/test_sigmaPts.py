@@ -1,14 +1,14 @@
 import unittest
+from selecv.sampling import cellPopulations
 from selecv.figures.figure6 import *
 
-class TestPolyc(unittest.TestCase):
-    def test_equivalence(self):
-        pass
+class TestSigmaPts(unittest.TestCase):
+    def test_hAsZero(self):
+        for targetPop in cellPopulations.keys():
+            targPops, offTargPops = genOnevsAll([targetPop])
 
-        targPops, offTargPops = genOnevsAll(targetPop)
-        targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
+            x = np.array([np.log(1e-9), np.log(1e-13), 5, 0.8, np.log(1e7), np.log(1e5)])
+            sel1 = minSelecFunc(x, targPops, offTargPops)
+            sel2 = minSigmaVar(x, targPops, offTargPops, h = 0)
 
-        minSelecFunc(x, tPops, offTPops)
-        minSigmaVar(x, tPops, offTPops)
-
-        self.assertEqual(res11[i], res12[i])
+            self.assertAlmostEqual(sel1 ,sel2)
