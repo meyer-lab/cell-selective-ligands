@@ -157,7 +157,8 @@ def KxStarFully(ax, L0, Kav, ylim=(-7, 5), fully=False, tetherComp=False):
     ax.legend(loc='lower right', fancybox=True, framealpha=1)
 
 
-"""def composition(ax, pairs, L0, KxStar, Kav, Cplx, ylim=(-5, 17), all=False):
+"""
+def composition(ax, pairs, L0, KxStar, Kav, Cplx, ylim=(-5, 17), all=False):
     nPoints = 20
     xaxis = np.linspace(0.01, 1, nPoints)
 
@@ -176,4 +177,5 @@ def KxStarFully(ax, L0, Kav, ylim=(-7, 5), fully=False, tetherComp=False):
         ax.set(xlim=(0, 1), ylim=ylim, xlabel="Composition of " + str(Cplx[0]),
                ylabel="Log selectivity of " + str(Cplx[0]))
         ax.set_title("Composition vs selectivity of " + str(Cplx[0]))
-    ax.legend(loc='upper left', fancybox=True, framealpha=1)"""
+    ax.legend(loc='upper left', fancybox=True, framealpha=1)
+"""

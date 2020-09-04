@@ -38,7 +38,7 @@ def genPopMeans(popName):
 
 
 def minSelecFunc(x, tPops, offTPops):
-    "Provides the function to be minimized to get optimal selectivity"
+    """Provides the function to be minimized to get optimal selectivity"""
     offTargetBound = 0
     tMeans, offTMeans = genPopMeans(tPops), genPopMeans(offTPops)
 
@@ -56,14 +56,12 @@ def genOnevsAll(targetPop, specPops=False):
     targPops, offTargPops = [], []
     if specPops:
         for _, pop in enumerate(df["Population"].unique()):
-            dfPop = df[df["Population"] == pop]
             if pop == targetPop[0]:
                 targPops.append(pop)
             elif pop in specPops:
                 offTargPops.append(pop)
     else:
         for _, pop in enumerate(df["Population"].unique()):
-            dfPop = df[df["Population"] == pop]
             if pop == targetPop[0]:
                 targPops.append(pop)
             else:

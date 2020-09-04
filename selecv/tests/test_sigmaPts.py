@@ -1,6 +1,7 @@
 import unittest
+import numpy as np
 from selecv.sampling import cellPopulations
-from selecv.figures.figure6 import *
+from selecv.figures.figure6 import genOnevsAll, minSelecFunc, minSigmaVar
 
 class TestSigmaPts(unittest.TestCase):
     def test_hAsZero(self):

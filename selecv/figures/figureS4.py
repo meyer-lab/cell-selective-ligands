@@ -4,7 +4,6 @@ Figure S4.
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import copy
 from matplotlib import pyplot as plt
 import matplotlib.cm as cm
 from scipy.optimize import minimize
