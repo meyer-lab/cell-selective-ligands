@@ -24,7 +24,7 @@ cellPopulations = {
 
 def sigmapts(name, h=None):
     if h is None:
-        h = np.sqrt(3)
+        h = 0 #np.sqrt(3)
     l = cellPopulations[name]
     x = np.array([l[0], l[1]])
     rot = np.array([[np.cos(np.deg2rad(l[4])), -np.sin(np.deg2rad(l[4]))], [np.sin(np.deg2rad(l[4])), np.cos(np.deg2rad(l[4]))]])
