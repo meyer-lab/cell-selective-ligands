@@ -94,7 +94,7 @@ def optimize(pmOptNo, targPops, offTargPops, L0, KxStar, f, LigC, Kav, bound=Non
         Bnds = bound
     print(targPops, offTargPops)
     optimized = minimize(minSigmaVar, xnot, bounds=np.array(Bnds), method="L-BFGS-B", args=(targPops, offTargPops),
-                         options={"eps": 1, "disp": True})
+                         options={"eps": 1, "disp": False})
     return optimized
 
 
