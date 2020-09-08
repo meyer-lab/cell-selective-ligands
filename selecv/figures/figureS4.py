@@ -4,12 +4,11 @@ Figure S4.
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import copy
 from matplotlib import pyplot as plt
 import matplotlib.cm as cm
 from scipy.optimize import minimize
 from .figureCommon import subplotLabel, getSetup, cellPopulations, overlapCellPopulation
-from .figure6 import genOnevsAll
+from .figure6 import genOnevsAll, genPopMeans
 from ..model import polyc
 
 
@@ -88,7 +87,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     for ii, aff1 in enumerate(affScan):
         sampMeans = np.zeros(npoints)
         for jj, aff2 in enumerate(np.flip(affScan)):
-            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [aff1, aff2]), options={"eps": 1, "disp": True})
+            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [aff1, aff2]), options={"eps": 1, "disp": False})
             sampMeans[jj] = 7 / optimized.fun
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
@@ -107,7 +106,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     (i, j) = np.unravel_index(maxindices.argmax(), maxindices.shape)
     maxaff1 = affScan[j]
     maxaff2 = affScan[npoints - 1 - i]
-    optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [maxaff1, maxaff2]), options={"eps": 1, "disp": True})
+    optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [maxaff1, maxaff2]), options={"eps": 1, "disp": False})
 
     return optimized.x, np.array([maxaff1, maxaff2])
 

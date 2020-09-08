@@ -228,9 +228,9 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
 
     if f is None:
         if fully:
-            func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[2][0])
+            func = np.vectorize(lambda abund1, abund2: np.sum(polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[2]))
         else:
-            func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0][0])
+            func = np.vectorize(lambda abund1, abund2: np.sum(polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0]))
     else:
         func = np.vectorize(lambda abund1, abund2: polyfc(L0, KxStar, f, [abund1, abund2], Comp, Kav)[0])
 
