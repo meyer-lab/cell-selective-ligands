@@ -18,35 +18,39 @@ pairs = [(r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"), (r"$R_1^{hi}R_2^{hi}$"
 def makeFigure():
     """ main function for Figure 5 """
     ax, f = getSetup((10, 12), (4, 3))
-    subplotLabel(ax, list(range(11)))
+    subplotLabel(ax, list(range(12)))
 
     L0 = 1e-8
     Kav = [[1e7, 1e5], [1e5, 1e6]]
 
+    KxStar = 1e-12
+    heatmap(ax[0], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=False,
+            title="[1, 1] log ligand bound with Kx*={}".format(KxStar), cbar=False)
+    heatmap(ax[1], L0 * 2, KxStar, Kav, [0.5, 0.5], f=1, vrange=(-4, 7), fully=False,
+            title="Mixture of monovalents, log Lbound with Kx*={}".format(KxStar), cbar=False)
+    heatmap(ax[2], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(-4, 7), fully=False,
+            title="Mixture of bivalent log Lbound with Kx*={}".format(KxStar), cbar=True)
 
     for i, KxStar in enumerate([1e-10, 1e-12, 1e-14]):
-        heatmap(ax[i], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=True,
+        heatmap(ax[i+3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=True,
                 title="[1, 1] log fully bound with Kx*={}".format(KxStar), cbar=(i==2))
 
     KxStar = 1e-12
-    heatmap(ax[3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=False,
-            title="[1, 1] log ligand bound with Kx*={}".format(KxStar), cbar=False)
-    heatmap(ax[4], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(-4, 7), fully=True,
-            title="Mixture of bivalent log Lfbnd with Kx*={}".format(KxStar), cbar=False)
-    heatmap(ax[5], L0*2, KxStar, Kav, [0.5, 0.5], f=1, vrange=(-4, 7), fully=False,
-            title="Mixture of monovalents, log Lbound with Kx*={}".format(KxStar), cbar=True)
+    heatmap(ax[6], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(-4, 7), fully=True,
+            title="Mixture of bivalent log Lfbnd with Kx*={}".format(KxStar), cbar=True)
 
-    normHeatmap(ax[6], L0, KxStar, Kav, vrange=(-14, 0),
-                title="Bispecific normalized by untethered with Kx*={}".format(KxStar), cbar=False, normby=tetheredYN)
+    KxStar = 1e-12
     normHeatmap(ax[7], L0, KxStar, Kav, vrange=(-14, 0),
+                title="Bispecific normalized by untethered with Kx*={}".format(KxStar), cbar=False, normby=tetheredYN)
+    normHeatmap(ax[8], L0, KxStar, Kav, vrange=(-14, 0),
                 title="Bispecific normalized by bivalent with Kx*={}".format(KxStar), cbar=True, normby=mixBispecYN)
 
-    for i in range(8):
+    for i in range(9):
         ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
 
-    KxStarVary(ax[8], L0, Kav, ylim=(-9, 9), compare="fully")
-    KxStarVary(ax[9], L0, Kav, ylim=(-9, 9), compare="tether")
-    KxStarVary(ax[10], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
+    KxStarVary(ax[9], L0, Kav, ylim=(-9, 9), compare="fully")
+    KxStarVary(ax[10], L0, Kav, ylim=(-9, 9), compare="tether")
+    KxStarVary(ax[11], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
 
     return f
 
