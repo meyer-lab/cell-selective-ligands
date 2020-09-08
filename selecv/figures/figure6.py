@@ -4,23 +4,37 @@ Figure 6.
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import copy
 from scipy.optimize import minimize
-from .figureCommon import subplotLabel, getSetup, heatmap, heatmapNorm
+from matplotlib import pyplot as plt
+import matplotlib.cm as cm
+from .figureCommon import subplotLabel, getSetup, heatmap, heatmapNorm, cellPopulations, overlapCellPopulation
 from ..imports import getPopDict
-from ..sampling import sampleSpec
-from ..model import polyfc
+from ..sampling import sampleSpec, sigmaPop
+from ..model import polyfc, polyc
 
 
 def makeFigure():
     """ Make figure 6. """
     # Get list of axis objects
-    ax, f = getSetup((16, 8), (3, 6))
-    subplotLabel(ax)
+    ax, f = getSetup((24, 12), (4, 6))
+    subplotLabel(ax, list(range(0, 22)))
 
-    # gridSearchTry(populationsdf, ['Pop5', 'Pop3'])
     optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"], vrange=(0, 3))
     optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 1.5))
     optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 10))
+
+    affDLsub = np.array([0, 10])
+    fDLsub = 4
+    optParams, DLaffs = optimizeDesignDL(ax[18], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
+    heatmapDL(ax[19], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False)
+    heatmapDL(ax[20], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False, dead=True)
+    heatmapDL(ax[21], np.exp(optParams[0]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False, dead=False, jTherap=True)
+    ax[22].axis("off")
+    ax[23].axis("off")
 
     return f
 
@@ -28,31 +42,76 @@ def makeFigure():
 _, df = getPopDict()
 
 
-def minSelecFunc(x, tMeans, offTMeans):
-    "Provides the function to be minimized to get optimal selectivity"
+def genPopMeans(popName):
+    assert isinstance(popName, list)
+    res = []
+    for name in popName:
+        dfPop = df[df["Population"] == name]
+        res.append(np.array([dfPop["Receptor_1"].to_numpy()[0], dfPop["Receptor_2"].to_numpy()[0]]))
+    return res
+
+
+def minSelecFunc(x, tPops, offTPops):
+    """Provides the function to be minimized to get optimal selectivity"""
     offTargetBound = 0
+    tMeans, offTMeans = genPopMeans(tPops), genPopMeans(offTPops)
 
-    targetBound = polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**tMeans[0][0], 10**tMeans[0][1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
-
+    targetBound = polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**tMeans[0][0], 10**tMeans[0][1]], [x[3], 1 - x[3]],
+                         np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
     for means in offTMeans:
-        offTargetBound += polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**means[0], 10**means[1]], [x[3], 1 - x[3]], np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
+        offTargetBound += polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**means[0], 10**means[1]], [x[3], 1 - x[3]],
+                                 np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
 
     return (offTargetBound) / (targetBound)
 
 
-def genOnevsAll(targetPop):
+def genOnevsAll(targetPop, specPops=False, means=False):
     assert isinstance(targetPop, list)
-    targMeans, offTargMeans = [], []
-    for _, pop in enumerate(df["Population"].unique()):
-        dfPop = df[df["Population"] == pop]
-        if pop == targetPop[0]:
-            targMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+    targPops, offTargPops = [], []
+    if means:
+        if specPops:
+            for _, pop in enumerate(df["Population"].unique()):
+                dfPop = df[df["Population"] == pop]
+                if pop == targetPop[0]:
+                    targPops.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+                elif pop in specPops:
+                    offTargPops.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
         else:
-            offTargMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
-    return targMeans, offTargMeans
+            for _, pop in enumerate(df["Population"].unique()):
+                dfPop = df[df["Population"] == pop]
+                if pop == targetPop[0]:
+                    targPops.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+                else:
+                    offTargPops.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+    else:
+        if specPops:
+            for _, pop in enumerate(df["Population"].unique()):
+                if pop == targetPop[0]:
+                    targPops.append(pop)
+                elif pop in specPops:
+                    offTargPops.append(pop)
+        else:
+            for _, pop in enumerate(df["Population"].unique()):
+                if pop == targetPop[0]:
+                    targPops.append(pop)
+                else:
+                    offTargPops.append(pop)
+
+    return targPops, offTargPops
 
 
-def optimize(pmOptNo, targMeans, offTargMeans, L0, KxStar, f, LigC, Kav, bound=None):
+def minSigmaVar(x, tPops, offTPops, h=None):
+    targetBound, offTargetBound = 0, 0
+    for tPop in tPops:
+        targetBound += sum(sigmaPop(tPop, np.exp(x[0]), np.exp(x[1]), x[2], [x[3], 1 - x[3]],
+                                    np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]), quantity=0, h=h))
+    for offTPop in offTPops:
+        offTargetBound += sum(sigmaPop(offTPop, np.exp(x[0]), np.exp(x[1]), x[2], [x[3], 1 - x[3]],
+                                       np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]), quantity=0, h=h))
+    return (offTargetBound) / (targetBound)
+
+
+def optimize(pmOptNo, targPops, offTargPops, L0, KxStar, f, LigC, Kav, bound=None):
     """ A more general purpose optimizer """
     # OPT = [log L0, log KxStar, f, LigC[0], log Ka(diag), log Ka(offdiag)]
     Kav = np.array(Kav)
@@ -62,21 +121,23 @@ def optimize(pmOptNo, targMeans, offTargMeans, L0, KxStar, f, LigC, Kav, bound=N
         Bnds[pmopt] = optBnds[pmopt]
     if bound is not None:
         Bnds = bound
-    optimized = minimize(minSelecFunc, xnot, bounds=np.array(Bnds), method="L-BFGS-B", args=(targMeans, offTargMeans),
-                         options={"eps": 1, "disp": True})
+    print(targPops, offTargPops)
+    optimized = minimize(minSigmaVar, xnot, bounds=np.array(Bnds), method="L-BFGS-B", args=(targPops, offTargPops),
+                         options={"eps": 1, "disp": False})
     return optimized
 
 
 def optimizeDesign(ax, targetPop, vrange=(0, 5)):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another"
-    targMeans, offTargMeans = genOnevsAll(targetPop)
+    targPops, offTargPops = genOnevsAll(targetPop)
+    targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
 
     optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
     strats = ["Xnot", "Affinity", "Mixture", "Valency", "All"]
     pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
 
     for i, strat in enumerate(strats):
-        optimized = optimize(pmOpts[i], targMeans, offTargMeans, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+        optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
         stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
         optDF = optDF.append(stratRow, ignore_index=True)
         optParams = optimized.x
@@ -112,57 +173,10 @@ bndsDict = {
 }
 
 
-searchdic = {
-    "L0": np.logspace(-11, -8, 4),
-    "Kx": np.logspace(-12, -8, 5),
-    "Val": np.logspace(0.0, 4.0, base=2.0, num=5),
-    "Mix": np.linspace(0, 0.5, 2),
-    "Aff": np.logspace(5, 9, 2),
-}
-
-
-def gridSearchTry(df, popList):
-    """Grid search for best params for selectivity. Works but slowly. Probably won't use."""
-    recMeans, Covs = [], []
-    for ii, pop in enumerate(popList):
-        dfPop = df[df["Population"] == pop]
-        recMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
-        Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
-
-    resultsTensor = np.zeros([4, 5, 5, 3, 5, 5, 5, 5])
-    for ii, conc in enumerate(searchdic["L0"]):
-        for jj, kx in enumerate(searchdic["Kx"]):
-            for kk, val in enumerate(searchdic["Val"]):
-                for ll, mix in enumerate(searchdic["Mix"]):
-                    for mm, aff1 in enumerate(searchdic["Aff"]):
-                        for nn, aff2 in enumerate(searchdic["Aff"]):
-                            for oo, aff3 in enumerate(searchdic["Aff"]):
-                                for pp, aff4 in enumerate(searchdic["Aff"]):
-                                    resultsTensor[ii, jj, kk, ll, mm, nn, oo, pp] = sampleSpec(
-                                        conc, kx, val, recMeans, Covs, np.array([mix, 1 - mix]), np.array([[aff1, aff2], [aff3, aff4]])
-                                    )[1]
-
-    maxSelec = np.amax(resultsTensor)
-    maxSelecCoords = np.unravel_index(np.argmax(resultsTensor), resultsTensor.shape)
-    maxParams = np.array(
-        [
-            searchdic["L0"][maxSelecCoords[0]],
-            searchdic["Kx"][maxSelecCoords[1]],
-            searchdic["Val"][maxSelecCoords[2]],
-            searchdic["Mix"][maxSelecCoords[3]],
-            searchdic["Aff"][maxSelecCoords[4]],
-            searchdic["Aff"][maxSelecCoords[5]],
-            searchdic["Aff"][maxSelecCoords[6]],
-            searchdic["Aff"][maxSelecCoords[7]],
-        ]
-    )
-
-    return maxSelec, maxParams
-
-
 def optimizeDesignAnim(targetPop):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another"
-    targMeans, offTargMeans = genOnevsAll(targetPop)
+    targPops, offTargPops = genOnevsAll(targetPop)
+    targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
 
     optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
     strats = ["Xnot", "Affinity", "Mixture", "Valency", "All"]
@@ -179,3 +193,82 @@ def optimizeDesignAnim(targetPop):
         optParamsHold[i, :] = optParams
 
     return optParamsHold, strats
+
+
+def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
+    "Provides the function to be minimized to get optimal selectivity with addition of dead ligand"
+    offTargetBound = 0
+    targetBound = polyc(np.exp(x[0]), np.exp(x[1]), [10**tMeans[0][0], 10**tMeans[0][1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]]))[0][1]
+    for means in offTMeans:
+        offTargetBound += polyc(np.exp(x[0]), np.exp(x[1]), [10**means[0], 10**means[1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]]))[0][1]
+    return (offTargetBound) / (targetBound)
+
+
+def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
+    "Runs optimization and determines optimal parameters for selectivity of one population vs. another with inclusion of dead ligand"
+    targMeans, offTargMeans = genOnevsAll(targetPop, specPops, means=True)
+    print(targMeans[0])
+    npoints = 5
+    ticks = np.full([npoints], None)
+    affScan = np.logspace(affDL[0], affDL[1], npoints)
+    ticks[0], ticks[-1] = "1e" + str(affDL[0]), "1e" + str(affDL[1])
+    bounds = ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 1), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
+    xnot = np.array([np.log(1e-9), np.log(1e-9), 1, 1, np.log(10e8), np.log(10e8)])
+    ratioDF = pd.DataFrame(columns=affScan, index=affScan)
+
+    for ii, aff1 in enumerate(affScan):
+        sampMeans = np.zeros(npoints)
+        for jj, aff2 in enumerate(np.flip(affScan)):
+            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [aff1, aff2]), options={"eps": 1, "disp": True})
+            sampMeans[jj] = 7 / optimized.fun
+        ratioDF[ratioDF.columns[ii]] = sampMeans
+
+    ratioDF = ratioDF.divide(ratioDF.iloc[npoints - 1, 0])
+    Cbar = True
+    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=2, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
+    ax.set(xlabel="Dead Ligand Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Dead Ligand Rec 2 Affinity ($K_a$, in M$^{-1}$)")
+
+    if specPops:
+        ax.set_title(targetPop[0] + " and Dead ligand of Valency " + str(fDL) + " vs " + specPops[0], fontsize=8)
+    else:
+        ax.set_title(targetPop[0] + " and Dead ligand of Valency " + str(fDL) + " vs all", fontsize=8)
+
+    maxindices = ratioDF.to_numpy()
+    (i, j) = np.unravel_index(maxindices.argmax(), maxindices.shape)
+    maxaff1 = affScan[j]
+    maxaff2 = affScan[npoints - 1 - i]
+    optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [maxaff1, maxaff2]), options={"eps": 1, "disp": True})
+
+    return optimized.x, np.array([maxaff1, maxaff2])
+
+
+def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cbar=True, dead=False, jTherap=False):
+    "Makes a heatmap with modified cell population abundances according to dead ligand binding"
+    nAbdPts = 70
+    abunds = np.array(list(cellPopulations.values()))[:, 0:2]
+    abundRange = (np.amin(abunds) - 1, np.amax(abunds) + 1)
+    abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
+    if dead:
+        func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0][0])
+        title = "Dead Ligand Bound"
+    else:
+        func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0][1])
+        if jTherap:
+            title = "Live Ligand Bound without Dead Ligand"
+        else:
+            title = "Live Ligand Bound"
+
+    X, Y = np.meshgrid(abundScan, abundScan)
+    logZ = np.log(func(X, Y))
+    contours = ax.contour(X, Y, logZ, levels=np.arange(-20, 20, 0.5), colors="black", linewidths=0.5)
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_title(title)
+    plt.clabel(contours, inline=True, fontsize=6)
+    ax.pcolor(X, Y, logZ, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
+    norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
+    ax.set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
+    if cbar:
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
+        cbar.set_label("Log Ligand Bound")
+    overlapCellPopulation(ax, abundRange, data=cellPopulations)
