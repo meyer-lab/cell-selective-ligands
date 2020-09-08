@@ -73,10 +73,10 @@ def minSigmaVar(x, tPops, offTPops, h=None):
     targetBound, offTargetBound = 0, 0
     for tPop in tPops:
         targetBound += sum(sigmaPop(tPop, np.exp(x[0]), np.exp(x[1]), x[2], [x[3], 1 - x[3]],
-                                np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]), quantity=0, h=h))
+                                    np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]), quantity=0, h=h))
     for offTPop in offTPops:
         offTargetBound += sum(sigmaPop(offTPop, np.exp(x[0]), np.exp(x[1]), x[2], [x[3], 1 - x[3]],
-                                   np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]), quantity=0, h=h))
+                                       np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]), quantity=0, h=h))
     return (offTargetBound) / (targetBound)
 
 

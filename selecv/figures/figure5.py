@@ -32,8 +32,8 @@ def makeFigure():
             title="Mixture of bivalent log Lbound with Kx*={}".format(KxStar), cbar=True)
 
     for i, KxStar in enumerate([1e-10, 1e-12, 1e-14]):
-        heatmap(ax[i+3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=True,
-                title="[1, 1] log fully bound with Kx*={}".format(KxStar), cbar=(i==2))
+        heatmap(ax[i + 3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=True,
+                title="[1, 1] log fully bound with Kx*={}".format(KxStar), cbar=(i == 2))
 
     KxStar = 1e-12
     heatmap(ax[6], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(-4, 7), fully=True,
@@ -59,10 +59,10 @@ def tetheredYN(L0, KxStar, Rtot, Kav, fully=True):
     """ Compare tethered (bispecific) vs monovalent  """
     if fully:
         return polyc(L0, KxStar, Rtot, [[1, 1]], [1.0], Kav)[2][0] / \
-            polyfc(L0*2, KxStar, 1, Rtot, [0.5, 0.5], Kav)[0]
+            polyfc(L0 * 2, KxStar, 1, Rtot, [0.5, 0.5], Kav)[0]
     else:
         return polyc(L0, KxStar, Rtot, [[1, 1]], [1.0], Kav)[0][0] / \
-            polyfc(L0*2, KxStar, 1, Rtot, [0.5, 0.5], Kav)[0]
+            polyfc(L0 * 2, KxStar, 1, Rtot, [0.5, 0.5], Kav)[0]
 
 
 def mixBispecYN(L0, KxStar, Rtot, Kav, fully=True):
@@ -125,13 +125,13 @@ def KxStarVary(ax, L0, Kav, ylim=(-7, 5), fully=True, compare=None):
         for j, KxStar in enumerate(Kxaxis):
             if compare == "tether":
                 sHolder[j] = selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=fully, untethered=False) \
-                             / selectivity(pair[0], pair[1], L0*2, KxStar, None, None, Kav, untethered=True)
+                    / selectivity(pair[0], pair[1], L0 * 2, KxStar, None, None, Kav, untethered=True)
             elif compare == "bisp":
                 sHolder[j] = selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=fully, untethered=False) \
-                             / selectivity(pair[0], pair[1], L0, KxStar, [[2, 0], [0, 2]], [0.5, 0.5], Kav, fully=fully)
+                    / selectivity(pair[0], pair[1], L0, KxStar, [[2, 0], [0, 2]], [0.5, 0.5], Kav, fully=fully)
             elif compare == " fully":
                 sHolder[j] = selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=True, untethered=False) \
-                             / selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=False, untethered=False)
+                    / selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=False, untethered=False)
             else:
                 sHolder[j] = np.log(selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=fully, untethered=False))
         ax.plot(Kxaxis, sHolder, color=colors[i], label=pair[0] + " to " + pair[1], linestyle="-")
@@ -157,7 +157,7 @@ def KxStarVary(ax, L0, Kav, ylim=(-7, 5), fully=True, compare=None):
     ax.legend(loc='lower right', fancybox=True, framealpha=1)
 
 
-##### DEPRECATED BELOW
+# DEPRECATED BELOW
 
 def affHeatMap(ax, pop1name, pop2name, L0, KxStar, Cbar=True):
     """ Calculate selectivity with 2d affinities """
