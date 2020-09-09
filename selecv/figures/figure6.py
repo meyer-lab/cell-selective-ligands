@@ -28,11 +28,11 @@ def makeFigure():
     fDLsub = 4
     optParams, DLaffs = optimizeDesignDL(ax[18], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
     heatmapDL(ax[19], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False)
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(0, 10), cbar=False, highlight=r"$R_1^{med}R_2^{med}$")
     heatmapDL(ax[20], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False, dead=True)
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(0, 10), cbar=False, dead=True, highlight=r"$R_1^{med}R_2^{med}$")
     heatmapDL(ax[21], np.exp(optParams[0]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 4), cbar=False, dead=False, jTherap=True)
+              [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(0, 10), cbar=True, dead=False, jTherap=True, highlight=r"$R_1^{med}R_2^{med}$")
     ax[22].axis("off")
     ax[23].axis("off")
 
@@ -225,7 +225,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
 
     ratioDF = ratioDF.divide(ratioDF.iloc[npoints - 1, 0])
     Cbar = True
-    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=2, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
+    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=4, cbar=Cbar, cbar_kws={'label': 'Selectivity Ratio w Dead Ligand'}, annot=True)
     ax.set(xlabel="Dead Ligand Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Dead Ligand Rec 2 Affinity ($K_a$, in M$^{-1}$)")
 
     if specPops:
@@ -242,7 +242,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     return optimized.x, np.array([maxaff1, maxaff2])
 
 
-def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cbar=True, dead=False, jTherap=False):
+def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cbar=True, dead=False, jTherap=False, highlight=[]):
     "Makes a heatmap with modified cell population abundances according to dead ligand binding"
     nAbdPts = 70
     abunds = np.array(list(cellPopulations.values()))[:, 0:2]
@@ -265,10 +265,10 @@ def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cb
     ax.set_yscale("log")
     ax.set_title(title)
     plt.clabel(contours, inline=True, fontsize=6)
-    ax.pcolor(X, Y, logZ, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
+    ax.pcolor(X, Y, logZ, cmap='summer', vmin=vrange[0], vmax=vrange[1])
     norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
     ax.set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
     if cbar:
-        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='summer'), ax=ax)
         cbar.set_label("Log Ligand Bound")
-    overlapCellPopulation(ax, abundRange, data=cellPopulations)
+    overlapCellPopulation(ax, abundRange, data=cellPopulations, highlight=highlight)
