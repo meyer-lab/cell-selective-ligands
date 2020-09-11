@@ -5,6 +5,7 @@ from string import ascii_lowercase
 from matplotlib import gridspec, pyplot as plt
 from matplotlib.patches import Ellipse
 import matplotlib.cm as cm
+from matplotlib import rcParams
 from scipy.stats import multivariate_normal
 import seaborn as sns
 import pandas as pds
@@ -12,6 +13,8 @@ import numpy as np
 import svgutils.transform as st
 from ..sampling import sampleSpec
 from ..model import polyc, polyfc
+
+rcParams['pcolor.shading'] = 'auto'
 
 
 def getSetup(figsize, gridd):
