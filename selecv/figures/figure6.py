@@ -4,13 +4,12 @@ Figure 6.
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import copy
 from scipy.optimize import minimize
 from matplotlib import pyplot as plt
 import matplotlib.cm as cm
-from .figureCommon import subplotLabel, getSetup, heatmap, heatmapNorm, cellPopulations, overlapCellPopulation
+from .figureCommon import subplotLabel, getSetup, heatmapNorm, cellPopulations, overlapCellPopulation
 from ..imports import getPopDict
-from ..sampling import sampleSpec, sigmaPop
+from ..sampling import sigmaPop
 from ..model import polyfc, polyc
 
 
