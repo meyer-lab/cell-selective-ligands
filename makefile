@@ -2,9 +2,9 @@ SHELL := /bin/bash
 
 .PHONY: clean test
 
-all: pylint.log coverage.xml output/manuscript.md $(patsubst %, output/figure%.svg, $(flist))
-
 flist = 1 2 3 4 5 6 S1 S2
+
+all: pylint.log coverage.xml output/manuscript.md $(patsubst %, output/figure%.svg, $(flist))
 
 venv: venv/bin/activate
 
