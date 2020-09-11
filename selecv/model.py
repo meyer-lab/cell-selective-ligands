@@ -34,7 +34,7 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
     """
     # Data consistency check
     Kav = np.array(Kav)
-    Rtot = np.array(Rtot)
+    Rtot = np.array(Rtot, dtype=np.float)
     assert Rtot.ndim <= 1
     LigC = np.array(LigC)
     assert LigC.ndim <= 1
@@ -105,7 +105,7 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     # Consistency check
     Kav = np.array(Kav)
     assert Kav.ndim == 2
-    Rtot = np.array(Rtot)
+    Rtot = np.array(Rtot, dtype=np.float)
     assert Rtot.ndim == 1
     Cplx = np.array(Cplx)
     assert Cplx.ndim == 2
