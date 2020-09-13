@@ -121,8 +121,8 @@ def optimize(pmOptNo, targPops, offTargPops, L0, KxStar, f, LigC, Kav, bound=Non
     if bound is not None:
         Bnds = bound
     print(targPops, offTargPops)
-    optimized = minimize(minSigmaVar, xnot, bounds=np.array(Bnds), method="L-BFGS-B", args=(targPops, offTargPops),
-                         options={"eps": 1, "disp": False})
+    optimized = minimize(minSigmaVar, xnot, bounds=np.array(Bnds), jac="3-point", method="L-BFGS-B", args=(targPops, offTargPops),
+                         options={"eps": 0.1, "disp": False})
     return optimized
 
 
@@ -218,7 +218,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     for ii, aff1 in enumerate(affScan):
         sampMeans = np.zeros(npoints)
         for jj, aff2 in enumerate(np.flip(affScan)):
-            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [aff1, aff2]), options={"eps": 1, "disp": False})
+            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", jac="3-point", args=(targMeans, offTargMeans, fDL, [aff1, aff2]), options={"eps": 0.1, "disp": False})
             sampMeans[jj] = 7 / optimized.fun
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
@@ -236,7 +236,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     (i, j) = np.unravel_index(maxindices.argmax(), maxindices.shape)
     maxaff1 = affScan[j]
     maxaff2 = affScan[npoints - 1 - i]
-    optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [maxaff1, maxaff2]), options={"eps": 1, "disp": False})
+    optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", jac="3-point", args=(targMeans, offTargMeans, fDL, [maxaff1, maxaff2]), options={"eps": 0.1, "disp": False})
 
     return optimized.x, np.array([maxaff1, maxaff2])
 
