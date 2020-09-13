@@ -126,8 +126,7 @@ def optimize(pmOptNo, targPops, offTargPops, L0, KxStar, f, LigC, Kav, bound=Non
     if optimized.success == False:
         print(Bnds)
         print(optimized)
-    
-    assert optimized.success
+
     return optimized
 
 
