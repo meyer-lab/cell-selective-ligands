@@ -17,22 +17,20 @@ def model_predict(df, KxStarP, LigC, slopeP, Kav1, abund, valencies=False):
     "Gathers predicted and measured fluorescent intensities for a given population"
     predicted, measured = [], []
 
-    if not valencies:
-        for _, row in df.iterrows():
+    for _, row in df.iterrows():
+        if not valencies:
             res = polyfc(row.monomer * 1e-9 / 8, KxStarP, 8, abund, np.array(LigC) * row.valency / 8 + [0, 0, 1 - sum(np.array(LigC) * row.valency / 8)], Kav1)
-            Lbound, _ = res[0] * slopeP, res[1]
-            predicted.append(Lbound)
-            measured.append(row.intensity)
-    else:
-        for _, row in df.iterrows():
-            ind = checkVal(row.valency)
+        else:
+            ind = int(row.valency)
             res = polyfc(row.monomer * 1e-9 / 8, KxStarP, 8, abund, np.array(LigC) * valencies[ind] / 8 + [0, 0, 1 - sum(np.array(LigC) * valencies[ind] / 8)], Kav1)
             assert(np.array(np.array(LigC) * valencies[ind] / 8 + [0, 0, 1 - sum(np.array(LigC) * valencies[ind] / 8)]).all()
                    == np.array(np.array(LigC) * row.valency / 8 + [0, 0, 1 - sum(np.array(LigC) * row.valency / 8)]).all())
-            Lbound, _ = res[0] * slopeP, res[1]
-            predicted.append(Lbound)
-            measured.append(row.intensity)
-    return predicted, measured
+        
+        Lbound, _ = res[0] * slopeP, res[1]
+        predicted.append(Lbound)
+        measured.append(row.intensity)
+
+    return np.array(predicted), np.array(measured)
 
 
 def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund, valencies=False):
@@ -120,29 +118,13 @@ def resids(x):
     X1, Y1 = model_predict(df1, np.exp(x[0]), [1, 0, 0], x[1], [[np.exp(x[3])], [np.exp(x[4])], [0]], np.exp(x[5]), valpack)
     df2 = pd.read_csv("selecv/data/csizmar_s4b.csv")
     X2, Y2 = model_predict(df2, np.exp(x[0]), [0, 1, 0], x[2], [[np.exp(x[3])], [np.exp(x[4])], [0]], np.exp(x[5]), valpack)
-    X1 = np.asarray(X1)
-    X2 = np.asarray(X2)
-    Y1 = np.asarray(Y1)
-    Y2 = np.asarray(Y2)
-    return sum(np.square(X2 - Y2) + np.square(X1 - Y1))
+    return np.linalg.norm(X2 - Y2) + np.linalg.norm(X1 - Y1)
 
 
 def fitfunc():
     "Runs least squares fitting for various model parameters, and returns the minimizers"
     x0 = np.array([np.log(10 ** -14.714), 0.01, 0.01, np.log(Kav[0])[0], np.log(Kav[1])[0], np.log(3.8e6), 1, 2, 4, 8])  # KXSTAR, slopeC5, slopeB22, KA C5, KA, B22, receps MH-7
-    bnds = ((None, None), (None, None), (None, None), (None, None), (None, None), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1), (2, 2), (4, 4), (8, 8))
-    parampredicts = minimize(resids, x0, bounds=bnds, method="L-BFGS-B")
+    bnds = ((None, None), (None, None), (None, None), (None, None), (None, None), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1.01), (2, 2.01), (4, 4.01), (8, 8.01))
+    parampredicts = minimize(resids, x0, jac="3-point", bounds=bnds)
+    assert parampredicts.success
     return parampredicts.x
-
-
-def checkVal(valency):
-    "Returns the indices of a given valency level"
-    if valency == 1.0:
-        index = 0
-    elif valency == 2.0:
-        index = 1
-    elif valency == 4.0:
-        index = 2
-    elif valency == 8.0:
-        index = 3
-    return index

@@ -4,13 +4,12 @@ Figure 6.
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import copy
 from scipy.optimize import minimize
 from matplotlib import pyplot as plt
 import matplotlib.cm as cm
-from .figureCommon import subplotLabel, getSetup, heatmap, heatmapNorm, cellPopulations, overlapCellPopulation
+from .figureCommon import subplotLabel, getSetup, heatmapNorm, cellPopulations, overlapCellPopulation
 from ..imports import getPopDict
-from ..sampling import sampleSpec, sigmaPop
+from ..sampling import sigmaPop
 from ..model import polyfc, polyc
 
 
@@ -116,14 +115,18 @@ def optimize(pmOptNo, targPops, offTargPops, L0, KxStar, f, LigC, Kav, bound=Non
     # OPT = [log L0, log KxStar, f, LigC[0], log Ka(diag), log Ka(offdiag)]
     Kav = np.array(Kav)
     xnot = np.array([np.log(L0), np.log(KxStar), f, LigC[0], np.log(Kav[0, 0]), np.log(Kav[0, 1])])
-    Bnds = [(i, i) for i in xnot]
+    Bnds = [(i, i + 0.001) for i in xnot]
+
     for pmopt in pmOptNo:
         Bnds[pmopt] = optBnds[pmopt]
     if bound is not None:
         Bnds = bound
-    print(targPops, offTargPops)
-    optimized = minimize(minSigmaVar, xnot, bounds=np.array(Bnds), method="L-BFGS-B", args=(targPops, offTargPops),
-                         options={"eps": 1, "disp": False})
+
+    optimized = minimize(minSigmaVar, xnot, bounds=np.array(Bnds), args=(targPops, offTargPops))
+    if optimized.success == False:
+        print(Bnds)
+        print(optimized)
+
     return optimized
 
 
@@ -164,17 +167,19 @@ optBnds = [(np.log(1e-11), np.log(1e-8)),  # log L0
            (np.log(1e2), np.log(1e9))]  # log Ka(offdiag)
 
 
+cBnd = (np.log(1e-9), np.log(1.01e-9))
+
 bndsDict = {
-    "Xnot": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-12), np.log(1e-12)), (1, 1), (1, 1), (np.log(1e6), np.log(1e6)), (np.log(1e6), np.log(1e6))),
-    "Affinity": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 1), (1, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10))),
-    "Mixture": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 1), (0, 1), (np.log(1e6), np.log(1e10)), (np.log(1e2), np.log(1e6))),
-    "Valency": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 16), (1, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10))),
-    "All": ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
+    "Xnot": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (1, 1.01), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
+    "Affinity": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 1.01), (1, 1.01), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10))),
+    "Mixture": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 1.01), (0, 1), (np.log(1e6), np.log(1e10)), (np.log(1e2), np.log(1e6))),
+    "Valency": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 16), (1, 1.01), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10))),
+    "All": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
 }
 
 
 def optimizeDesignAnim(targetPop):
-    "Runs optimization and determines optimal parameters for selectivity of one population vs. another"
+    """ Runs optimization and determines optimal parameters for selectivity of one population vs. another. """
     targPops, offTargPops = genOnevsAll(targetPop)
     targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
 
@@ -196,30 +201,30 @@ def optimizeDesignAnim(targetPop):
 
 
 def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
-    "Provides the function to be minimized to get optimal selectivity with addition of dead ligand"
+    """ Provides the function to be minimized to get optimal selectivity with addition of dead ligand. """
     offTargetBound = 0
     targetBound = polyc(np.exp(x[0]), np.exp(x[1]), [10**tMeans[0][0], 10**tMeans[0][1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]]))[0][1]
     for means in offTMeans:
         offTargetBound += polyc(np.exp(x[0]), np.exp(x[1]), [10**means[0], 10**means[1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]]))[0][1]
-    return (offTargetBound) / (targetBound)
+    return offTargetBound / targetBound
 
 
 def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another with inclusion of dead ligand"
     targMeans, offTargMeans = genOnevsAll(targetPop, specPops, means=True)
-    print(targMeans[0])
     npoints = 5
     ticks = np.full([npoints], None)
     affScan = np.logspace(affDL[0], affDL[1], npoints)
     ticks[0], ticks[-1] = "1e" + str(affDL[0]), "1e" + str(affDL[1])
-    bounds = ((np.log(1e-9), np.log(1e-9)), (np.log(1e-15), np.log(1e-9)), (1, 1), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
+    bounds = (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 1.01), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
     xnot = np.array([np.log(1e-9), np.log(1e-9), 1, 1, np.log(10e8), np.log(10e8)])
     ratioDF = pd.DataFrame(columns=affScan, index=affScan)
 
     for ii, aff1 in enumerate(affScan):
         sampMeans = np.zeros(npoints)
         for jj, aff2 in enumerate(np.flip(affScan)):
-            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [aff1, aff2]), options={"eps": 1, "disp": True})
+            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), args=(targMeans, offTargMeans, fDL, [aff1, aff2]))
+            assert optimized.success
             sampMeans[jj] = 7 / optimized.fun
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
@@ -237,7 +242,8 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     (i, j) = np.unravel_index(maxindices.argmax(), maxindices.shape)
     maxaff1 = affScan[j]
     maxaff2 = affScan[npoints - 1 - i]
-    optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), method="L-BFGS-B", args=(targMeans, offTargMeans, fDL, [maxaff1, maxaff2]), options={"eps": 1, "disp": True})
+    optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), args=(targMeans, offTargMeans, fDL, [maxaff1, maxaff2]))
+    assert optimized.success
 
     return optimized.x, np.array([maxaff1, maxaff2])
 

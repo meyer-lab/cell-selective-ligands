@@ -18,7 +18,6 @@ def makeFigure():
     mixture(f, ax, 1e-9, 10 ** -10, ff=1, vmin=-2, vmax=3.5)
     subplotLabel(ax, [0] + list(range(5, 9)))
 
-    affinities = np.array([[1e7, 1e6], [1e6, 1e7]])
     _, populationsdf = getPopDict()
 
     popCompare(ax[5], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], populationsdf, "Mix", Kav=np.array([[1e6, 1e5], [1e5, 1e6]]))

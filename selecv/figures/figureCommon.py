@@ -5,6 +5,7 @@ from string import ascii_lowercase
 from matplotlib import gridspec, pyplot as plt
 from matplotlib.patches import Ellipse
 import matplotlib.cm as cm
+from matplotlib import rcParams
 from scipy.stats import multivariate_normal
 import seaborn as sns
 import pandas as pds
@@ -12,6 +13,8 @@ import numpy as np
 import svgutils.transform as st
 from ..sampling import sampleSpec
 from ..model import polyc, polyfc
+
+rcParams['pcolor.shading'] = 'auto'
 
 
 def getSetup(figsize, gridd):
@@ -60,7 +63,7 @@ def PlotCellPops(ax, df, bbox=False):
     sns.set_palette("husl", 8)
     for pop in sampleData.Population.unique():
         popDF = sampleData.loc[sampleData["Population"] == pop]
-        plot = sns.kdeplot(popDF.Receptor_1, popDF.Receptor_2, ax=ax, label=pop, shade=True, shade_lowest=False, legend=False)
+        plot = sns.kdeplot(x=popDF.Receptor_1, y=popDF.Receptor_2, ax=ax, label=pop, shade=True, thresh=0.05, legend=False)
     plot.text(100, 100, r'$R_1^{lo}R_2^{lo}$', size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
     plot.text(1000, 100, r"$R_1^{med}R_2^{lo}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
     plot.text(10000, 100, r"$R_1^{hi}R_2^{lo}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
@@ -121,7 +124,6 @@ def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
 
     sampMeans = np.zeros(npoints)
     ratioDF = pds.DataFrame(columns=affScan, index=affScan)
-    tens = np.array([10, 10])
 
     for ii, aff1 in enumerate(affScan):
         for jj, aff2 in enumerate(np.flip(affScan)):

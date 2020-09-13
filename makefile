@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: clean test testprofile testcover docs
+.PHONY: clean test
 
 flist = 1 2 3 4 5 6 S1 S2
 
@@ -15,7 +15,7 @@ venv/bin/activate: requirements.txt
 
 output/figure%.svg: venv genFigures.py selecv/figures/figure%.py
 	mkdir -p ./manuscript/figures
-	. venv/bin/activate && ./genFigures.py $*
+	. venv/bin/activate && JAX_PLATFORM_NAME=cpu ./genFigures.py $*
 
 output/manuscript.md: venv manuscript/*.md
 	. venv/bin/activate && manubot process --content-directory=manuscript --output-directory=output --cache-directory=cache --skip-citations --log-level=INFO
@@ -34,10 +34,10 @@ output/manuscript.docx: venv output/manuscript.md $(patsubst %, output/figure%.s
 		output/manuscript.md
 
 test: venv
-	. venv/bin/activate; pytest -s
+	. venv/bin/activate; JAX_PLATFORM_NAME=cpu pytest -s -v
 
 coverage.xml: venv
-	. venv/bin/activate; pytest --junitxml=junit.xml --cov=selecv --cov-report xml:coverage.xml
+	. venv/bin/activate; JAX_PLATFORM_NAME=cpu pytest --junitxml=junit.xml --cov=selecv --cov-report xml:coverage.xml
 
 pylint.log: venv
 	. venv/bin/activate && (pylint --rcfile=./common/pylintrc selecv > pylint.log || echo "pylint exited with $?")
