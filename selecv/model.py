@@ -17,9 +17,9 @@ def Req_func(Req, Rtot, L0fA, AKxStar, f):
     Phisum = jnp.dot(AKxStar, Req.T)
     return Req + L0fA * Req * (1 + Phisum) ** (f - 1) - Rtot
 
+
 Req_func_jit = jit(Req_func)
 Req_func_J_jit = jit(jacfwd(Req_func, 0))
-
 
 
 def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
@@ -84,6 +84,7 @@ def Req_func2(Req, L0, KxStar, Rtot, Cplx, Ctheta, Kav):
 
     Rbound = L0 / KxStar * jnp.sum(Ctheta.reshape(-1, 1) * jnp.dot(Cplx, Psinorm) * jnp.exp(jnp.dot(Cplx, jnp.log1p(Psirs - 1))), axis=0)
     return Req + Rbound - Rtot
+
 
 Req_func2_jit = jit(Req_func2)
 Req_func2_J_jit = jit(jacfwd(Req_func2, 0))
