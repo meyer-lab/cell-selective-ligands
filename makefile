@@ -4,7 +4,7 @@ SHELL := /bin/bash
 
 flist = 1 2 3 4 5 6 S1 S2
 
-all: pylint.log coverage.xml output/manuscript.md $(patsubst %, output/figure%.svg, $(flist))
+all: output/manuscript.md pylint.log coverage.xml $(patsubst %, output/figure%.svg, $(flist))
 
 venv: venv/bin/activate
 
