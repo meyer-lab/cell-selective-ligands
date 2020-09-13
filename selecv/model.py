@@ -52,10 +52,6 @@ def polyfc(L0, KxStar, f, Rtot, LigC, Kav):
     return Lbound, Rbound, vieq
 
 
-def polyfcm(KxStar, f, Rtot, Lig, Kav):
-    return polyfc(np.sum(Lig) / f, KxStar, f, Rtot, Lig / np.sum(Lig), Kav)
-
-
 def Req_Regression(L0, KxStar, f, Rtot, LigC, Kav):
     """Run least squares regression to calculate the Req vector"""
     A = np.dot(LigC.T, Kav)
@@ -130,7 +126,3 @@ def polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav):
     assert Rbound.shape[0] == len(Ctheta)
     assert Rbound.shape[1] == len(Rtot)
     return Lbound, Rbound, Lfbnd
-
-
-def polycm(KxStar, Rtot, Cplx, Ltheta, Kav):
-    return polyc(np.sum(Ltheta), KxStar, Rtot, Cplx, Ltheta / np.sum(Ltheta), Kav)
