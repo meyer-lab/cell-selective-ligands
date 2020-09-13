@@ -123,7 +123,7 @@ def optimize(pmOptNo, targPops, offTargPops, L0, KxStar, f, LigC, Kav, bound=Non
         Bnds = bound
 
     optimized = minimize(minSigmaVar, xnot, bounds=np.array(Bnds), args=(targPops, offTargPops))
-    if optimized.success == False:
+    if not optimized.success:
         print(Bnds)
         print(optimized)
 

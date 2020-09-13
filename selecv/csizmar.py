@@ -25,7 +25,7 @@ def model_predict(df, KxStarP, LigC, slopeP, Kav1, abund, valencies=False):
             res = polyfc(row.monomer * 1e-9 / 8, KxStarP, 8, abund, np.array(LigC) * valencies[ind] / 8 + [0, 0, 1 - sum(np.array(LigC) * valencies[ind] / 8)], Kav1)
             assert(np.array(np.array(LigC) * valencies[ind] / 8 + [0, 0, 1 - sum(np.array(LigC) * valencies[ind] / 8)]).all()
                    == np.array(np.array(LigC) * row.valency / 8 + [0, 0, 1 - sum(np.array(LigC) * row.valency / 8)]).all())
-        
+
         Lbound, _ = res[0] * slopeP, res[1]
         predicted.append(Lbound)
         measured.append(row.intensity)
