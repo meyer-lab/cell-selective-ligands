@@ -63,7 +63,7 @@ def PlotCellPops(ax, df, bbox=False):
     sns.set_palette("husl", 8)
     for pop in sampleData.Population.unique():
         popDF = sampleData.loc[sampleData["Population"] == pop]
-        plot = sns.kdeplot(x=popDF.Receptor_1, y=popDF.Receptor_2, ax=ax, label=pop, shade=True, shade_lowest=False, legend=False)
+        plot = sns.kdeplot(x=popDF.Receptor_1, y=popDF.Receptor_2, ax=ax, label=pop, shade=True, thresh=0.05, legend=False)
     plot.text(100, 100, r'$R_1^{lo}R_2^{lo}$', size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
     plot.text(1000, 100, r"$R_1^{med}R_2^{lo}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
     plot.text(10000, 100, r"$R_1^{hi}R_2^{lo}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
