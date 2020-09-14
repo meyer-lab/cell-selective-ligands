@@ -19,4 +19,11 @@ if __name__ == '__main__':
     ff = eval(nameOut + '.makeFigure()')
     ff.savefig(fdir + nameOut + '.svg', dpi=ff.dpi, bbox_inches='tight', pad_inches=0)
 
+    if sys.argv[1] == '1':
+        # Overlay Figure 1 cartoon
+        overlayCartoon(fdir + 'figure1.svg',
+                       './selecv/graphics/figure_1a.svg', 20, 10, scalee = 0.35, scale_x = 0.5, scale_y = 0.5)
+        overlayCartoon(fdir + 'figure1.svg',
+                       './selecv/graphics/figure_1b.svg', 10, 280, scalee=0.5, scale_x=0.3, scale_y=0.3)
+
     info('%s is done after %s seconds.', nameOut, time() - start)

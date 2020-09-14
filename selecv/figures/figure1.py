@@ -17,16 +17,17 @@ val = 16.0
 def makeFigure():
     """ Make figure 1. """
     # Get list of axis objects
-    ax, f = getSetup((7, 7), (2, 2))
+    ax, f = getSetup((10, 7), (2, 3))
 
-    subplotLabel(ax)
+    subplotLabel(ax, [0,3,4,5])
 
-    #_, affData = getAffDict()
-    #_, npdata, cell_names = import_Rexpr()
-    _, populations = getPopDict()
-    #plotRealPops(ax[0], npdata, cell_names)
-    demoHeatmap(ax[2], vmin=1, vmax=5)
-    PlotCellPops(ax[3], populations)
+    ax[0].axis("off")
+    ax[1].axis("off")
+    ax[2].axis("off")
+    ax[3].axis("off")
+
+    demoHeatmap(ax[4], vmin=1, vmax=5)
+    PlotCellPops(ax[5], getPopDict()[1])
 
     return f
 
