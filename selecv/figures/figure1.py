@@ -19,7 +19,7 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((10, 7), (2, 3))
 
-    subplotLabel(ax, [0,3,4,5])
+    subplotLabel(ax, [0, 3, 4, 5])
 
     ax[0].axis("off")
     ax[1].axis("off")
