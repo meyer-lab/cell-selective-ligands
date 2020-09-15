@@ -22,7 +22,7 @@ if __name__ == '__main__':
     if sys.argv[1] == '1':
         # Overlay Figure 1 cartoon
         overlayCartoon(fdir + 'figure1.svg',
-                       './selecv/graphics/figure_1a.svg', 20, 10, scalee = 0.35, scale_x = 0.5, scale_y = 0.5)
+                       './selecv/graphics/figure_1a.svg', 20, 10, scalee=0.35, scale_x=0.5, scale_y=0.5)
         overlayCartoon(fdir + 'figure1.svg',
                        './selecv/graphics/figure_1b.svg', 10, 280, scalee=0.5, scale_x=0.3, scale_y=0.3)
 
