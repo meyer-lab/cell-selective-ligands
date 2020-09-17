@@ -10,7 +10,7 @@ pipeline {
         sh 'make venv'
       }
     }
-    stage('Test/Build/Lint') {
+    stage('Build') {
       steps {
         sh 'make all -j 12'
         lock ('manubot') {
