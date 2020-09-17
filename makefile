@@ -4,7 +4,7 @@ SHELL := /bin/bash
 
 flist = 1 2 3 4 5 6 S1 S2
 
-all: output/manuscript.md coverage.xml $(patsubst %, output/figure%.svg, $(flist))
+all: output/manuscript.md $(patsubst %, output/figure%.svg, $(flist))
 
 venv: venv/bin/activate
 
@@ -35,9 +35,6 @@ output/manuscript.docx: venv output/manuscript.md $(patsubst %, output/figure%.s
 
 test: venv
 	. venv/bin/activate; JAX_PLATFORM_NAME=cpu pytest -s -v
-
-coverage.xml: venv
-	. venv/bin/activate; JAX_PLATFORM_NAME=cpu pytest --junitxml=junit.xml --cov=selecv --cov-report xml:coverage.xml
 
 clean:
 	mv output/requests-cache.sqlite requests-cache.sqlite || true
