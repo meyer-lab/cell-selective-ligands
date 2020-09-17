@@ -10,14 +10,13 @@ pipeline {
         sh 'make venv'
       }
     }
-    stage('Test/Build/Lint') {
+    stage('Build') {
       steps {
         sh 'make all -j 12'
         lock ('manubot') {
           sh 'make output/manuscript.html output/manuscript.docx'
         }
         archiveArtifacts artifacts: 'output/*.svg, output/*.docx', onlyIfSuccessful: true
-        cobertura coberturaReportFile: 'coverage.xml', failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'output', reportFiles: 'manuscript.html', reportName: 'Manuscript'])
       }
     }

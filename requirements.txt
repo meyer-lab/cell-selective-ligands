@@ -9,8 +9,8 @@ manubot==0.4.1
 pandoc-fignos==2.3.1
 pandoc-eqnos==2.3.0
 pandoc-tablenos==2.2.2
-jaxlib==0.1.52
-jax==0.1.75
+jaxlib==0.1.55
+jax==0.1.77
 svgutils==0.3.1
 celluloid==0.2.0
 ffmpeg==1.4
