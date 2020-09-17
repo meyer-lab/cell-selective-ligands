@@ -4,7 +4,7 @@ SHELL := /bin/bash
 
 flist = 1 2 3 4 5 6 S1 S2
 
-all: output/manuscript.md pylint.log coverage.xml $(patsubst %, output/figure%.svg, $(flist))
+all: output/manuscript.md coverage.xml $(patsubst %, output/figure%.svg, $(flist))
 
 venv: venv/bin/activate
 
@@ -39,11 +39,8 @@ test: venv
 coverage.xml: venv
 	. venv/bin/activate; JAX_PLATFORM_NAME=cpu pytest --junitxml=junit.xml --cov=selecv --cov-report xml:coverage.xml
 
-pylint.log: venv
-	. venv/bin/activate && (pylint --rcfile=./common/pylintrc selecv > pylint.log || echo "pylint exited with $?")
-
 clean:
 	mv output/requests-cache.sqlite requests-cache.sqlite || true
-	rm -rf output pylint.log
+	rm -rf output
 	mkdir output
 	mv requests-cache.sqlite output/requests-cache.sqlite || true
