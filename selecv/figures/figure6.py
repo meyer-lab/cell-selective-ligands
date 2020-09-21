@@ -18,8 +18,8 @@ def makeFigure():
     subplotLabel(ax)
 
     optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"], vrange=(0, 3))
-    optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 1.5))
-    optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 10))
+    #optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 1.5))
+    #optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 10))
 
     return f
 
@@ -42,10 +42,10 @@ def minSelecFunc(x, tPops, offTPops):
     tMeans, offTMeans = genPopMeans(tPops), genPopMeans(offTPops)
 
     targetBound = polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**tMeans[0][0], 10**tMeans[0][1]], [x[3], 1 - x[3]],
-                         np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
+                         np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]))[0]
     for means in offTMeans:
         offTargetBound += polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**means[0], 10**means[1]], [x[3], 1 - x[3]],
-                                 np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]))[0]
+                                 np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]))[0]
 
     return (offTargetBound) / (targetBound)
 
@@ -89,10 +89,10 @@ def minSigmaVar(x, tPops, offTPops, h=None):
     targetBound, offTargetBound = 0, 0
     for tPop in tPops:
         targetBound += sum(sigmaPop(tPop, np.exp(x[0]), np.exp(x[1]), x[2], [x[3], 1 - x[3]],
-                                    np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]), quantity=0, h=h))
+                                    np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]), quantity=0, h=h))
     for offTPop in offTPops:
         offTargetBound += sum(sigmaPop(offTPop, np.exp(x[0]), np.exp(x[1]), x[2], [x[3], 1 - x[3]],
-                                       np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[5]), np.exp(x[4])]]), quantity=0, h=h))
+                                    np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]), quantity=0, h=h))
     return (offTargetBound) / (targetBound)
 
 
@@ -100,7 +100,7 @@ def optimize(pmOptNo, targPops, offTargPops, L0, KxStar, f, LigC, Kav, bound=Non
     """ A more general purpose optimizer """
     # OPT = [log L0, log KxStar, f, LigC[0], log Ka(diag), log Ka(offdiag)]
     Kav = np.array(Kav)
-    xnot = np.array([np.log(L0), np.log(KxStar), f, LigC[0], np.log(Kav[0, 0]), np.log(Kav[0, 1])])
+    xnot = np.array([np.log(L0), np.log(KxStar), f, LigC[0], np.log(Kav[0, 0]), np.log(Kav[0, 1]), np.log(Kav[1, 0]), np.log(Kav[1, 1])])
     Bnds = [(i, i + 0.001) for i in xnot]
 
     for pmopt in pmOptNo:
@@ -126,7 +126,10 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
     pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
 
     for i, strat in enumerate(strats):
-        optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+        if strat == "Mixture" or strat == "All":
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [0.75, 0.25], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+        else: 
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
         stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
         optDF = optDF.append(stratRow, ignore_index=True)
         optParams = optimized.x
@@ -134,10 +137,15 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
         optParams[4::] = np.exp(optParams[4::])
 
         if i < 4:
-            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
+            print(strat)
+            print(targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[6], optParams[7]]], [optParams[3], 1 - optParams[3]], optParams[2])
+            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
                         [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=True, highlight=targetPop[0])
         else:
-            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[4], optParams[5]]],
+            print(strat)
+            print(targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[6], optParams[7]]], [optParams[3], 1 - optParams[3]], optParams[2])
+            
+            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
                         [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=True, layover=True, highlight=targetPop[0])
         ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
 
@@ -150,17 +158,19 @@ optBnds = [(np.log(1e-11), np.log(1e-8)),  # log L0
            (1, 16),  # f
            (0.0, 1.0),  # LigC[0]
            (np.log(1e2), np.log(1e9)),  # log Ka(diag)
+           (np.log(1e2), np.log(1e9)),
+           (np.log(1e2), np.log(1e9)),
            (np.log(1e2), np.log(1e9))]  # log Ka(offdiag)
 
 
 cBnd = (np.log(1e-9), np.log(1.01e-9))
 
 bndsDict = {
-    "Xnot": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (1, 1.01), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
-    "Affinity": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 1.01), (1, 1.01), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10))),
-    "Mixture": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 1.01), (0, 1), (np.log(1e6), np.log(1e10)), (np.log(1e2), np.log(1e6))),
-    "Valency": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 16), (1, 1.01), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10))),
-    "All": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
+    "Xnot": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (1, 1.01), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
+    "Affinity": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (1, 1.01), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
+    "Mixture": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 1.01), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10))),
+    "Valency": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 16), (1, 1.01), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
+    "All": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
 }
 
 
