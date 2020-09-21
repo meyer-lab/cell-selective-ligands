@@ -17,9 +17,9 @@ def makeFigure():
     ax, f = getSetup((16, 8), (3, 6))
     subplotLabel(ax)
 
-    #optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"], vrange=(0, 3))
+    optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"], vrange=(0, 3))
     optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 1.5))
-    #optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 10))
+    optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 10))
 
     return f
 
@@ -92,7 +92,7 @@ def minSigmaVar(x, tPops, offTPops, h=None):
                                     np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]), quantity=0, h=h))
     for offTPop in offTPops:
         offTargetBound += sum(sigmaPop(offTPop, np.exp(x[0]), np.exp(x[1]), x[2], [x[3], 1 - x[3]],
-                                    np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]), quantity=0, h=h))
+                                       np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]), quantity=0, h=h))
     return (offTargetBound) / (targetBound)
 
 
@@ -126,9 +126,11 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
     pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
 
     for i, strat in enumerate(strats):
-        if strat == "Mixture" or strat == "All":
-            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [0.5, 0.5], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
-        else: 
+        if strat == "Mixture":
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [0.9, 0.1], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+        elif strat == "All":
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 15, [0.9, 0.1], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+        else:
             optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
         stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
         optDF = optDF.append(stratRow, ignore_index=True)
@@ -141,7 +143,7 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
                         [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=True, highlight=targetPop[0])
         else:
             print(optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
-                        [optParams[3], 1 - optParams[3]], optParams[2])    
+                  [optParams[3], 1 - optParams[3]], optParams[2])
             heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
                         [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=True, layover=True, highlight=targetPop[0])
         ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
