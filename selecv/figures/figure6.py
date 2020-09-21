@@ -17,8 +17,8 @@ def makeFigure():
     ax, f = getSetup((16, 8), (3, 6))
     subplotLabel(ax)
 
-    optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"], vrange=(0, 3))
-    #optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 1.5))
+    #optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"], vrange=(0, 3))
+    optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 1.5))
     #optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 10))
 
     return f
@@ -127,7 +127,7 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
 
     for i, strat in enumerate(strats):
         if strat == "Mixture" or strat == "All":
-            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [0.95, 0.15], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [0.5, 0.5], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
         else: 
             optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
         stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
@@ -139,7 +139,9 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
         if i < 4:
             heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
                         [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=True, highlight=targetPop[0])
-        else:       
+        else:
+            print(optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
+                        [optParams[3], 1 - optParams[3]], optParams[2])    
             heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
                         [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=True, layover=True, highlight=targetPop[0])
         ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
@@ -161,10 +163,10 @@ optBnds = [(np.log(1e-11), np.log(1e-8)),  # log L0
 cBnd = (np.log(1e-9), np.log(1.01e-9))
 
 bndsDict = {
-    "Xnot": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (1, 1.01), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
-    "Affinity": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (1, 1.01), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
+    "Xnot": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0.99, 1.00), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
+    "Affinity": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0.99, 1.00), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
     "Mixture": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10))),
-    "Valency": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 16), (1, 1.01), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
+    "Valency": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 16), (0.99, 1.00), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
     "All": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
 }
 
