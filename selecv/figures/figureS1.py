@@ -14,6 +14,7 @@ def makeFigure():
     subplotLabel(ax)
     fit = fitfunc()
     FitKX, FitSlopeC5, FitSlopeB22, Kav, Fitabund = np.exp(fit[0]), fit[1], fit[2], [[np.exp(fit[3])], [np.exp(fit[4])], [0]], np.exp(fit[5])
+    print(FitKX, FitSlopeC5, FitSlopeB22, Kav, Fitabund)
 
     fit_slope(ax[0], FitKX, FitSlopeC5, FitSlopeB22, Kav, Fitabund)
     discrim2(ax[1], FitKX, FitSlopeC5, FitSlopeB22, Kav)
