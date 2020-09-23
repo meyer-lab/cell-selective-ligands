@@ -20,22 +20,21 @@ def makeFigure():
     affDLsub = np.array([0, 10])
 
     fDLsub = 4
-
-    optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{med}R_2^{lo}$"], fDLsub, affDLsub, specPops=[r"$R_1^{hi}R_2^{lo}$"])
-    heatmapDL(ax[1], np.exp(optParams[1]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 10), cbar=False, highlight=[r"$R_1^{med}R_2^{lo}$"])
-    heatmapDL(ax[2], np.exp(optParams[2]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 10), cbar=False, dead=True, highlight=[r"$R_1^{med}R_2^{lo}$"])
-    heatmapDL(ax[3], np.exp(optParams[3]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 10), cbar=True, dead=False, jTherap=True, highlight=[r"$R_1^{med}R_2^{lo}$"])
-
-    optParams, DLaffs = optimizeDesignDL(ax[4], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
-    heatmapDL(ax[5], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+    optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{med}R_2^{med}$"], fDLsub, affDLsub)
+    heatmapDL(ax[1], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
               [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 10), cbar=False, highlight=[r"$R_1^{med}R_2^{med}$"])
-    heatmapDL(ax[6], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+    heatmapDL(ax[2], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
               [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 10), cbar=False, dead=True, highlight=[r"$R_1^{med}R_2^{med}$"])
-    heatmapDL(ax[7], np.exp(optParams[0]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+    heatmapDL(ax[3], np.exp(optParams[0]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
               [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 10), cbar=True, dead=False, jTherap=True, highlight=[r"$R_1^{med}R_2^{med}$"])
+
+    optParams, DLaffs = optimizeDesignDL(ax[4], [r"$R_1^{med}R_2^{lo}$"], fDLsub, affDLsub, specPops=[r"$R_1^{hi}R_2^{lo}$"])
+    heatmapDL(ax[5], np.exp(optParams[1]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 10), cbar=False, highlight=[r"$R_1^{med}R_2^{lo}$"])
+    heatmapDL(ax[6], np.exp(optParams[2]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 10), cbar=False, dead=True, highlight=[r"$R_1^{med}R_2^{lo}$"])
+    heatmapDL(ax[7], np.exp(optParams[3]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-2, 10), cbar=True, dead=False, jTherap=True, highlight=[r"$R_1^{med}R_2^{lo}$"])
 
     return f
 
@@ -73,13 +72,13 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
 
     ratioDF = ratioDF.divide(ratioDF.iloc[npoints - 1, 0])
     Cbar = True
-    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=4, cbar=Cbar, cbar_kws={'label': 'Selectivity Ratio w Dead Ligand'}, annot=True)
-    ax.set(xlabel="Dead Ligand Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Dead Ligand Rec 2 Affinity ($K_a$, in M$^{-1}$)")
+    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=4, cbar=Cbar, cbar_kws={'label': 'Selectivity Ratio w Antagonist'}, annot=True)
+    ax.set(xlabel="Antagonist Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Antagonist Rec 2 Affinity ($K_a$, in M$^{-1}$)")
 
     if specPops:
-        ax.set_title(targetPop[0] + " and Dead ligand of Valency " + str(fDL) + " vs " + specPops[0], fontsize=8)
+        ax.set_title(targetPop[0] + " and Antagonist of Valency " + str(fDL) + " vs " + specPops[0], fontsize=8)
     else:
-        ax.set_title(targetPop[0] + " and Dead ligand of Valency " + str(fDL) + " vs all", fontsize=8)
+        ax.set_title(targetPop[0] + " and Antagonist of Valency " + str(fDL) + " vs all", fontsize=8)
 
     maxindices = ratioDF.to_numpy()
     (i, j) = np.unravel_index(maxindices.argmax(), maxindices.shape)
@@ -92,20 +91,20 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
 
 
 def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cbar=True, dead=False, jTherap=False, highlight=[]):
-    "Makes a heatmap with modified cell population abundances according to dead ligand binding"
+    "Makes a heatmap with modified cell population abundances according to Antagonist binding"
     nAbdPts = 70
     abunds = np.array(list(cellPopulations.values()))[:, 0:2]
     abundRange = (np.amin(abunds) - 1, np.amax(abunds) + 1)
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
     if dead:
         func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0][0])
-        title = "Dead Ligand Bound"
+        title = "Antagonist Bound"
     else:
         func = np.vectorize(lambda abund1, abund2: polyc(L0, KxStar, [abund1, abund2], Cplx, Comp, Kav)[0][1])
         if jTherap:
-            title = "Live Ligand Bound without Dead Ligand"
+            title = "Agonist Bound without Antagonist"
         else:
-            title = "Live Ligand Bound"
+            title = "Agonist Bound"
 
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
