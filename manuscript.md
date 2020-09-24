@@ -77,11 +77,11 @@ header-includes: '<!--
 
   <link rel="alternate" type="application/pdf" href="https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf" />
 
-  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/1a65009a394b9f3bc60c5acbd527d36e1a6f767e/" />
+  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/fdc34d35e54574edc15fbf3b241655807e898ca3/" />
 
-  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/1a65009a394b9f3bc60c5acbd527d36e1a6f767e/" />
+  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/fdc34d35e54574edc15fbf3b241655807e898ca3/" />
 
-  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/1a65009a394b9f3bc60c5acbd527d36e1a6f767e/manuscript.pdf" />
+  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/fdc34d35e54574edc15fbf3b241655807e898ca3/manuscript.pdf" />
 
   <meta property="og:type" content="article" />
 
