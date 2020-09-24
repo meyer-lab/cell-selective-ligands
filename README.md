@@ -1,6 +1,7 @@
 # Engineering cell selective ligands
 
-[![Build Status](https://transduc.seas.ucla.edu/buildStatus/icon?job=meyer-lab%2Fcell-selective-ligands%2Fmaster)](https://transduc.seas.ucla.edu/job/meyer-lab/job/cell-selective-ligands/job/master/)
-[![Manuscript](https://img.shields.io/static/v1?label=manuscript&message=master&color=blue)](https://transduc.seas.ucla.edu/job/meyer-lab/job/cell-selective-ligands/job/master/Manuscript/)
+![Python package](https://github.com/meyer-lab/cell-selective-ligands/workflows/Python%20package/badge.svg)
+
+[Manuscript Build](https://meyer-lab.github.io/cell-selective-ligands/manuscript.html)
 
 A modeling perspective on cell selective ligands
