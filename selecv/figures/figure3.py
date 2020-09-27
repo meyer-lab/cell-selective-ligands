@@ -97,7 +97,7 @@ def ConcValPlot(ax):
 
 def vieqPlot(ax, recCount, val):
     "Demonstrate effect of valency"
-    vieqDF = pds.DataFrame(columns=["Binding Valency", "Ligand Bound", "$K_a$"])
+    vieqDF = pds.DataFrame(columns=["Degree of Binding", "# Ligand Bound", "$K_a (M^{-1})$"])
     Conc = 1e-9
     affs = [1e8, 1e7, 1e6]
     afflabs = ["1e8", "1e7", "1e6"]
@@ -107,7 +107,7 @@ def vieqPlot(ax, recCount, val):
             ligboundDF = pds.DataFrame({"Degree of Binding": jj + 1, "# Ligand Bound": [bound], "$K_a (M^{-1})$": afflabs[ii]})
             vieqDF = vieqDF.append(ligboundDF)
     sns.stripplot(x="Degree of Binding", y="# Ligand Bound", hue="$K_a (M^{-1})$", data=vieqDF, ax=ax)
-    ax.set(yscale="log", ylim=(0.1, 1e4), title="Valency of Binding to " + str(recCount) + " Receptors", ylabel="Ligand Bound", xlabel="Binding Valency")
+    ax.set(yscale="log", ylim=(0.1, 1e4), title="Valency of Binding to " + str(int(recCount)) + " Receptors", ylabel="Ligand Bound", xlabel="Binding Valency")
 
 
 def ratePlot(ax):
