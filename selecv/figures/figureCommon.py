@@ -120,7 +120,7 @@ def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
     npoints = 3
     ticks = np.full([npoints], None)
     affScan = np.logspace(Kav[0], Kav[1], npoints)
-    ticks[0], ticks[-1] = "1e" + str(9-Kav[0]), "1e" + str(9-Kav[1])
+    ticks[0], ticks[-1] = "1e" + str(9 - Kav[0]), "1e" + str(9 - Kav[1])
 
     sampMeans = np.zeros(npoints)
     ratioDF = pds.DataFrame(columns=affScan, index=affScan)

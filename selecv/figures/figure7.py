@@ -50,7 +50,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     affScan = np.logspace(affDL[0], affDL[1], npoints)
     bounds = (cBnd, (np.log(1e-15), np.log(1e-9)), (0.99, 1), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e1), np.log(1.01e1)))
     xnot = np.array([np.log(1e-9), np.log(1e-9), 1, 1, np.log(1e8), np.log(1e1)])
-    ratioDF = pd.DataFrame({"Aff": affScan, "Selectivity": np.zeros(npoints), "Aff nM": affScan ^ -1 * 1e9 })
+    ratioDF = pd.DataFrame({"Aff": affScan, "Selectivity": np.zeros(npoints), "Aff nM": (1 / affScan) * 1e9})
     sampMeans = np.zeros(npoints)
 
     for ii, aff1 in enumerate(affScan):
@@ -58,7 +58,6 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
         assert optimized.success
         sampMeans[ii] = 7 / optimized.fun
 
-    
     ratioDF.Selectivity = sampMeans
     ratioDF.Selectivity /= sampMeans[0]
 
