@@ -4,7 +4,7 @@ author-meta:
 - Zhixin Cyrillus Tan
 - Aaron S. Meyer
 bibliography: []
-date-meta: '2020-09-27'
+date-meta: '2020-09-28'
 header-includes: '<!--
 
   Manubot generated metadata rendered from header-includes-template.html.
@@ -23,9 +23,9 @@ header-includes: '<!--
 
   <meta property="twitter:title" content="Exploiting multivalency and other strategies to engineer cell-selective therapies" />
 
-  <meta name="dc.date" content="2020-09-27" />
+  <meta name="dc.date" content="2020-09-28" />
 
-  <meta name="citation_publication_date" content="2020-09-27" />
+  <meta name="citation_publication_date" content="2020-09-28" />
 
   <meta name="dc.language" content="en-US" />
 
@@ -77,11 +77,11 @@ header-includes: '<!--
 
   <link rel="alternate" type="application/pdf" href="https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf" />
 
-  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/cfdf9d5f3d55e4bfbf5b8cfb49209831b2606000/" />
+  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/e1bccdbc26e6c82abf139eb14c2acf62af6d2caf/" />
 
-  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/cfdf9d5f3d55e4bfbf5b8cfb49209831b2606000/" />
+  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/e1bccdbc26e6c82abf139eb14c2acf62af6d2caf/" />
 
-  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/cfdf9d5f3d55e4bfbf5b8cfb49209831b2606000/manuscript.pdf" />
+  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/e1bccdbc26e6c82abf139eb14c2acf62af6d2caf/manuscript.pdf" />
 
   <meta property="og:type" content="article" />
 
@@ -110,7 +110,7 @@ title: Exploiting multivalency and other strategies to engineer cell-selective t
 
 <small><em>
 This manuscript
-was automatically generated on September 27, 2020.
+was automatically generated on September 28, 2020.
 </em></small>
 
 ## Authors
