@@ -49,5 +49,5 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
             plt.text(3.7, 3.85, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
             plt.plot([2, 3.7], [3.5, 2.2], color="w", marker=2)
             plt.text(2.3, 3.5, "e", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-            axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e}".format(aff1) + "M$^{-1}$ $K_2$ = " + "{:.1e}".format(aff2) + "M$^{-1}$")
+            axs[i2 * nAffPts + i1].set_title("$K_1$ = {:.1e}".format(1e9 * (1 / aff1)) + " nM, $K_2$ = " + "{:.1e}".format(1e9 * (1 / aff2)) + " nM")
     return fig

@@ -120,7 +120,7 @@ def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
     npoints = 3
     ticks = np.full([npoints], None)
     affScan = np.logspace(Kav[0], Kav[1], npoints)
-    ticks[0], ticks[-1] = "1e" + str(Kav[0]), "1e" + str(Kav[1])
+    ticks[0], ticks[-1] = "1e" + str(9 - Kav[0]), "1e" + str(9 - Kav[1])
 
     sampMeans = np.zeros(npoints)
     ratioDF = pds.DataFrame(columns=affScan, index=affScan)
@@ -134,7 +134,7 @@ def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=10, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
     else:
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
-    ax.set(xlabel="Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Rec 2 Affinity ($K_a$, in M$^{-1}$)")
+    ax.set(xlabel="Rec 1 Affinity ($K_D$, in nM)", ylabel="Rec 2 Affinity ($K_D$, in nM)")
     ax.set_title(Title, fontsize=8)
 
 
@@ -148,7 +148,7 @@ def ValencyPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
     for ii, aff in enumerate(Kav):
         for jj, val in enumerate(f):
             underDev[jj], sampMeans[jj], overDev[jj] = sampleSpec(
-                L0 / val, KxStar, val, [recMeans[0], recMeans[1]], [Covs[0], Covs[1]], np.array([1]), np.array([[aff, aff]])
+                L0 / val, KxStar, val, [recMeans[0], recMeans[1]], [Covs[0], Covs[1]], np.array([1]), np.array([[aff, 0.01]])
             )
 
         ax.plot(f, sampMeans, color=colors[ii], label=labels[ii])
