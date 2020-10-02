@@ -25,15 +25,15 @@ def makeFigure():
 
     KxStar = 1e-12
     heatmap(ax[0], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=False,
-            title="[1, 1] log ligand bound with Kx*={}".format(KxStar), cbar=False)
+            title="Bispecific Lbound, Kx*={}".format(KxStar), cbar=False)
     heatmap(ax[1], L0 * 2, KxStar, Kav, [0.5, 0.5], f=1, vrange=(-4, 7), fully=False,
-            title="Mixture of monovalents, log Lbound with Kx*={}".format(KxStar), cbar=False)
+            title="Mixture of monovalents Lbound, Kx*={}".format(KxStar), cbar=False)
     heatmap(ax[2], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(-4, 7), fully=False,
-            title="Mixture of bivalent log Lbound with Kx*={}".format(KxStar), cbar=True)
+            title="Mixture of bivalents Lbound, Kx*={}".format(KxStar), cbar=True)
 
     for i, KxStar in enumerate([1e-10, 1e-12, 1e-14]):
         heatmap(ax[i + 3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=True,
-                title="[1, 1] log fully bound with Kx*={}".format(KxStar), cbar=(i == 2))
+                title="Bispecific log fully bound with Kx*={}".format(KxStar), cbar=(i == 2))
 
     KxStar = 1e-12
     heatmap(ax[6], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(-4, 7), fully=True,
@@ -144,7 +144,7 @@ def KxStarVary(ax, L0, Kav, ylim=(-7, 5), fully=True, compare=None):
         ax.set_title("Ratio of selectivities, untethered to tethered")
     elif compare == "bisp":
         ax.set_ylabel("Ratio of selectivity")
-        ax.set_title("Ratio of selectivities, homogeneous bivalent to bispecific")
+        ax.set_title("Ratio of selectivities, homo-bivalent to bispecific")
     elif compare == "fully":
         ax.set_ylabel("Ratio of selectivity")
         ax.set_title("Ratio of selectivities, fully to ligand bound")
