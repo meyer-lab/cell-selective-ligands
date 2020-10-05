@@ -45,6 +45,7 @@ def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund, valencies=False):
     df2["predicted"] = X2
     df2["data"] = "B22"
     df = pd.concat([df1, df2])
+    df = df.rename(columns={"valency": "Valency", "data": "Clone"})
 
     lr = LinearRegression(fit_intercept=False)
     X, Y = np.array(X1).reshape(-1, 1), np.array(Y1)
@@ -54,7 +55,7 @@ def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund, valencies=False):
     lr.fit(X, Y)
     B22_score = lr.score(X, Y)
 
-    sns.lineplot(x="predicted", y="intensity", hue="data", style="valency", markers=True, data=df, ax=ax)
+    sns.lineplot(x="predicted", y="intensity", hue="Clone", style="Valency", markers=True, data=df, ax=ax)
 
     return C5_score, B22_score
 
@@ -68,30 +69,33 @@ KxStar_B22 = 10 ** -12.734
 slope_C5 = 0.008514426941736077
 slope_B22 = 0.012855332053729724
 
+ligandDict = {"[8, 0, 0]": "Octovalent C5", "[4, 0, 4]": "Tetravalent C5", "[0, 8, 0]": "Octovalent B22", "[0, 4, 4]": "Tetravalent B22"}
+
 
 def discrim2(ax, KxStarD, slopeC5, slopeB22, KavD, valencies=False):
     "Returns predicted fluorescent values over a range of abundances with unique slopes for C5 and B22"
-    df = pd.DataFrame(columns=["Lig", "Recep", "value"])
+    df = pd.DataFrame(columns=["Ligand", "Receptor", "value"])
     if not valencies:
         for lig in [[8, 0, 0], [4, 0, 4]]:
             for rec in Recep.values():
                 res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
-                df = df.append({"Lig": str(lig), "Recep": rec, "value": res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
+                df = df.append({"Ligand": ligandDict[str(lig)], "Recep": rec, "value": res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
         for lig in [[0, 8, 0], [0, 4, 4]]:
             for rec in Recep.values():
                 res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
-                df = df.append({"Lig": str(lig), "Recep": rec, "value": res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
+                df = df.append({"Ligand": ligandDict[str(lig)], "Recep": rec, "value": res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
 
     else:
         for lig in [[valencies[0], 0, 8 - valencies[0]], [valencies[1], 0, 8 - valencies[1]]]:
             for rec in Recep.values():
                 res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
-                df = df.append({"Lig": str(lig), "Recep": rec, "value": res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
+                df = df.append({"Ligand": ligandDict[str(lig)], "Recep": rec, "value": res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
         for lig in [[0, valencies[0], 8 - valencies[0]], [0, valencies[1], 8 - valencies[1]]]:
             for rec in Recep.values():
                 res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
-                df = df.append({"Lig": str(lig), "Recep": rec, "value": res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
-    sns.lineplot(x="Recep", y="value", hue="Lig", style="Lig", markers=True, data=df, ax=ax)
+                df = df.append({"Ligand": ligandDict[str(lig)], "Recep": rec, "value": res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
+    sns.lineplot(x="Recep", y="value", hue="Ligand", style="Ligand", markers=True, data=df, ax=ax)
+    ax.set(xlabel="Receptor Abundance", ylabel="Ligand Bound")
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set(xlim=(1e4, 1e7), ylim=(10, 1e5))
@@ -100,12 +104,14 @@ def discrim2(ax, KxStarD, slopeC5, slopeB22, KavD, valencies=False):
 
 def xeno(ax, KxStarX, KavX):
     "Plots Xenograft targeting ratios"
-    df = pd.DataFrame(columns=["Lig", "ratio"])
+    df = pd.DataFrame(columns=["Ligand", "ratio"])
     for lig in [[8, 0, 0], [4, 0, 4], [0, 8, 0], [0, 4, 4]]:
         mcf = polyfc(50 * 1e-9, KxStarX, 8, [Recep["MCF"]], lig, KavX)[0]
         mda = polyfc(50 * 1e-9, KxStarX, 8, [Recep["MDA"]], lig, KavX)[0]
-        df = df.append({"Lig": str(lig), "ratio": (mcf / mda)}, ignore_index=True)
-    sns.barplot(x="Lig", y="ratio", data=df, ax=ax)
+        df = df.append({"Ligand": ligandDict[str(lig)], "ratio": (mcf / mda)}, ignore_index=True)
+    sns.barplot(x="Ligand", y="ratio", data=df, ax=ax)
+    ax.set(xlabel="Receptor Abundance", ylabel="Binding Ratio")
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=25, horizontalalignment='right')
     ax.set(ylim=(0, 200))
     return ax
 

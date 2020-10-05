@@ -21,11 +21,11 @@ def makeFigure():
 
     fDLsub = 4
     optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{med}R_2^{lo}$"], fDLsub, affDLsub, specPops=[r"$R_1^{hi}R_2^{lo}$"])
-    heatmapDL(ax[1], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+    heatmapDL(ax[1], np.exp(optParams[1]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
               [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-6, 3), cbar=True, highlight=[r"$R_1^{med}R_2^{lo}$"])
-    heatmapDL(ax[2], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+    heatmapDL(ax[2], np.exp(optParams[2]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
               [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=False, dead=True, highlight=[r"$R_1^{med}R_2^{lo}$"])
-    heatmapDL(ax[3], np.exp(optParams[0]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+    heatmapDL(ax[3], np.exp(optParams[3]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
               [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=True, dead=False, jTherap=True, highlight=[r"$R_1^{med}R_2^{lo}$"])
 
     return f
@@ -46,36 +46,40 @@ def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
 def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another with inclusion of dead ligand"
     targMeans, offTargMeans = genOnevsAll(targetPop, specPops, means=True)
-    npoints = 10
+    npoints = 4
+    ticks = np.full([npoints], None)
     affScan = np.logspace(affDL[0], affDL[1], npoints)
-    bounds = (cBnd, (np.log(1e-15), np.log(1e-9)), (0.99, 1), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e1), np.log(1.01e1)))
-    xnot = np.array([np.log(1e-9), np.log(1e-9), 1, 1, np.log(1e8), np.log(1e1)])
-    ratioDF = pd.DataFrame({"Aff": affScan, "Selectivity": np.zeros(npoints), "Aff nM": (1 / affScan) * 1e9})
-    sampMeans = np.zeros(npoints)
+    ticks[0], ticks[-1] = "1e" + str(affDL[0]), "1e" + str(affDL[1])
+    bounds = (cBnd, (np.log(1e-15), np.log(1e-9)), (0.99, 1), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
+    xnot = np.array([np.log(1e-9), np.log(1e-9), 1, 1, np.log(10e8), np.log(10e8)])
+    ratioDF = pd.DataFrame(columns=affScan, index=affScan)
 
     for ii, aff1 in enumerate(affScan):
-        optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), args=(targMeans, offTargMeans, fDL, [aff1, 1e0]))
-        assert optimized.success
-        sampMeans[ii] = 7 / optimized.fun
+        sampMeans = np.zeros(npoints)
+        for jj, aff2 in enumerate(np.flip(affScan)):
+            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), args=(targMeans, offTargMeans, fDL, [aff1, aff2]))
+            assert optimized.success
+            sampMeans[jj] = 7 / optimized.fun
+        ratioDF[ratioDF.columns[ii]] = sampMeans
 
-    ratioDF.Selectivity = sampMeans
-    ratioDF.Selectivity /= sampMeans[0]
-
-    sns.lineplot(x="Aff nM", y="Selectivity", data=ratioDF, ax=ax)
-    ax.set(xscale='log', xlabel="Antagonist Rec 1 Affinity ($K_D$, in nM)", ylabel='Selectivity Ratio w Antagonist')
+    ratioDF = ratioDF.divide(ratioDF.iloc[npoints - 1, 0])
+    Cbar = True
+    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=4, cbar=Cbar, cbar_kws={'label': 'Selectivity Ratio w Antagonist'}, annot=True)
+    ax.set(xlabel="Antagonist Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Antagonist Rec 2 Affinity ($K_a$, in M$^{-1}$)")
 
     if specPops:
         ax.set_title(targetPop[0] + " and Antagonist of Valency " + str(fDL) + " vs " + specPops[0], fontsize=8)
     else:
         ax.set_title(targetPop[0] + " and Antagonist of Valency " + str(fDL) + " vs all", fontsize=8)
 
-    maxindices = ratioDF["Selectivity"].to_numpy()
-    i = (maxindices.argmax())
-    maxaff1 = affScan[i]
-    optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), args=(targMeans, offTargMeans, fDL, [maxaff1, 1e1]))
+    maxindices = ratioDF.to_numpy()
+    (i, j) = np.unravel_index(maxindices.argmax(), maxindices.shape)
+    maxaff1 = affScan[j]
+    maxaff2 = affScan[npoints - 1 - i]
+    optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), args=(targMeans, offTargMeans, fDL, [maxaff1, maxaff2]))
     assert optimized.success
 
-    return optimized.x, np.array([maxaff1, 1e1])
+    return optimized.x, np.array([maxaff1, maxaff2])
 
 
 def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cbar=True, dead=False, jTherap=False, highlight=[]):
