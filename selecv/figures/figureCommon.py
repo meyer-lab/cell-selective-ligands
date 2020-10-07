@@ -120,7 +120,7 @@ def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
     npoints = 3
     ticks = np.full([npoints], None)
     affScan = np.logspace(Kav[0], Kav[1], npoints)
-    ticks[0], ticks[-1] = "1e" + str(9 - Kav[0]), "1e" + str(9 - Kav[1])
+    ticks[0], ticks[-1] = "$10^{}$".format(9 - Kav[0]), "$10^{}$".format(9 - Kav[1])
 
     sampMeans = np.zeros(npoints)
     ratioDF = pds.DataFrame(columns=affScan, index=affScan)
@@ -134,7 +134,7 @@ def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=10, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
     else:
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
-    ax.set(xlabel="Rec 1 Affinity ($K_D$, in nM)", ylabel="Rec 2 Affinity ($K_D$, in nM)")
+    ax.set(xlabel="Rec 1 Affinity ($K_d$, in nM)", ylabel="Rec 2 Affinity ($K_d$, in nM)")
     ax.set_title(Title, fontsize=8)
 
 
