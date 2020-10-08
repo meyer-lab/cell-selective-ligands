@@ -2,8 +2,6 @@
 Figure 5. Heterovalent bispecific
 """
 
-import seaborn as sns
-import pandas as pds
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -17,40 +15,30 @@ pairs = [(r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"), (r"$R_1^{hi}R_2^{hi}$"
 
 def makeFigure():
     """ main function for Figure 5 """
-    ax, f = getSetup((10, 12), (4, 3))
-    subplotLabel(ax, list(range(12)))
+    ax, f = getSetup((10, 10), (3, 3))
+    subplotLabel(ax, list(range(8)))
 
     L0 = 1e-8
     Kav = [[1e7, 1e5], [1e5, 1e6]]
 
     KxStar = 1e-12
     heatmap(ax[0], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=False,
-            title="Bispecific Lbound, Kx*={}".format(KxStar), cbar=False)
+            title="Bispecific Lbound, $K_x^*$={}".format(KxStar), cbar=False)
     heatmap(ax[1], L0 * 2, KxStar, Kav, [0.5, 0.5], f=1, vrange=(-4, 7), fully=False,
-            title="Mixture of monovalents Lbound, Kx*={}".format(KxStar), cbar=False)
+            title="Mixture of monovalents Lbound, $K_x^*$={}".format(KxStar), cbar=False)
     heatmap(ax[2], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(-4, 7), fully=False,
-            title="Mixture of bivalents Lbound, Kx*={}".format(KxStar), cbar=True)
+            title="Mixture of bivalents Lbound, $K_x^*$={}".format(KxStar), cbar=True)
 
     for i, KxStar in enumerate([1e-10, 1e-12, 1e-14]):
         heatmap(ax[i + 3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=True,
-                title="Bispecific log fully bound with Kx*={}".format(KxStar), cbar=(i == 2))
+                title="Bispecific log fully bound with $K_x^*$={}".format(KxStar), cbar=(i == 2))
 
-    KxStar = 1e-12
-    heatmap(ax[6], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(-4, 7), fully=True,
-            title="Mixture of bivalent log Lfbnd with Kx*={}".format(KxStar), cbar=True)
-
-    KxStar = 1e-12
-    normHeatmap(ax[7], L0, KxStar, Kav, vrange=(-14, 0),
-                title="Bispecific normalized by untethered with Kx*={}".format(KxStar), cbar=False, normby=tetheredYN)
-    normHeatmap(ax[8], L0, KxStar, Kav, vrange=(-14, 0),
-                title="Bispecific normalized by bivalent with Kx*={}".format(KxStar), cbar=True, normby=mixBispecYN)
-
-    for i in range(9):
+    for i in range(6):
         ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
-
-    KxStarVary(ax[9], L0, Kav, ylim=(-9, 9), compare="fully")
-    KxStarVary(ax[10], L0, Kav, ylim=(-9, 9), compare="tether")
-    KxStarVary(ax[11], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
+ 
+    KxStarVary(ax[6], L0, Kav, ylim=(-9, 9), compare="tether")
+    KxStarVary(ax[7], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
+    ax[8].axis("off")
 
     return f
 
@@ -137,49 +125,22 @@ def KxStarVary(ax, L0, Kav, ylim=(-7, 5), fully=True, compare=None):
         ax.plot(Kxaxis, sHolder, color=colors[i], label=pair[0] + " to " + pair[1], linestyle="-")
 
     ax.set(xlim=(1e-15, 1e-7), ylim=ylim,
-           xlabel="Kx*")
+           xlabel="$K_x^*$")
     ax.set_xscale('log')
     if compare == "tether":
         ax.set_ylabel("Ratio of selectivity")
-        ax.set_title("Ratio of selectivities, untethered to tethered")
+        ax.set_title("Ratio of selectivities, bispecific vs. monovalent mixture")
     elif compare == "bisp":
         ax.set_ylabel("Ratio of selectivity")
-        ax.set_title("Ratio of selectivities, homo-bivalent to bispecific")
+        ax.set_title("Ratio of selectivities, bispecific vs. bivalent mixture")
     elif compare == "fully":
         ax.set_ylabel("Ratio of selectivity")
         ax.set_title("Ratio of selectivities, fully to ligand bound")
     else:
         ax.set_ylabel("Log selectivity of [1, 1]")
         if fully:
-            ax.set_title("Log selectivity varies with Kx* for Lfbnd")
+            ax.set_title("Log selectivity varies with $K_x^*$ for Lfbnd")
         else:
-            ax.set_title("Log selectivity varies with Kx* for Lbound")
+            ax.set_title("Log selectivity varies with $K_x^*$ for Lbound")
     ax.legend(loc='lower right', fancybox=True, framealpha=1)
 
-
-# DEPRECATED BELOW
-
-def affHeatMap(ax, pop1name, pop2name, L0, KxStar, Cbar=True):
-    """ Calculate selectivity with 2d affinities """
-    npoints = 50
-    affRange = (4, 8)
-    ticks = np.full([npoints], None)
-    affScan = np.logspace(affRange[0], affRange[1], npoints)
-    ticks[0], ticks[-1] = "1e" + str(affRange[0]), "1e" + str(affRange[1])
-
-    sampMeans = np.zeros(npoints)
-    ratioDF = pds.DataFrame(columns=affScan, index=affScan)
-
-    for ii, aff1 in enumerate(affScan):
-        for jj, aff2 in enumerate(np.flip(affScan)):
-            sampMeans[jj] = selectivity(pop1name, pop2name, L0, KxStar, [[1, 1]], [1], [[aff1, 1e4], [1e4, aff2]])
-            sampMeans[jj] = np.log(sampMeans[jj])
-        ratioDF[ratioDF.columns[ii]] = sampMeans
-
-    maxind = np.argmax(ratioDF.to_numpy())
-    maxx, maxy = maxind // npoints, maxind % npoints
-    ax.scatter(np.array([maxy]), np.array([maxx]), s=320, marker='*', color='green', zorder=3)
-
-    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, annot=False)
-    ax.set(xlabel="Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Rec 2 Affinity ($K_a$, in M$^{-1}$)")
-    ax.set_title(pop1name + " to " + pop2name + " bispecific log binding ratio", fontsize=8)
