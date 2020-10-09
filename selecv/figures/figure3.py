@@ -7,7 +7,6 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
 from .figureCommon import subplotLabel, getSetup, popCompare, heatmap
-from ..imports import getPopDict
 from ..model import polyfc
 
 ligConc = np.array([1e-8])
@@ -23,10 +22,9 @@ def makeFigure():
 
     valency(f, ax[0:3], 1e-9, 10 ** -10, [1.0], Kav=[[3e6, 0.01]], vmin=0.0, vmax=9)
     valencyScan = np.logspace(0.0, 4.0, base=2.0, num=10)
-    _, populationsdf = getPopDict()
-    popCompare(ax[3], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], populationsdf, "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
-    popCompare(ax[4], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
-    popCompare(ax[5], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
+    popCompare(ax[3], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
+    popCompare(ax[4], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
+    popCompare(ax[5], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
     vieqPlot(ax[6], 1e4, 8)
     vieqPlot(ax[7], 1e3, 8)
     ratePlot(ax[8])
