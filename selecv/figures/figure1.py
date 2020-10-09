@@ -87,3 +87,4 @@ def demoHeatmap(ax, vmin=1, vmax=4):
             verticalalignment='center', backgroundcolor='w')
     ax.text(10**2, 10**4, "3", size='large', color='red', weight='semibold', horizontalalignment='center',
             verticalalignment='center', backgroundcolor='w')
+    ax.set(xlabel="Receptor 1", ylabel="Receptor 2")

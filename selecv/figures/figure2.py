@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 from .figureCommon import subplotLabel, getSetup, popCompare, heatmap
 from ..imports import getPopDict
 
-ligConc = np.array([1e-8])
+ligConc = np.array([1e-9])
 KxStarP = 1e-10
 val = 1.0
 
@@ -20,12 +20,13 @@ def makeFigure():
     subplotLabel(ax, [0] + list(range(9, 13)))
     ax[13].axis("off")
     ax[14].axis("off")
-    affinity(f, ax[0:9], 1e-9, 10 ** -10, [1.0], ff=1, vmin=-1, vmax=5.5)
+    affinity(f, ax[0:9], 1e-9, 1e-10, [1.0], ff=1, vmin=-1, vmax=5.5)
 
-    popCompare(ax[9], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], populationsdf, "Aff", Kav=[5, 7])
+    popCompare(ax[9], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{hi}$"], populationsdf, "Aff", Kav=[5, 7])
     popCompare(ax[10], [r"$R_1^{med}R_2^{hi}$", r"$R_1^{hi}R_2^{med}$"], populationsdf, "Aff", Kav=[5, 7])
-    popCompare(ax[11], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Aff", Kav=[5, 7])
-    popCompare(ax[12], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{hi}$"], populationsdf, "Aff", Kav=[5, 7])
+    popCompare(ax[11], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], populationsdf, "Aff", Kav=[5, 7])
+    popCompare(ax[12], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Aff", Kav=[5, 7])
+
 
     return f
 
@@ -41,13 +42,19 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
                 cbar = True
             heatmap(axs[i2 * nAffPts + i1], L0, KxStar, [[aff1, aff2]], Comp, f=ff, Cplx=Cplx, vrange=(vmin, vmax), cbar=cbar)
             axs[i2 * nAffPts + i1].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
-            plt.plot([3.3, 3.7], [2, 2], color="w", marker=2)
-            plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-            plt.plot([3.3, 3.7], [3.6, 3.2], color="w", marker=2)
-            plt.text(3.4, 3.63, "c", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-            plt.plot([3.3, 3.8], [3.2, 3.7], color="w", marker=2)
-            plt.text(3.7, 3.85, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
             plt.plot([2, 3.7], [3.5, 2.2], color="w", marker=2)
-            plt.text(2.3, 3.5, "e", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
+            plt.text(2.3, 3.5, "b", size='large', color='white', weight='semibold', horizontalalignment='center',
+                     verticalalignment='center')
+            plt.plot([3.3, 3.7], [3.6, 3.2], color="w", marker=2)
+            plt.text(3.4, 3.63, "c", size='large', color='white', weight='semibold', horizontalalignment='center',
+                     verticalalignment='center')
+            plt.plot([3.3, 3.7], [2, 2], color="w", marker=2)
+            plt.text(3.5, 2.1, "d", size='large', color='white', weight='semibold', horizontalalignment='center',
+                     verticalalignment='center')
+            plt.plot([3.3, 3.8], [3.2, 3.7], color="w", marker=2)
+            plt.text(3.7, 3.85, "e", size='large', color='white', weight='semibold', horizontalalignment='center',
+                     verticalalignment='center')
+
+
             axs[i2 * nAffPts + i1].set_title(r"$K_{d1}$" + " = {:d}".format(int(1e9 * (1 / aff1))) + " nM, " + r"$K_{d2}$" + " = {:d}".format(int(1e9 * (1 / aff2))) + " nM")
     return fig

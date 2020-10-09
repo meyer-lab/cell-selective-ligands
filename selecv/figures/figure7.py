@@ -49,7 +49,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     npoints = 4
     ticks = np.full([npoints], None)
     affScan = np.logspace(affDL[0], affDL[1], npoints)
-    ticks[0], ticks[-1] = "1e" + str(affDL[0]), "1e" + str(affDL[1])
+    ticks[0], ticks[-1] = "1e" + str(9-affDL[0]), "1e" + str(9-affDL[1])
     bounds = (cBnd, (np.log(1e-15), np.log(1e-9)), (0.99, 1), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
     xnot = np.array([np.log(1e-9), np.log(1e-9), 1, 1, np.log(10e8), np.log(10e8)])
     ratioDF = pd.DataFrame(columns=affScan, index=affScan)
@@ -65,7 +65,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     ratioDF = ratioDF.divide(ratioDF.iloc[npoints - 1, 0])
     Cbar = True
     sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=4, cbar=Cbar, cbar_kws={'label': 'Selectivity Ratio w Antagonist'}, annot=True)
-    ax.set(xlabel="Antagonist Rec 1 Affinity ($K_a$, in M$^{-1}$)", ylabel="Antagonist Rec 2 Affinity ($K_a$, in M$^{-1}$)")
+    ax.set(xlabel="Antagonist Rec 1 Affinity ($K_d$, in nM)", ylabel="Antagonist Rec 2 Affinity ($K_d$, in nM)")
 
     if specPops:
         ax.set_title(targetPop[0] + " and Antagonist of Valency " + str(fDL) + " vs " + specPops[0], fontsize=8)
@@ -96,7 +96,7 @@ def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cb
         if jTherap:
             title = "Agonist Bound without Antagonist"
         else:
-            title = "Agonist Bound"
+            title = "Agonist Bound with Antagonist"
 
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
