@@ -49,7 +49,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     npoints = 4
     ticks = np.full([npoints], None)
     affScan = np.logspace(affDL[0], affDL[1], npoints)
-    ticks[0], ticks[-1] = "1e" + str(9-affDL[0]), "1e" + str(9-affDL[1])
+    ticks[0], ticks[-1] = "1e" + str(9 - affDL[0]), "1e" + str(9 - affDL[1])
     bounds = (cBnd, (np.log(1e-15), np.log(1e-9)), (0.99, 1), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
     xnot = np.array([np.log(1e-9), np.log(1e-9), 1, 1, np.log(10e8), np.log(10e8)])
     ratioDF = pd.DataFrame(columns=affScan, index=affScan)

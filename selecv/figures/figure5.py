@@ -35,7 +35,7 @@ def makeFigure():
 
     for i in range(6):
         ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
- 
+
     KxStarVary(ax[6], L0, Kav, ylim=(-9, 9), compare="tether")
     KxStarVary(ax[7], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
     ax[8].axis("off")
@@ -143,4 +143,3 @@ def KxStarVary(ax, L0, Kav, ylim=(-7, 5), fully=True, compare=None):
         else:
             ax.set_title("Log selectivity varies with $K_x^*$ for Lbound")
     ax.legend(loc='lower right', fancybox=True, framealpha=1)
-
