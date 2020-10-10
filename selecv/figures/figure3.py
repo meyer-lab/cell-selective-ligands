@@ -107,7 +107,7 @@ def vieqPlot(ax, recCount, val):
             ligboundDF = pds.DataFrame({"Degree of Binding": jj + 1, "# Ligand Bound": [bound], "$K_d$ nM": afflabs[ii]})
             vieqDF = vieqDF.append(ligboundDF)
     sns.stripplot(x="Degree of Binding", y="# Ligand Bound", hue="$K_d$ nM", data=vieqDF, ax=ax)
-    ax.set(yscale="log", ylim=(0.1, 1e4), title="Valency of Binding to " + str(int(recCount)) + " Receptors", ylabel="Ligand Bound", xlabel="Binding Valency")
+    ax.set(yscale="log", ylim=(0.1, 1e4), title="Valency of Binding to " + str(int(recCount)) + " Receptors", ylabel="Ligand Bound", xlabel="Receptors Bound")
 
 
 def ratePlot(ax):
