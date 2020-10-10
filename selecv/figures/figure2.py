@@ -27,7 +27,6 @@ def makeFigure():
     popCompare(ax[11], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], populationsdf, "Aff", Kav=[5, 7])
     popCompare(ax[12], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], populationsdf, "Aff", Kav=[5, 7])
 
-
     return f
 
 
@@ -54,7 +53,6 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
             plt.plot([3.3, 3.8], [3.2, 3.7], color="w", marker=2)
             plt.text(3.7, 3.85, "e", size='large', color='white', weight='semibold', horizontalalignment='center',
                      verticalalignment='center')
-
 
             axs[i2 * nAffPts + i1].set_title(r"$K_{d1}$" + " = {:d}".format(int(1e9 * (1 / aff1))) + " nM, " + r"$K_{d2}$" + " = {:d}".format(int(1e9 * (1 / aff2))) + " nM")
     return fig
