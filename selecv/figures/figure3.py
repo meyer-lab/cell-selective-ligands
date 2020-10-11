@@ -20,7 +20,7 @@ def makeFigure():
     ax, f = getSetup((9, 9), (3, 3))
     subplotLabel(ax, [0] + list(range(3, 9)))
 
-    valency(f, ax[0:3], 1e-9, 10 ** -10, [1.0], Kav=[[3e6, 0.01]], vmin=0.0, vmax=9)
+    valency(f, ax[0:3], 1e-9, 10 ** -10, [1.0], Kav=[[1e7, 0.01]], vmin=0.0, vmax=9)
     valencyScan = np.logspace(0.0, 4.0, base=2.0, num=10)
     popCompare(ax[3], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
     popCompare(ax[4], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
@@ -105,7 +105,7 @@ def vieqPlot(ax, recCount, val):
             ligboundDF = pds.DataFrame({"Degree of Binding": jj + 1, "# Ligand Bound": [bound], "$K_d$ nM": afflabs[ii]})
             vieqDF = vieqDF.append(ligboundDF)
     sns.stripplot(x="Degree of Binding", y="# Ligand Bound", hue="$K_d$ nM", data=vieqDF, ax=ax)
-    ax.set(yscale="log", ylim=(0.1, 1e4), title="Valency of Binding to " + str(int(recCount)) + " Receptors", ylabel="Ligand Bound", xlabel="Binding Valency")
+    ax.set(yscale="log", ylim=(0.1, 1e4), title="Valency of Binding to " + str(int(recCount)) + " Receptors", ylabel="Ligand Bound", xlabel="Receptors Bound")
 
 
 def ratePlot(ax):
@@ -123,7 +123,7 @@ def ratePlot(ax):
             for kk, recCount in enumerate(recScan):
                 rateHolder[kk] = KxStarPl * Ka * (f - 1) * recCount
             ax.plot(recScan, rateHolder, color=colors[jj], label="Valency = " + str(f), linestyle=lines[ii])
-    ax.set(xlim=(1, 10000), xlabel="Receptor Abundance", ylabel="Forward/Reverse Rate", xscale="log", ylim=(0.1, 5))  # ylim=(0, 1),
+    ax.set(xlim=(1, 100000), xlabel="Receptor Abundance", ylabel="Forward/Reverse Rate", xscale="log", ylim=(0.1, 5))  # ylim=(0, 1),
     handles, _ = ax.get_legend_handles_labels()
     handles = handles[0:4]
     line = Line2D([], [], color="black", marker="_", linestyle="None", markersize=6, label="$K_d$ nM = 10")
