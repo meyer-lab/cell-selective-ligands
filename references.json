@@ -1567,6 +1567,7 @@
     "issue": "6",
     "page": "2005-8",
     "container-title": "Oncology reports",
+    "container-title-short": "Oncol Rep",
     "ISSN": "1021-335X",
     "author": [
       {
@@ -1587,6 +1588,7 @@
     "issue": "1",
     "page": "77-88",
     "container-title": "Cancer cell",
+    "container-title-short": "Cancer Cell",
     "ISSN": "1878-3686",
     "issued": {
       "date-parts": [
@@ -1814,6 +1816,7 @@
     "issue": "5",
     "page": "826-38",
     "container-title": "Immunity",
+    "container-title-short": "Immunity",
     "ISSN": "1097-4180",
     "issued": {
       "date-parts": [
@@ -1913,6 +1916,7 @@
     "issue": "6",
     "page": "1184-1196.e24",
     "container-title": "Cell",
+    "container-title-short": "Cell",
     "ISSN": "1097-4172",
     "issued": {
       "date-parts": [
@@ -1972,6 +1976,7 @@
     "issue": "1",
     "page": "41-48.e5",
     "container-title": "Cell systems",
+    "container-title-short": "Cell Syst",
     "ISSN": "2405-4712",
     "issued": {
       "date-parts": [
@@ -2022,6 +2027,7 @@
     "volume": "154",
     "page": "70-76",
     "container-title": "Methods (San Diego, Calif.)",
+    "container-title-short": "Methods",
     "ISSN": "1095-9130",
     "issued": {
       "date-parts": [
@@ -2063,6 +2069,7 @@
     "volume": "95",
     "page": "1-14",
     "container-title": "Journal of autoimmunity",
+    "container-title-short": "J Autoimmun",
     "ISSN": "1095-9157",
     "issued": {
       "date-parts": [
@@ -2154,6 +2161,7 @@
     "issue": "3",
     "page": "489-503.e8",
     "container-title": "Cancer cell",
+    "container-title-short": "Cancer Cell",
     "ISSN": "1878-3686",
     "issued": {
       "date-parts": [
