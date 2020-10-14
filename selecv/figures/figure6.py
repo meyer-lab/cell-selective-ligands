@@ -130,6 +130,8 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
             optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [0.9, 0.1], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
         elif strat == "All":
             optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 15, [0.9, 0.1], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+        elif strat == "Valency":
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 15, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
         else:
             optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
         stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
