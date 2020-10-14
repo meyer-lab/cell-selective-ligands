@@ -175,7 +175,6 @@ def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
         ax.grid()
 
 
-
 def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[]):
     ax_new = ax.twinx().twiny()
     ax_new.set_xscale("linear")
