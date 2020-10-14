@@ -11,7 +11,7 @@ import seaborn as sns
 import pandas as pds
 import numpy as np
 import svgutils.transform as st
-from ..sampling import sampleSpec
+from ..sampling import sampleSpec, cellPopulations
 from ..model import polyc, polyfc
 
 rcParams['pcolor.shading'] = 'auto'
@@ -100,22 +100,18 @@ def getFuncDict():
     return FuncDict
 
 
-def popCompare(ax, popList, df, scanKey, Kav, L0=1e-9, KxStar=10 ** -10.0, f=1):
+def popCompare(ax, popList, scanKey, Kav, L0=1e-9, KxStar=10 ** -10.0, f=1):
     """Takes in populations and parameters to scan over and creates line plot"""
     funcDict = getFuncDict()
-    recMeans, Covs = [], []
     Title = popList[0] + " to " + popList[1]
     for ii, pop in enumerate(popList):
-        dfPop = df[df["Population"] == pop]
-        recMeans.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
-        Covs.append(dfPop.Covariance_Matrix.to_numpy()[0])
         if ii >= 2:
             Title += "/" + pop
     Title = Title + " binding ratio"
-    funcDict[scanKey](ax, recMeans, Covs, Kav, L0, KxStar, f, Title)
+    funcDict[scanKey](ax, popList, Kav, L0, KxStar, f, Title)
 
 
-def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
+def affHeatMap(ax, names, Kav, L0, KxStar, f, Title, Cbar=True):
     "Makes a heatmap comparing binding ratios of populations at a range of binding affinities"
     npoints = 3
     ticks = np.full([npoints], None)
@@ -127,7 +123,9 @@ def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
 
     for ii, aff1 in enumerate(affScan):
         for jj, aff2 in enumerate(np.flip(affScan)):
-            sampMeans[jj] = polyfc(L0, KxStar, f, np.power(10, recMeans[0]), [1], np.array([[aff1, aff2]]))[0] / polyfc(L0, KxStar, f, np.power(10, recMeans[1]), [1], np.array([[aff1, aff2]]))[0]
+            recMeans0 = np.array([cellPopulations[names[0]][0], cellPopulations[names[0]][1]])
+            recMeans1 = np.array([cellPopulations[names[1]][0], cellPopulations[names[1]][1]])
+            sampMeans[jj] = polyfc(L0, KxStar, f, np.power(10, recMeans0), [1], np.array([[aff1, aff2]]))[0] / polyfc(L0, KxStar, f, np.power(10, recMeans1), [1], np.array([[aff1, aff2]]))[0]
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
     if ratioDF.max().max() < 15:
@@ -138,7 +136,7 @@ def affHeatMap(ax, recMeans, Covs, Kav, L0, KxStar, f, Title, Cbar=True):
     ax.set_title(Title, fontsize=8)
 
 
-def ValencyPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
+def ValencyPlot(ax, names, Kav, L0, KxStar, f, Title):
     "Makes a line chart comparing binding ratios of populations at multiple valencies"
     assert len(f) > 1
     sampMeans, underDev, overDev = np.zeros_like(f), np.zeros_like(f), np.zeros_like(f)
@@ -147,9 +145,7 @@ def ValencyPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
 
     for ii, aff in enumerate(Kav):
         for jj, val in enumerate(f):
-            underDev[jj], sampMeans[jj], overDev[jj] = sampleSpec(
-                L0 / val, KxStar, val, [recMeans[0], recMeans[1]], [Covs[0], Covs[1]], np.array([1]), np.array([[aff, 0.01]])
-            )
+            underDev[jj], sampMeans[jj], overDev[jj] = sampleSpec(L0 / val, KxStar, val, names, np.array([1]), np.array([[aff, 0.01]]))
 
         ax.plot(f, sampMeans, color=colors[ii], label=labels[ii])
         ax.fill_between(f, underDev, overDev, color=colors[ii], alpha=0.1)
@@ -158,39 +154,26 @@ def ValencyPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
     ax.legend(prop={"size": 6})
 
 
-def MixPlot(ax, recMeans, Covs, Kav, L0, KxStar, f, Title):
+def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
     "Makes a line chart comparing binding ratios of populations at multiple mixture compositions"
     npoints = 51
     sampMeans, underDev, overDev = np.zeros(npoints), np.zeros(npoints), np.zeros(npoints)
     mixRatio = np.linspace(0, 1, npoints)
 
     for jj, mixture1 in enumerate(mixRatio):
-        underDev[jj], sampMeans[jj], overDev[jj] = sampleSpec(
-            L0, KxStar, f, recMeans, Covs, np.array([mixture1, 1 - mixture1]), np.array([Kav[0], Kav[1]])
-        )
+        underDev[jj], sampMeans[jj], overDev[jj] = sampleSpec(L0, KxStar, f, names, np.array([mixture1, 1 - mixture1]), np.array([Kav[0], Kav[1]]))
 
     ax.plot(mixRatio, sampMeans, color="royalblue")
     ax.fill_between(mixRatio, underDev, overDev, color="royalblue", alpha=0.1)
-    if len(Covs) == 2:
+    if len(names) == 2:
         ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 12), xlim=(0, 1))  # , title=Title + " binding ratio")
         ax.set_title(Title + " ratio", fontsize=7)
         ax.grid()
     else:
-        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 3), xlim=(0, 1))
+        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 4), xlim=(0, 1))
         ax.set_title(Title, fontsize=7)
         ax.grid()
 
-
-cellPopulations = {
-    r"$R_1^{lo}R_2^{lo}$": [2, 2, 0.5, 0.25, 45],
-    r"$R_1^{med}R_2^{lo}$": [3, 2, 0.5, 0.25, 0],
-    r"$R_1^{hi}R_2^{lo}$": [4, 2, 0.5, 0.25, 0],
-    r"$R_1^{lo}R_2^{hi}$": [2, 4, 0.3, 0.6, 0],
-    r"$R_1^{med}R_2^{hi}$": [3.1, 3.9, 0.5, 0.25, 45],
-    r"$R_1^{hi}R_2^{med}$": [3.9, 3.1, 0.5, 0.25, 45],
-    r"$R_1^{hi}R_2^{hi}$": [4, 4, 0.5, 0.25, 45],
-    r"$R_1^{med}R_2^{med}$": [3.1, 3.1, 0.25, 1, 45],
-}
 
 
 def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[]):
