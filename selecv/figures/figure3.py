@@ -45,8 +45,8 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
         plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
         plt.plot([3.3, 3.8], [3.2, 3.7], color="w", marker=2)
         plt.text(3.65, 3.8, "c", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        plt.plot([3.1, 3.1], [3.4, 3.7], color="w", marker=1, markersize=4)
-        plt.text(3.25, 3.55, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        plt.plot([3.4, 3.6], [3, 3], color="w", marker=1, markersize=4)
+        plt.text(3.6, 2.8, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
         axs[i].set_title("Valency = {}".format(v))
 
     return fig
