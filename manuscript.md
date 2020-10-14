@@ -4,7 +4,7 @@ author-meta:
 - Zhixin Cyrillus Tan
 - Aaron S. Meyer
 bibliography: []
-date-meta: '2020-10-11'
+date-meta: '2020-10-13'
 header-includes: '<!--
 
   Manubot generated metadata rendered from header-includes-template.html.
@@ -23,9 +23,9 @@ header-includes: '<!--
 
   <meta property="twitter:title" content="A quantitative view of strategies to engineer cell-selective ligand binding" />
 
-  <meta name="dc.date" content="2020-10-11" />
+  <meta name="dc.date" content="2020-10-13" />
 
-  <meta name="citation_publication_date" content="2020-10-11" />
+  <meta name="citation_publication_date" content="2020-10-13" />
 
   <meta name="dc.language" content="en-US" />
 
@@ -77,11 +77,11 @@ header-includes: '<!--
 
   <link rel="alternate" type="application/pdf" href="https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf" />
 
-  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/6f259dfa69bfbe32cd0b94f65250c6ba063277ef/" />
+  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/0259e00a800489c63214a828a0af1bbbfdae921d/" />
 
-  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/6f259dfa69bfbe32cd0b94f65250c6ba063277ef/" />
+  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/0259e00a800489c63214a828a0af1bbbfdae921d/" />
 
-  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/6f259dfa69bfbe32cd0b94f65250c6ba063277ef/manuscript.pdf" />
+  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/0259e00a800489c63214a828a0af1bbbfdae921d/manuscript.pdf" />
 
   <meta property="og:type" content="article" />
 
@@ -110,7 +110,7 @@ title: A quantitative view of strategies to engineer cell-selective ligand bindi
 
 <small><em>
 This manuscript
-was automatically generated on October 11, 2020.
+was automatically generated on October 13, 2020.
 </em></small>
 
 ## Authors
@@ -216,9 +216,9 @@ While most therapies rely on the action of a single molecular species, mixtures 
 
 To evaluate the contribution of mixtures, we evaluated model-predicted binding while varying the composition between two ligands with either $R_1$ or $R_2$-preferred binding, respectively (Fig. {@fig:mixture}a). The trend that arises is very similar to an additive combination of the single ligand cases. This pattern highlights a key limitation of using mixtures for selectivity: selectivity between two populations varies monotonically with the composition, so any mixture combination is no better than using the more specific ligand entirely (Fig. {@fig:mixture}b).
 
-While mixture engineering fails to enhance binding selectivity between two cell populations, it is potentially beneficial when considering two or more off-target cell populations. More specifically, when a target population expresses two target receptors, but off-target populations express each receptor individually in high amounts, drug mixtures can offer enhanced selectivity. For example, when maximizing targeting to $R_1^{hi}R_2^{hi}$ over $R_1^{hi}R_2^{lo}$ and $R_1^{lo}R_2^{hi}$, which individually express high levels of the receptors found on the $R_1^{hi}R_2^{hi}$, we show that a uniform mixture of ligands with high affinity for receptor 1 and 2 provides a modest improvement in targeting selectivity (Fig. {@fig:mixture}c). We also demonstrate the utility of mixture engineering in cell population combinations where many off-target populations are considered (Fig. {@fig:mixture}d). However, even in these cases, the magnitude of selectivity enhancement is modest. Finally, although we only consider the amount of binding, ligands can have non-overlapping signaling effects even with identical amounts of binding. In these cases, the effect of combinations can be distinct from either individual ligand [@pmid:28886385; @pmid:29960887].
+While mixture engineering fails to enhance binding selectivity between two cell populations, it is potentially beneficial when considering two or more off-target cell populations. More specifically, when a target population expresses two target receptors, but off-target populations express each receptor individually in high amounts, drug mixtures can offer enhanced selectivity. For example, when maximizing targeting to $R_1^{hi}R_2^{hi}$ over $R_1^{med}R_2^{hi}$ and $R_1^{hi}R_2^{med}$, which individually express high levels of the receptors found on the $R_1^{hi}R_2^{hi}$, we show that a uniform mixture of ligands with high affinity for receptor 1 and 2 provides a modest improvement in targeting selectivity (Fig. {@fig:mixture}c). However, even in these cases, the magnitude of selectivity enhancement is modest. Finally, although we only consider the amount of binding, ligands can have non-overlapping signaling effects even with identical amounts of binding. In these cases, the effect of combinations can be distinct from either individual ligand [@pmid:28886385; @pmid:29960887].
 
-![**Ligand mixtures with non-overlapping responses can enhance selectivity.** a) Heat/contour maps of multivalent ligands bound to cell populations given their expression profiles of two receptors. A mixture of monovalent ligands is used, with ligand 1 binding to receptor 1 and 2 with dissociation constants of $1 \mathrm{\mu M}$ and $10 \mathrm{\mu M}$ respectively, and ligand 2 binding to receptors 1 and 2 with dissociation constants of $10 \mathrm{\mu M}$ and $1 \mathrm{\mu M}$ respectively. Ligand concentration $L_0=1 \mathrm{nM}$; crosslinking constant $K_x^*=10^{-10}$. b-e) Ratio of ligand bound to cell populations exposed to monovalent mixtures of ligand one and 2. For b-d, the ratio of the target population to the single off target population with the greatest ligand bound is plotted. b) Ligand bound ratio of $R_1^{hi}R_2^{lo}$ to $R_1^{med}R_2^{lo}$, c) $R_1^{hi}R_2^{hi}$ to $R_1^{hi}R_2^{lo}$ and $R_1^{lo}R_2^{hi}$, d) $R_1^{med}R_2^{med}$ to $R_1^{med}R_2^{hi}$ and $R_1^{hi}R_2^{med}$.](figure4.svg){#fig:mixture}
+![**Ligand mixtures with non-overlapping responses can enhance selectivity.** a) Heat/contour maps of multivalent ligands bound to cell populations given their expression profiles of two receptors. A mixture of monovalent ligands is used, with ligand 1 binding to receptor 1 and 2 with dissociation constants of $1 \mathrm{\mu M}$ and $10 \mathrm{\mu M}$ respectively, and ligand 2 binding to receptors 1 and 2 with dissociation constants of $10 \mathrm{\mu M}$ and $1 \mathrm{\mu M}$ respectively. Ligand concentration $L_0=1 \mathrm{nM}$; crosslinking constant $K_x^*=10^{-10}$. b-e) Ratio of ligand bound to cell populations exposed to monovalent mixtures of ligand one and 2. For b-d, the ratio of the target population to the single off target population with the greatest ligand bound is plotted. b) Ligand bound ratio of $R_1^{hi}R_2^{lo}$ to $R_1^{med}R_2^{lo}$, c) $R_1^{hi}R_2^{hi}$ to $R_1^{med}R_2^{hi}$ and $R_1^{hi}R_2^{med}$.](figure4.svg){#fig:mixture}
 
 ### Heterovalent Bispecific Ligands Exhibit Unique Charateristics When Activated Fully Bound
 
