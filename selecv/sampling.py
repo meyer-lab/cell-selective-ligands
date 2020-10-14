@@ -50,7 +50,7 @@ def sampleSpec(L0, KxStar, f, names, LigC, Kav):
     quants = np.zeros([len(names) - 1, len(quantsNum)**2])
 
     for ii in range(1, len(names)):
-        quants[ii-1, :] = np.reshape(quantsNum.reshape(-1, 1) / sigmaPop(names[ii], L0, KxStar, f, LigC, Kav), -1)
+        quants[ii - 1, :] = np.reshape(quantsNum.reshape(-1, 1) / sigmaPop(names[ii], L0, KxStar, f, LigC, Kav), -1)
 
     quants = np.min(quants, axis=0)
     return np.quantile(quants, [0.3, 0.5, 0.7])
@@ -66,8 +66,7 @@ def sampleSpecC(L0, KxStar, names, LigCplx, Ctheta, Kav):
     quants = np.zeros([len(names) - 1, len(quantsNum)])
 
     for ii in range(1, len(names)):
-        quants[ii-1, :] = np.reshape(quantsNum.reshape(-1, 1) / sigmaPopC(names[ii], L0, KxStar, LigCplx, Ctheta, Kav), -1)
+        quants[ii - 1, :] = np.reshape(quantsNum.reshape(-1, 1) / sigmaPopC(names[ii], L0, KxStar, LigCplx, Ctheta, Kav), -1)
 
     quants = np.min(quants, axis=0)
     return np.quantile(quants, [0.3, 0.5, 0.7])
-
