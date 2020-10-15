@@ -11,13 +11,13 @@ nsample = 200
 
 
 cellPopulations = {
-    r"$R_1^{lo}R_2^{lo}$": [2, 2, 0.5, 0.25, 45],
+    r"$R_1^{lo}R_2^{lo}$": [2, 2, 0.75, 0.25, 45],
     r"$R_1^{med}R_2^{lo}$": [3, 2, 0.5, 0.25, 0],
     r"$R_1^{hi}R_2^{lo}$": [4, 2, 0.5, 0.25, 0],
-    r"$R_1^{lo}R_2^{hi}$": [2, 4, 0.3, 0.6, 0],
-    r"$R_1^{med}R_2^{hi}$": [3.0, 3.9, 0.5, 0.25, 45],
-    r"$R_1^{hi}R_2^{med}$": [3.9, 3.0, 0.5, 0.25, 45],
-    r"$R_1^{hi}R_2^{hi}$": [4, 4, 0.5, 0.25, 45],
+    r"$R_1^{lo}R_2^{hi}$": [2, 4, 0.25, 0.5, 0],
+    r"$R_1^{med}R_2^{hi}$": [3.0, 3.9, 0.75, 0.25, 45],
+    r"$R_1^{hi}R_2^{med}$": [3.9, 3.0, 0.75, 0.25, 45],
+    r"$R_1^{hi}R_2^{hi}$": [4, 4, 0.75, 0.25, 45],
     r"$R_1^{med}R_2^{med}$": [3.1, 3.1, 0.25, 1, 45],
 }
 
@@ -28,7 +28,7 @@ def sigmapts(name, h=None):
     l = cellPopulations[name]
     x = np.array([l[0], l[1]])
     rot = np.array([[np.cos(np.deg2rad(l[4])), -np.sin(np.deg2rad(l[4]))], [np.sin(np.deg2rad(l[4])), np.cos(np.deg2rad(l[4]))]])
-    srlamb = np.diag([l[2], l[3]])  # np.diag(np.sqrt([l[2], l[3]]))
+    srlamb = np.diag([l[2], l[3]])
     srcov = rot @ srlamb @ np.transpose(rot)
     return np.power(10, [x, x + h * srcov[:, 0], x - h * srcov[:, 0], x + h * srcov[:, 1], x - h * srcov[:, 1]])
 
@@ -48,12 +48,17 @@ def sampleSpec(L0, KxStar, f, names, LigC, Kav):
     """
     quantsNum = sigmaPop(names[0], L0, KxStar, f, LigC, Kav)
     quants = np.zeros([len(names) - 1, len(quantsNum)**2])
+    qmean = np.zeros([len(names) - 1])
 
     for ii in range(1, len(names)):
-        quants[ii - 1, :] = np.reshape(quantsNum.reshape(-1, 1) / sigmaPop(names[ii], L0, KxStar, f, LigC, Kav), -1)
+        calc = sigmaPop(names[ii], L0, KxStar, f, LigC, Kav)
+        quants[ii - 1, :] = np.reshape(quantsNum.reshape(-1, 1) / calc, -1)
+        qmean[ii - 1] = quantsNum[0] / calc[0]
 
     quants = np.min(quants, axis=0)
-    return np.quantile(quants, [0.3, 0.5, 0.7])
+    res = np.quantile(quants, [0.3, 0.5, 0.7])
+    res[1] = np.min(qmean)
+    return res
 
 
 def sampleSpecC(L0, KxStar, names, LigCplx, Ctheta, Kav):
@@ -64,9 +69,14 @@ def sampleSpecC(L0, KxStar, names, LigCplx, Ctheta, Kav):
 
     quantsNum = sigmaPopC(names[0], L0, KxStar, LigCplx, Ctheta, Kav)
     quants = np.zeros([len(names) - 1, len(quantsNum)])
+    qmean = np.zeros([len(names) - 1])
 
     for ii in range(1, len(names)):
-        quants[ii - 1, :] = np.reshape(quantsNum.reshape(-1, 1) / sigmaPopC(names[ii], L0, KxStar, LigCplx, Ctheta, Kav), -1)
+        calc = sigmaPopC(names[ii], L0, KxStar, LigCplx, Ctheta, Kav)
+        quants[ii - 1, :] = np.reshape(quantsNum.reshape(-1, 1) / calc, -1)
+        qmean[ii - 1] = quantsNum[0] / calc[0]
 
     quants = np.min(quants, axis=0)
-    return np.quantile(quants, [0.3, 0.5, 0.7])
+    res = np.quantile(quants, [0.3, 0.5, 0.7])
+    res[1] = np.mean(qmean)
+    return res
