@@ -150,7 +150,7 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
 
     sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax[0])
     ax[0].set(title="Optimization of " + targetPop[0])
-    ax[0].set_xticklabels(ax.get_xticklabels(), rotation=25, horizontalalignment='right')
+    ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=25, horizontalalignment='right')
 
 
 optBnds = [(np.log(1e-11), np.log(1e-8)),  # log L0
