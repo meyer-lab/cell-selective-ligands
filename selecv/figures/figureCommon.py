@@ -255,10 +255,10 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
     ax.set_yscale("log")
     ax.set_title(title)
     plt.clabel(contours, inline=True, fontsize=6)
-    ax.pcolor(X, Y, Z, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
+    ax.pcolor(X, Y, Z, cmap='summer', vmin=vrange[0], vmax=vrange[1])
     norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
     if cbar:
-        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='summer'), ax=ax)
         cbar.set_label("Relative Ligand Bound")
     if layover:
         overlapCellPopulation(ax, abundRange, highlight=highlight)

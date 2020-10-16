@@ -24,7 +24,7 @@ def makeFigure():
     vrange = (0, 3)
     targetPop = [r"$R_1^{hi}R_2^{hi}$"]
     targMeans, offTargMeans = genOnevsAll(targetPop)
-    selecDF = pd.DataFrame(columns=["Xnot", "Affinity", "Mixture", "Valency", "All"])
+    selecDF = pd.DataFrame(columns=["Xo", "Affinity", "Mixture", "Valency", "All"])
     overlay = False
 
     optParamsFrame, strats = optimizeDesignAnim(targetPop)
@@ -34,7 +34,7 @@ def makeFigure():
     XnotRow[4::] = np.log(XnotRow[4::])
     XnotSelec = 7 / minSelecFunc(XnotRow, targMeans, offTargMeans)
 
-    selecDF = pd.DataFrame({"Strategy": ["Xnot", "Affinity", "Mixture", "Valency", "All"], "Selectivity": np.tile(XnotSelec, [5])})
+    selecDF = pd.DataFrame({"Strategy": ["Xo", "Affinity", "Mixture", "Valency", "All"], "Selectivity": np.tile(XnotSelec, [5])})
 
     for i in range(0, optParamsFrame.shape[0]):
         optParamsR = optParamsFrame[i, :]
