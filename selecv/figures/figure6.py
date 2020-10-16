@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from scipy.optimize import minimize
-from .figureCommon import subplotLabel, getSetup, heatmap, heatmapNorm
+from .figureCommon import subplotLabel, getSetup, heatmapNorm
 from ..imports import getPopDict
 from ..sampling import sigmaPop
 from ..model import polyfc
