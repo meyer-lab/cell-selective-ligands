@@ -131,3 +131,4 @@ def ratePlot(ax):
     handles.append(line)
     handles.append(point)
     ax.legend(handles=handles, prop={"size": 6})
+    ax.set_yscale("log")
