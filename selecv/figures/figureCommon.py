@@ -170,7 +170,7 @@ def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
         ax.set_title(Title + " ratio", fontsize=7)
         ax.grid()
     else:
-        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 3), xlim=(0, 1))
+        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 5), xlim=(0, 1))
         ax.set_title(Title, fontsize=7)
         ax.grid()
 
