@@ -204,7 +204,7 @@ def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[]):
                     color='white')
 
 
-def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title="", cbar=False, layover=True, fully=False):
+def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title="", cbar=False, layover=True, fully=False, highlight=[]):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
     abundRange = (1.5, 4.5)
@@ -232,7 +232,7 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
         cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
         cbar.set_label("Log Ligand Bound")
     if layover:
-        overlapCellPopulation(ax, abundRange)
+        overlapCellPopulation(ax, abundRange, highlight=highlight)
 
 
 def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=True, highlight=[]):

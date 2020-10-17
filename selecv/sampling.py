@@ -54,6 +54,7 @@ def sampleSpec(L0, KxStar, f, names, LigC, Kav):
         calc = sigmaPop(names[ii], L0, KxStar, f, LigC, Kav)
         quants[ii - 1, :] = np.reshape(quantsNum.reshape(-1, 1) / calc, -1)
         qmean[ii - 1] = quantsNum[0] / calc[0]
+        quants[ii - 1, :] = np.sort(quants[ii - 1])
 
     quants = np.min(quants, axis=0)
     res = np.quantile(quants, [0.3, 0.5, 0.7])
@@ -75,6 +76,7 @@ def sampleSpecC(L0, KxStar, names, LigCplx, Ctheta, Kav):
         calc = sigmaPopC(names[ii], L0, KxStar, LigCplx, Ctheta, Kav)
         quants[ii - 1, :] = np.reshape(quantsNum.reshape(-1, 1) / calc, -1)
         qmean[ii - 1] = quantsNum[0] / calc[0]
+        quants[ii - 1, :] = np.sort(quants[ii - 1])
 
     quants = np.min(quants, axis=0)
     res = np.quantile(quants, [0.3, 0.5, 0.7])
