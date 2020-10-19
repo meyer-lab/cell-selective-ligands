@@ -57,8 +57,9 @@ def sampleSpec(L0, KxStar, f, names, LigC, Kav):
         quants[ii - 1, :] = np.sort(quants[ii - 1])
 
     quants = np.min(quants, axis=0)
-    res = np.quantile(quants, [0.3, 0.5, 0.7])
-    res[1] = np.min(qmean)
+    mean = np.mean(np.log(quants))
+    std = np.std(np.log(quants))
+    res = np.array([np.exp(mean-std*0.5), np.min(qmean), np.exp(mean+std*0.5)])
     return res
 
 
@@ -79,6 +80,7 @@ def sampleSpecC(L0, KxStar, names, LigCplx, Ctheta, Kav):
         quants[ii - 1, :] = np.sort(quants[ii - 1])
 
     quants = np.min(quants, axis=0)
-    res = np.quantile(quants, [0.3, 0.5, 0.7])
-    res[1] = np.mean(qmean)
+    mean = np.mean(np.log(quants))
+    std = np.std(np.log(quants))
+    res = np.array([np.exp(mean - std * 0.5), np.min(qmean), np.exp(mean + std * 0.5)])
     return res
