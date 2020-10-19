@@ -38,7 +38,7 @@ def sigmaPop(name, L0, KxStar, f, LigC, Kav, quantity=0, h=None):
 
 
 def sigmaPopC(name, L0, KxStar, Cplx, Ctheta, Kav, quantity=0, h=None):
-    return np.array([polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav)[quantity] for Rtot in sigmapts(name, h=h)]).reshape(-1)
+    return np.array([polyc(L0, KxStar, Rtot, Cplx, Ctheta, Kav)[quantity][1] for Rtot in sigmapts(name, h=h)]).reshape(-1)
 
 
 def sampleSpec(L0, KxStar, f, names, LigC, Kav):
