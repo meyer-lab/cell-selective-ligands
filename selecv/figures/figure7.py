@@ -18,7 +18,7 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((18, 4), (1, 4))
     subplotLabel(ax)
-    affDLsub = np.array([0, 10])
+    affDLsub = np.array([0, 12])
 
     fDLsub = 4
     optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{lo}R_2^{hi}$"], fDLsub, affDLsub)

@@ -111,7 +111,7 @@ def vieqPlot(ax, recCount, val):
 def ratePlot(ax):
     "Plots rate of bivalent binding over dissocation rate for monovalently bound complexes"
     # kxstar * Ka, * val-1 * rec-1
-    recScan = np.logspace(0, 4, 100)
+    recScan = np.logspace(0, 6, 100)
     val = np.arange(1, 5)
     affinities = [1e8, 1e6]
     KxStarPl = 10 ** -10.0
@@ -123,7 +123,7 @@ def ratePlot(ax):
             for kk, recCount in enumerate(recScan):
                 rateHolder[kk] = KxStarPl * Ka * (f - 1) * recCount
             ax.plot(recScan, rateHolder, color=colors[jj], label="Valency = " + str(f), linestyle=lines[ii])
-    ax.set(xlim=(1, 100000), xlabel="Receptor Abundance", ylabel="Forward/Reverse Rate", xscale="log", ylim=(0.1, 5))  # ylim=(0, 1),
+    ax.set(xlim=(1, 1000000), xlabel="Receptor Abundance", ylabel="Forward/Reverse Rate", xscale="log", ylim=(0.1, 5))  # ylim=(0, 1),
     handles, _ = ax.get_legend_handles_labels()
     handles = handles[0:4]
     line = Line2D([], [], color="black", marker="_", linestyle="None", markersize=6, label="$K_d$ nM = 10")
@@ -132,4 +132,4 @@ def ratePlot(ax):
     handles.append(point)
     ax.legend(handles=handles, prop={"size": 6})
     ax.set_yscale("log")
-    ax.set_ylim(1e-1, 1e2)
+    ax.set_ylim(1e-1, 1e3)
