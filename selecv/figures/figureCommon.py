@@ -100,7 +100,7 @@ def getFuncDict():
     return FuncDict
 
 
-def popCompare(ax, popList, scanKey, Kav, L0=1e-9, KxStar=10 ** -10.0, f=1):
+def popCompare(ax, popList, scanKey, Kav, L0=1e-9, KxStar=1e-10, f=1):
     """Takes in populations and parameters to scan over and creates line plot"""
     funcDict = getFuncDict()
     Title = popList[0] + " to " + popList[1]
