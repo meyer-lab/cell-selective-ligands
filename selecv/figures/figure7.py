@@ -18,21 +18,21 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((18, 4), (1, 4))
     subplotLabel(ax)
-    affDLsub = np.array([0, 12])
+    affDLsub = np.array([0, 10])
 
     fDLsub = 4
-    optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{lo}R_2^{hi}$"], fDLsub, affDLsub)
+    optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{med}R_2^{lo}$"], fDLsub, affDLsub, specPops=[r"$R_1^{hi}R_2^{lo}$"])
     heatmapDL(ax[1], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-6, 3), cbar=True, highlight=[r"$R_1^{lo}R_2^{hi}$"])
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-6, 3), cbar=True, highlight=[r"$R_1^{med}R_2^{lo}$"])
     heatmapDL(ax[2], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=False, dead=True, highlight=[r"$R_1^{lo}R_2^{hi}$"])
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=False, dead=True, highlight=[r"$R_1^{med}R_2^{lo}$"])
     heatmapDL(ax[3], np.exp(optParams[0]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=True, dead=False, jTherap=True, highlight=[r"$R_1^{lo}R_2^{hi}$"])
+              [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=True, dead=False, jTherap=True, highlight=[r"$R_1^{med}R_2^{lo}$"])
 
     return f
 
 
-cBnd = (np.log(2e-9), np.log(2.01e-9))
+cBnd = (np.log(1e-9), np.log(1.01e-9))
 
 
 def minSelecFuncDL(x, targPop, offTpops, fDL, affDL):
@@ -47,13 +47,17 @@ def minSelecFuncDL(x, targPop, offTpops, fDL, affDL):
 
 def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another with inclusion of dead ligand"
-    targPops, offTargPops = genOnevsAll(targetPop)
+    if not specPops:
+        targPops, offTargPops = genOnevsAll(targetPop)
+    else:
+        targPops, offTargPops = targetPop, specPops
+
     npoints = 4
     ticks = np.full([npoints], None)
     affScan = np.logspace(affDL[0], affDL[1], npoints)
     ticks[0], ticks[-1] = "1e" + str(9 - affDL[0]), "1e" + str(9 - affDL[1])
     bounds = (cBnd, (np.log(1e-15), np.log(1e-9)), (0.99, 1), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
-    xnot = np.array([np.log(2e-9), np.log(1e-9), 1, 1, np.log(10e8), np.log(10e8)])
+    xnot = np.array([np.log(1e-9), np.log(1e-9), 1, 1, np.log(10e8), np.log(10e8)])
     ratioDF = pd.DataFrame(columns=affScan, index=affScan)
 
     for ii, aff1 in enumerate(affScan):
@@ -61,7 +65,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
         for jj, aff2 in enumerate(np.flip(affScan)):
             optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), args=(targPops, offTargPops, fDL, [aff1, aff2]))
             assert optimized.success
-            sampMeans[jj] = 7 / optimized.fun
+            sampMeans[jj] = len(offTargPops) / optimized.fun
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
     Cbar = True
