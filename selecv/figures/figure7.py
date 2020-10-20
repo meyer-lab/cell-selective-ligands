@@ -10,6 +10,7 @@ from scipy.optimize import minimize
 from .figureCommon import subplotLabel, getSetup, cellPopulations, overlapCellPopulation
 from .figure6 import genOnevsAll, genPopMeans
 from ..model import polyc
+from ..sampling import sigmaPopC
 
 
 def makeFigure():
@@ -34,18 +35,23 @@ def makeFigure():
 cBnd = (np.log(1e-9), np.log(1.01e-9))
 
 
-def minSelecFuncDL(x, tMeans, offTMeans, fDL, affDL):
+def minSelecFuncDL(x, targPop, offTpops, fDL, affDL):
     """ Provides the function to be minimized to get optimal selectivity with addition of dead ligand. """
-    offTargetBound = 0
-    targetBound = polyc(np.exp(x[0]), np.exp(x[1]), [10**tMeans[0][0], 10**tMeans[0][1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]]))[0][1]
-    for means in offTMeans:
-        offTargetBound += polyc(np.exp(x[0]), np.exp(x[1]), [10**means[0], 10**means[1]], [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]]))[0][1]
+    offTargetBound, targetBound = 0, 0
+    for tPop in targPop:
+        targetBound += sum(sigmaPopC(tPop, np.exp(x[0]), np.exp(x[1]), [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]]), quantity=0))
+    for offTPop in offTpops:
+        offTargetBound += sum(sigmaPopC(offTPop, np.exp(x[0]), np.exp(x[1]), [[fDL, 0], [0, x[2]]], [0.5, 0.5], np.array([[affDL[0], affDL[1]], [np.exp(x[4]), np.exp(x[5])]]), quantity=0))
     return offTargetBound / targetBound
 
 
 def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another with inclusion of dead ligand"
-    targMeans, offTargMeans = genOnevsAll(targetPop, specPops, means=True)
+    if not specPops:
+        targPops, offTargPops = genOnevsAll(targetPop)
+    else:
+        targPops, offTargPops = targetPop, specPops
+
     npoints = 4
     ticks = np.full([npoints], None)
     affScan = np.logspace(affDL[0], affDL[1], npoints)
@@ -57,12 +63,11 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     for ii, aff1 in enumerate(affScan):
         sampMeans = np.zeros(npoints)
         for jj, aff2 in enumerate(np.flip(affScan)):
-            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), args=(targMeans, offTargMeans, fDL, [aff1, aff2]))
+            optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), args=(targPops, offTargPops, fDL, [aff1, aff2]))
             assert optimized.success
-            sampMeans[jj] = 7 / optimized.fun
+            sampMeans[jj] = len(offTargPops) / optimized.fun
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
-    ratioDF = ratioDF.divide(ratioDF.iloc[npoints - 1, 0])
     Cbar = True
     sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=4, cbar=Cbar, cbar_kws={'label': 'Selectivity Ratio w Antagonist'}, annot=True)
     ax.set(xlabel="Antagonist Rec 1 Affinity ($K_d$, in nM)", ylabel="Antagonist Rec 2 Affinity ($K_d$, in nM)")
@@ -76,7 +81,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     (i, j) = np.unravel_index(maxindices.argmax(), maxindices.shape)
     maxaff1 = affScan[j]
     maxaff2 = affScan[npoints - 1 - i]
-    optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), args=(targMeans, offTargMeans, fDL, [maxaff1, maxaff2]))
+    optimized = minimize(minSelecFuncDL, xnot, bounds=np.array(bounds), args=(targPops, offTargPops, fDL, [maxaff1, maxaff2]))
     assert optimized.success
 
     return optimized.x, np.array([maxaff1, maxaff2])
