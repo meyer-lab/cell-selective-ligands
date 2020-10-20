@@ -59,7 +59,7 @@ def sampleSpec(L0, KxStar, f, names, LigC, Kav):
     quants = np.min(quants, axis=0)
     mean = np.mean(np.log(quants))
     std = np.std(np.log(quants))
-    res = np.array([np.exp(mean-std*0.5), np.min(qmean), np.exp(mean+std*0.5)])
+    res = np.array([np.exp(mean - std * 0.5), np.min(qmean), np.exp(mean + std * 0.5)])
     return res
 
 
