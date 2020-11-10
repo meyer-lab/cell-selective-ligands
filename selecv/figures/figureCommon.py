@@ -140,7 +140,7 @@ def ValencyPlot(ax, names, Kav, L0, KxStar, f, Title):
     "Makes a line chart comparing binding ratios of populations at multiple valencies"
     assert len(f) > 1
     sampMeans, underDev, overDev = np.zeros_like(f), np.zeros_like(f), np.zeros_like(f)
-    labels = ["Low Affinity", "Med Affinity", "High Affinity"]
+    labels = [r"Low $R_1$ Affinity", r"Med $R_1$ Affinity", r"High $R_1$ Affinity"]
     colors = ["lime", "blue", "red"]
 
     for ii, aff in enumerate(Kav):

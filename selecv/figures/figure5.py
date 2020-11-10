@@ -129,10 +129,10 @@ def KxStarVary(ax, L0, Kav, ylim=(-7, 5), fully=True, compare=None):
     ax.set_xscale('log')
     if compare == "tether":
         ax.set_ylabel("Bispecific selectivity / Monovalent selectivity")
-        ax.set_title("Bispecific selectivity advantage over Monovalent Mixture")
+        ax.set_title("Bispecific advantage over monovalent mixture")
     elif compare == "bisp":
         ax.set_ylabel("Bispecific selectivity / Bivalent selectivity")
-        ax.set_title("Bispecific selectivity advantage over Bivalent Mixture")
+        ax.set_title("Bispecific advantage over homo-bivalent mixture")
     elif compare == "fully":
         ax.set_ylabel("Ratio of selectivity")
         ax.set_title("Fully bound selectivity / Ligand bound selectivity")
