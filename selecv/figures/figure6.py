@@ -122,7 +122,7 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
     targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
 
     optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
-    strats = ["Xo", "Affinity", "Mixture", "Valency", "All"]
+    strats = ["X0", "Affinity", "Mixture", "Valency + Affinity", "All"]
     pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
 
     for i, strat in enumerate(strats):
@@ -181,7 +181,7 @@ def optimizeDesignAnim(targetPop):
     targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
 
     optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
-    strats = ["Xo", "Affinity", "Mixture", "Valency", "All"]
+    strats = ["X0", "Affinity", "Mixture", "Valency + Affinity", "All"]
     pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
     optParamsHold = np.zeros([len(strats), 6])
 
