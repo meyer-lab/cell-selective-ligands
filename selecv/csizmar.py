@@ -45,7 +45,7 @@ def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund, valencies=False):
     df2["predicted"] = X2
     df2["data"] = "B22"
     df = pd.concat([df1, df2])
-    df = df.rename(columns={"valency": "Valency", "data": "Clone"})
+    df = df.rename(columns={"valency": "Valency", "data": "Clone", "intensity": "measured fluorescent intensity"})
 
     lr = LinearRegression(fit_intercept=False)
     X, Y = np.array(X1).reshape(-1, 1), np.array(Y1)
