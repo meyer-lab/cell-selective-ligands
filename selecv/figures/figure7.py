@@ -23,11 +23,11 @@ def makeFigure():
     fDLsub = 4
     optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{med}R_2^{lo}$"], fDLsub, affDLsub, specPops=[r"$R_1^{hi}R_2^{lo}$"])
     heatmapDL(ax[1], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-6, 3), cbar=True, highlight=[r"$R_1^{med}R_2^{lo}$"])
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-6, 3), cbar=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
     heatmapDL(ax[2], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=False, dead=True, highlight=[r"$R_1^{med}R_2^{lo}$"])
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=False, dead=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
     heatmapDL(ax[3], np.exp(optParams[0]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=True, dead=False, jTherap=True, highlight=[r"$R_1^{med}R_2^{lo}$"])
+              [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=True, dead=False, jTherap=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
 
     return f
 
@@ -73,9 +73,9 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     ax.set(xlabel="Antagonist Rec 1 Affinity ($K_d$, in nM)", ylabel="Antagonist Rec 2 Affinity ($K_d$, in nM)")
 
     if specPops:
-        ax.set_title(targetPop[0] + " and Antagonist of Valency " + str(fDL) + " vs " + specPops[0], fontsize=8)
+        ax.set_title("Agonist bound with antagonist, " + targetPop[0] + " vs " + specPops[0], fontsize=8)
     else:
-        ax.set_title(targetPop[0] + " and Antagonist of Valency " + str(fDL) + " vs all", fontsize=8)
+        ax.set_title("Agonist bound with antagonist, " + targetPop[0] + " vs all", fontsize=8)
 
     maxindices = ratioDF.to_numpy()
     (i, j) = np.unravel_index(maxindices.argmax(), maxindices.shape)
@@ -87,7 +87,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     return optimized.x, np.array([maxaff1, maxaff2])
 
 
-def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cbar=True, dead=False, jTherap=False, highlight=[]):
+def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cbar=True, dead=False, jTherap=False, highlight=[], lowlight=[]):
     "Makes a heatmap with modified cell population abundances according to Antagonist binding"
     nAbdPts = 70
     abunds = np.array(list(cellPopulations.values()))[:, 0:2]
@@ -116,4 +116,4 @@ def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cb
     if cbar:
         cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
         cbar.set_label("Log Ligand Bound")
-    overlapCellPopulation(ax, abundRange, data=cellPopulations, highlight=highlight)
+    overlapCellPopulation(ax, abundRange, data=cellPopulations, highlight=highlight, lowlight=lowlight)

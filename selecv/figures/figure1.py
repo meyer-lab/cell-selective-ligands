@@ -4,9 +4,10 @@ Figure 1. Introduce the model system.
 
 import seaborn as sns
 import numpy as np
-from .figureCommon import subplotLabel, getSetup, PlotCellPops, heatmap
-from ..imports import getPopDict
-from ..sampling import sampleSpec
+import matplotlib.pyplot as plt
+from .figureCommon import subplotLabel, getSetup, heatmap, overlapCellPopulation
+from ..sampling import sampleSpec, cellPopulations
+
 
 
 ligConc = np.array([1e-8])
@@ -27,7 +28,8 @@ def makeFigure():
     ax[3].axis("off")
 
     demoHeatmap(ax[4], vmin=1, vmax=5)
-    PlotCellPops(ax[5], getPopDict()[1])
+    demoPopulations(ax[5])
+    #PlotCellPops(ax[5], getPopDict()[1])
 
     return f
 
@@ -81,10 +83,32 @@ def demoHeatmap(ax, vmin=1, vmax=4):
 
     ax.plot([10 ** 2, 10 ** 3], [10 ** 3, 10 ** 3], color="w")
     ax.plot([10 ** 2, 10 ** 2], [10 ** 3, 10 ** 4], color="w")
-    ax.text(10**2, 10**3, "1", size='large', color='red', weight='semibold', horizontalalignment='center',
+
+    ax_new = ax.twinx().twiny()
+    ax_new.set_xscale("linear")
+    ax_new.set_yscale("linear")
+    ax_new.set_xticks([])
+    ax_new.set_yticks([])
+    ax_new.set_xlim((1.5, 4.5))
+    ax_new.set_ylim((1.5, 4.5))
+
+    ax_new.add_artist(plt.Circle((2, 3), 0.2, color='w'))
+    ax_new.text(2, 3, "1", size=11, color='red', weight='semibold', horizontalalignment='center',
             verticalalignment='center', backgroundcolor='w')
-    ax.text(10**3, 10**3, "2", size='large', color='red', weight='semibold', horizontalalignment='center',
+    ax_new.add_artist(plt.Circle((3, 3), 0.2, color='w'))
+    ax_new.text(3, 3, "2", size=11, color='red', weight='semibold', horizontalalignment='center',
             verticalalignment='center', backgroundcolor='w')
-    ax.text(10**2, 10**4, "3", size='large', color='red', weight='semibold', horizontalalignment='center',
+    ax_new.add_artist(plt.Circle((2, 4), 0.2, color='w'))
+    ax_new.text(2, 4, "3", size=11, color='red', weight='semibold', horizontalalignment='center',
             verticalalignment='center', backgroundcolor='w')
     ax.set(xlabel="Receptor 1", ylabel="Receptor 2")
+
+
+def demoPopulations(ax):
+    ax.set_facecolor('darkgoldenrod')
+    ax.set_xlim((10 ** 1.5, 10 ** 4.5))
+    ax.set_ylim((10 ** 1.5, 10 ** 4.5))
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set(xscale="log", yscale="log", xlabel="Receptor 1", ylabel="Receptor 2")
+    overlapCellPopulation(ax, (1.5, 4.5), data=cellPopulations)

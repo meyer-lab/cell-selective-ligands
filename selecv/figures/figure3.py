@@ -41,12 +41,12 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
             cbar = True
         heatmap(axs[i], L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vrange=(vmin, vmax), cbar=cbar)
         axs[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
-        plt.plot([3.32, 3.7], [2, 2], color="w", marker=2)
-        plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        plt.plot([3.3, 3.8], [3.2, 3.7], color="w", marker=2)
-        plt.text(3.65, 3.8, "c", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        plt.plot([3.4, 3.6], [3, 3], color="w", marker=1, markersize=4)
-        plt.text(3.6, 2.8, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        plt.plot([3.32, 3.7], [2, 2], color="black", marker=2)
+        plt.text(3.5, 2.1, "b", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        plt.plot([3.3, 3.8], [3.2, 3.7], color="black", marker=2)
+        plt.text(3.65, 3.8, "c", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        plt.plot([3.4, 3.6], [3, 3], color="black", marker=1, markersize=4)
+        plt.text(3.6, 2.8, "d", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
         axs[i].set_title("Valency = {}".format(v))
 
     return fig
@@ -133,3 +133,4 @@ def ratePlot(ax):
     ax.legend(handles=handles, prop={"size": 6})
     ax.set_yscale("log")
     ax.set_ylim(1e-1, 1e3)
+    ax.set_title("Reaction rate for second degree binding")

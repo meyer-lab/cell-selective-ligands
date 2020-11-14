@@ -167,7 +167,7 @@ def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
     ax.fill_between(mixRatio, underDev, overDev, color="royalblue", alpha=0.1)
     if len(names) == 2:
         ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 12), xlim=(0, 1))  # , title=Title + " binding ratio")
-        ax.set_title(Title + " ratio", fontsize=7)
+        ax.set_title(Title, fontsize=7)
         ax.grid()
     else:
         ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 5), xlim=(0, 1))
@@ -175,7 +175,7 @@ def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
         ax.grid()
 
 
-def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[]):
+def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowlight=[]):
     ax_new = ax.twinx().twiny()
     ax_new.set_xscale("linear")
     ax_new.set_yscale("linear")
@@ -184,22 +184,29 @@ def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[]):
     ax_new.set_xlim(scale)
     ax_new.set_ylim(scale)
     for label, item in data.items():
+        color = "blue"
+        if label in highlight:
+            color = "red"
+        elif label in lowlight:
+            color = "purple"
         ax_new.add_patch(Ellipse(xy=(item[0], item[1]),
                                  width=item[2],
                                  height=item[3],
                                  angle=item[4],
-                                 facecolor=("red" if label in highlight else "blue"),
+                                 facecolor=color,
                                  fill=True,
                                  alpha=0.8,
                                  linewidth=1))
         ax_new.text(item[0], item[1], label,
                     horizontalalignment='center',
                     verticalalignment='center',
+                    fontsize=11,
                     fontweight='heavy',
                     color='black')
         ax_new.text(item[0], item[1], label,
                     horizontalalignment='center',
                     verticalalignment='center',
+                    fontsize=10,
                     fontweight='light',
                     color='white')
 

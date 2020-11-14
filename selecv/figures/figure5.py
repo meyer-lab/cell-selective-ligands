@@ -16,7 +16,7 @@ pairs = [(r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"), (r"$R_1^{hi}R_2^{hi}$"
 def makeFigure():
     """ main function for Figure 5 """
     ax, f = getSetup((10, 10), (3, 3))
-    subplotLabel(ax, list(range(8)))
+    subplotLabel(ax, list(range(9)))
 
     L0 = 1e-8
     Kav = [[1e7, 1e5], [1e5, 1e6]]
