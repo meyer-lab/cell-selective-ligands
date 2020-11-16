@@ -41,12 +41,12 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
             cbar = True
         heatmap(axs[i], L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vrange=(vmin, vmax), cbar=cbar)
         axs[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
-        plt.plot([3.32, 3.7], [2, 2], color="w", marker=2)
-        plt.text(3.5, 2.1, "b", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        plt.plot([3.3, 3.8], [3.2, 3.7], color="w", marker=2)
-        plt.text(3.65, 3.8, "c", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        plt.plot([3.4, 3.6], [3, 3], color="w", marker=1, markersize=4)
-        plt.text(3.6, 2.8, "d", size='large', color='white', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        plt.plot([3.32, 3.7], [2, 2], color="black", marker=2)
+        plt.text(3.5, 2.1, "b", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        plt.plot([3.3, 3.8], [3.2, 3.7], color="black", marker=2)
+        plt.text(3.65, 3.8, "c", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        plt.plot([3.4, 3.6], [3, 3], color="black", marker=1, markersize=4)
+        plt.text(3.6, 2.8, "d", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
         axs[i].set_title("Valency = {}".format(v))
 
     return fig
@@ -112,11 +112,11 @@ def ratePlot(ax):
     "Plots rate of bivalent binding over dissocation rate for monovalently bound complexes"
     # kxstar * Ka, * val-1 * rec-1
     recScan = np.logspace(0, 6, 100)
-    val = np.arange(1, 5)
+    val = np.arange(2, 5)
     affinities = [1e8, 1e6]
     KxStarPl = 10 ** -10.0
     lines = ["-", ":"]
-    colors = ["royalblue", "orange", "limegreen", "orangered"]
+    colors = ["orange", "limegreen", "orangered"]
     rateHolder = np.zeros([100])
     for ii, Ka in enumerate(affinities):
         for jj, f in enumerate(val):
@@ -125,7 +125,7 @@ def ratePlot(ax):
             ax.plot(recScan, rateHolder, color=colors[jj], label="Valency = " + str(f), linestyle=lines[ii])
     ax.set(xlim=(1, 1000000), xlabel="Receptor Abundance", ylabel="Forward/Reverse Rate", xscale="log", ylim=(0.1, 5))  # ylim=(0, 1),
     handles, _ = ax.get_legend_handles_labels()
-    handles = handles[0:4]
+    handles = handles[0:3]
     line = Line2D([], [], color="black", marker="_", linestyle="None", markersize=6, label="$K_d$ nM = 10")
     point = Line2D([], [], color="black", marker=".", linestyle="None", markersize=6, label="$K_d$ nM = 1000")
     handles.append(line)
@@ -133,3 +133,4 @@ def ratePlot(ax):
     ax.legend(handles=handles, prop={"size": 6})
     ax.set_yscale("log")
     ax.set_ylim(1e-1, 1e3)
+    ax.set_title("Reaction rate for second degree binding")
