@@ -9,7 +9,6 @@ from .figureCommon import subplotLabel, getSetup, heatmap, overlapCellPopulation
 from ..sampling import sampleSpec, cellPopulations
 
 
-
 ligConc = np.array([1e-8])
 KxStarP = 1e-10
 val = 16.0
@@ -94,13 +93,13 @@ def demoHeatmap(ax, vmin=1, vmax=4):
 
     ax_new.add_artist(plt.Circle((2, 3), 0.2, color='w'))
     ax_new.text(2, 3, "1", size=11, color='red', weight='semibold', horizontalalignment='center',
-            verticalalignment='center', backgroundcolor='w')
+                verticalalignment='center', backgroundcolor='w')
     ax_new.add_artist(plt.Circle((3, 3), 0.2, color='w'))
     ax_new.text(3, 3, "2", size=11, color='red', weight='semibold', horizontalalignment='center',
-            verticalalignment='center', backgroundcolor='w')
+                verticalalignment='center', backgroundcolor='w')
     ax_new.add_artist(plt.Circle((2, 4), 0.2, color='w'))
     ax_new.text(2, 4, "3", size=11, color='red', weight='semibold', horizontalalignment='center',
-            verticalalignment='center', backgroundcolor='w')
+                verticalalignment='center', backgroundcolor='w')
     ax.set(xlabel="Receptor 1", ylabel="Receptor 2")
 
 
