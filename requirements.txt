@@ -5,12 +5,12 @@ scipy==1.5.4
 seaborn==0.11.0
 pytest==6.1.2
 pytest-cov==2.10.1
-manubot==0.4.1
+git+https://github.com/manubot/manubot.git
 pandoc-fignos==2.4.0
 pandoc-eqnos==2.4.0
 pandoc-tablenos==2.3.0
 jaxlib==0.1.57
-jax==0.2.5
+jax==0.2.6
 svgutils==0.3.1
 celluloid==0.2.0
 ffmpeg==1.4
