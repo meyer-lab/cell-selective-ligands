@@ -7,19 +7,21 @@ keywords:
 lang: en-US
 authors:
   -
-    github: borcuttjahns
-    name: Brian Orcutt-Jahns
-    initials: BOJ
-    orcid: 0000-0002-1436-1224
-    affiliations:
-      - Department of Bioengineering, University of California, Los Angeles
-  -
     github: cyrillustan
     name: Zhixin Cyrillus Tan
     initials: CT
     orcid: 0000-0002-5498-5509
     affiliations:
       - Bioinformatics Interdepartmental Program, University of California, Los Angeles
+      - These authors contributed equally.
+  -
+    github: borcuttjahns
+    name: Brian Orcutt-Jahns
+    initials: BOJ
+    orcid: 0000-0002-1436-1224
+    affiliations:
+      - Department of Bioengineering, University of California, Los Angeles
+      - These authors contributed equally.
   -
     github: aarmey
     name: Aaron S. Meyer
