@@ -1,10 +1,10 @@
 ---
 author-meta:
-- Brian Orcutt-Jahns
 - Zhixin Cyrillus Tan
+- Brian Orcutt-Jahns
 - Aaron S. Meyer
 bibliography: []
-date-meta: '2020-11-17'
+date-meta: '2020-11-24'
 header-includes: '<!--
 
   Manubot generated metadata rendered from header-includes-template.html.
@@ -23,9 +23,9 @@ header-includes: '<!--
 
   <meta property="twitter:title" content="A quantitative view of strategies to engineer cell-selective ligand binding" />
 
-  <meta name="dc.date" content="2020-11-17" />
+  <meta name="dc.date" content="2020-11-24" />
 
-  <meta name="citation_publication_date" content="2020-11-17" />
+  <meta name="citation_publication_date" content="2020-11-24" />
 
   <meta name="dc.language" content="en-US" />
 
@@ -39,17 +39,21 @@ header-includes: '<!--
 
   <meta name="citation_technical_report_institution" content="Manubot" />
 
-  <meta name="citation_author" content="Brian Orcutt-Jahns" />
-
-  <meta name="citation_author_institution" content="Department of Bioengineering, University of California, Los Angeles" />
-
-  <meta name="citation_author_orcid" content="0000-0002-1436-1224" />
-
   <meta name="citation_author" content="Zhixin Cyrillus Tan" />
 
   <meta name="citation_author_institution" content="Bioinformatics Interdepartmental Program, University of California, Los Angeles" />
 
+  <meta name="citation_author_institution" content="These authors contributed equally." />
+
   <meta name="citation_author_orcid" content="0000-0002-5498-5509" />
+
+  <meta name="citation_author" content="Brian Orcutt-Jahns" />
+
+  <meta name="citation_author_institution" content="Department of Bioengineering, University of California, Los Angeles" />
+
+  <meta name="citation_author_institution" content="These authors contributed equally." />
+
+  <meta name="citation_author_orcid" content="0000-0002-1436-1224" />
 
   <meta name="citation_author" content="Aaron S. Meyer" />
 
@@ -77,11 +81,11 @@ header-includes: '<!--
 
   <link rel="alternate" type="application/pdf" href="https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf" />
 
-  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/cbb26c67cfa8a35c780dfd7dc6bc20518b994b24/" />
+  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/b6f37d01e8bc4b5cf15915412f40b403bb8b5055/" />
 
-  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/cbb26c67cfa8a35c780dfd7dc6bc20518b994b24/" />
+  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/b6f37d01e8bc4b5cf15915412f40b403bb8b5055/" />
 
-  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/cbb26c67cfa8a35c780dfd7dc6bc20518b994b24/manuscript.pdf" />
+  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/b6f37d01e8bc4b5cf15915412f40b403bb8b5055/manuscript.pdf" />
 
   <meta property="og:type" content="article" />
 
@@ -110,20 +114,11 @@ title: A quantitative view of strategies to engineer cell-selective ligand bindi
 
 <small><em>
 This manuscript
-was automatically generated on November 17, 2020.
+was automatically generated on November 24, 2020.
 </em></small>
 
 ## Authors
 
-
-+ **Brian Orcutt-Jahns**<br>
-    ORCID
-    [0000-0002-1436-1224](https://orcid.org/0000-0002-1436-1224)
-    · Github
-    [borcuttjahns](https://github.com/borcuttjahns)<br>
-  <small>
-     Department of Bioengineering, University of California, Los Angeles
-  </small>
 
 + **Zhixin Cyrillus Tan**<br>
     ORCID
@@ -131,7 +126,16 @@ was automatically generated on November 17, 2020.
     · Github
     [cyrillustan](https://github.com/cyrillustan)<br>
   <small>
-     Bioinformatics Interdepartmental Program, University of California, Los Angeles
+     Bioinformatics Interdepartmental Program, University of California, Los Angeles; These authors contributed equally.
+  </small>
+
++ **Brian Orcutt-Jahns**<br>
+    ORCID
+    [0000-0002-1436-1224](https://orcid.org/0000-0002-1436-1224)
+    · Github
+    [borcuttjahns](https://github.com/borcuttjahns)<br>
+  <small>
+     Department of Bioengineering, University of California, Los Angeles; These authors contributed equally.
   </small>
 
 + **Aaron S. Meyer**<br>

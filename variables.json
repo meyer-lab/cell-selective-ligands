@@ -7,13 +7,13 @@
       "systems biology"
     ],
     "lang": "en-US",
-    "date-meta": "2020-11-17",
+    "date-meta": "2020-11-24",
     "author-meta": [
-      "Brian Orcutt-Jahns",
       "Zhixin Cyrillus Tan",
+      "Brian Orcutt-Jahns",
       "Aaron S. Meyer"
     ],
-    "header-includes": "<!--\nManubot generated metadata rendered from header-includes-template.html.\nSuggest improvements at https://github.com/manubot/manubot/blob/master/manubot/process/header-includes-template.html\n-->\n<meta name=\"dc.format\" content=\"text/html\" />\n<meta name=\"dc.title\" content=\"A quantitative view of strategies to engineer cell-selective ligand binding\" />\n<meta name=\"citation_title\" content=\"A quantitative view of strategies to engineer cell-selective ligand binding\" />\n<meta property=\"og:title\" content=\"A quantitative view of strategies to engineer cell-selective ligand binding\" />\n<meta property=\"twitter:title\" content=\"A quantitative view of strategies to engineer cell-selective ligand binding\" />\n<meta name=\"dc.date\" content=\"2020-11-17\" />\n<meta name=\"citation_publication_date\" content=\"2020-11-17\" />\n<meta name=\"dc.language\" content=\"en-US\" />\n<meta name=\"citation_language\" content=\"en-US\" />\n<meta name=\"dc.relation.ispartof\" content=\"Manubot\" />\n<meta name=\"dc.publisher\" content=\"Manubot\" />\n<meta name=\"citation_journal_title\" content=\"Manubot\" />\n<meta name=\"citation_technical_report_institution\" content=\"Manubot\" />\n<meta name=\"citation_author\" content=\"Brian Orcutt-Jahns\" />\n<meta name=\"citation_author_institution\" content=\"Department of Bioengineering, University of California, Los Angeles\" />\n<meta name=\"citation_author_orcid\" content=\"0000-0002-1436-1224\" />\n<meta name=\"citation_author\" content=\"Zhixin Cyrillus Tan\" />\n<meta name=\"citation_author_institution\" content=\"Bioinformatics Interdepartmental Program, University of California, Los Angeles\" />\n<meta name=\"citation_author_orcid\" content=\"0000-0002-5498-5509\" />\n<meta name=\"citation_author\" content=\"Aaron S. Meyer\" />\n<meta name=\"citation_author_institution\" content=\"Department of Bioengineering, University of California, Los Angeles\" />\n<meta name=\"citation_author_institution\" content=\"Bioinformatics Interdepartmental Program, University of California, Los Angeles\" />\n<meta name=\"citation_author_institution\" content=\"Jonsson Comprehensive Cancer Center, University of California, Los Angeles\" />\n<meta name=\"citation_author_institution\" content=\"Eli and Edythe Broad Center of Regenerative Medicine and Stem Cell Research, University of California, Los Angeles\" />\n<meta name=\"citation_author_orcid\" content=\"0000-0003-4513-1840\" />\n<meta name=\"twitter:creator\" content=\"@aarmey\" />\n<link rel=\"canonical\" href=\"https://meyer-lab.github.io/cell-selective-ligands/\" />\n<meta property=\"og:url\" content=\"https://meyer-lab.github.io/cell-selective-ligands/\" />\n<meta property=\"twitter:url\" content=\"https://meyer-lab.github.io/cell-selective-ligands/\" />\n<meta name=\"citation_fulltext_html_url\" content=\"https://meyer-lab.github.io/cell-selective-ligands/\" />\n<meta name=\"citation_pdf_url\" content=\"https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf\" />\n<link rel=\"alternate\" type=\"application/pdf\" href=\"https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf\" />\n<link rel=\"alternate\" type=\"text/html\" href=\"https://meyer-lab.github.io/cell-selective-ligands/v/cbb26c67cfa8a35c780dfd7dc6bc20518b994b24/\" />\n<meta name=\"manubot_html_url_versioned\" content=\"https://meyer-lab.github.io/cell-selective-ligands/v/cbb26c67cfa8a35c780dfd7dc6bc20518b994b24/\" />\n<meta name=\"manubot_pdf_url_versioned\" content=\"https://meyer-lab.github.io/cell-selective-ligands/v/cbb26c67cfa8a35c780dfd7dc6bc20518b994b24/manuscript.pdf\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"twitter:card\" content=\"summary_large_image\" />\n<link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"https://manubot.org/favicon-192x192.png\" />\n<link rel=\"mask-icon\" href=\"https://manubot.org/safari-pinned-tab.svg\" color=\"#ad1457\" />\n<meta name=\"theme-color\" content=\"#ad1457\" />\n<!-- end Manubot generated metadata -->",
+    "header-includes": "<!--\nManubot generated metadata rendered from header-includes-template.html.\nSuggest improvements at https://github.com/manubot/manubot/blob/master/manubot/process/header-includes-template.html\n-->\n<meta name=\"dc.format\" content=\"text/html\" />\n<meta name=\"dc.title\" content=\"A quantitative view of strategies to engineer cell-selective ligand binding\" />\n<meta name=\"citation_title\" content=\"A quantitative view of strategies to engineer cell-selective ligand binding\" />\n<meta property=\"og:title\" content=\"A quantitative view of strategies to engineer cell-selective ligand binding\" />\n<meta property=\"twitter:title\" content=\"A quantitative view of strategies to engineer cell-selective ligand binding\" />\n<meta name=\"dc.date\" content=\"2020-11-24\" />\n<meta name=\"citation_publication_date\" content=\"2020-11-24\" />\n<meta name=\"dc.language\" content=\"en-US\" />\n<meta name=\"citation_language\" content=\"en-US\" />\n<meta name=\"dc.relation.ispartof\" content=\"Manubot\" />\n<meta name=\"dc.publisher\" content=\"Manubot\" />\n<meta name=\"citation_journal_title\" content=\"Manubot\" />\n<meta name=\"citation_technical_report_institution\" content=\"Manubot\" />\n<meta name=\"citation_author\" content=\"Zhixin Cyrillus Tan\" />\n<meta name=\"citation_author_institution\" content=\"Bioinformatics Interdepartmental Program, University of California, Los Angeles\" />\n<meta name=\"citation_author_institution\" content=\"These authors contributed equally.\" />\n<meta name=\"citation_author_orcid\" content=\"0000-0002-5498-5509\" />\n<meta name=\"citation_author\" content=\"Brian Orcutt-Jahns\" />\n<meta name=\"citation_author_institution\" content=\"Department of Bioengineering, University of California, Los Angeles\" />\n<meta name=\"citation_author_institution\" content=\"These authors contributed equally.\" />\n<meta name=\"citation_author_orcid\" content=\"0000-0002-1436-1224\" />\n<meta name=\"citation_author\" content=\"Aaron S. Meyer\" />\n<meta name=\"citation_author_institution\" content=\"Department of Bioengineering, University of California, Los Angeles\" />\n<meta name=\"citation_author_institution\" content=\"Bioinformatics Interdepartmental Program, University of California, Los Angeles\" />\n<meta name=\"citation_author_institution\" content=\"Jonsson Comprehensive Cancer Center, University of California, Los Angeles\" />\n<meta name=\"citation_author_institution\" content=\"Eli and Edythe Broad Center of Regenerative Medicine and Stem Cell Research, University of California, Los Angeles\" />\n<meta name=\"citation_author_orcid\" content=\"0000-0003-4513-1840\" />\n<meta name=\"twitter:creator\" content=\"@aarmey\" />\n<link rel=\"canonical\" href=\"https://meyer-lab.github.io/cell-selective-ligands/\" />\n<meta property=\"og:url\" content=\"https://meyer-lab.github.io/cell-selective-ligands/\" />\n<meta property=\"twitter:url\" content=\"https://meyer-lab.github.io/cell-selective-ligands/\" />\n<meta name=\"citation_fulltext_html_url\" content=\"https://meyer-lab.github.io/cell-selective-ligands/\" />\n<meta name=\"citation_pdf_url\" content=\"https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf\" />\n<link rel=\"alternate\" type=\"application/pdf\" href=\"https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf\" />\n<link rel=\"alternate\" type=\"text/html\" href=\"https://meyer-lab.github.io/cell-selective-ligands/v/b6f37d01e8bc4b5cf15915412f40b403bb8b5055/\" />\n<meta name=\"manubot_html_url_versioned\" content=\"https://meyer-lab.github.io/cell-selective-ligands/v/b6f37d01e8bc4b5cf15915412f40b403bb8b5055/\" />\n<meta name=\"manubot_pdf_url_versioned\" content=\"https://meyer-lab.github.io/cell-selective-ligands/v/b6f37d01e8bc4b5cf15915412f40b403bb8b5055/manuscript.pdf\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"twitter:card\" content=\"summary_large_image\" />\n<link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"https://manubot.org/favicon-192x192.png\" />\n<link rel=\"mask-icon\" href=\"https://manubot.org/safari-pinned-tab.svg\" color=\"#ad1457\" />\n<meta name=\"theme-color\" content=\"#ad1457\" />\n<!-- end Manubot generated metadata -->",
     "bibliography": [],
     "manubot-output-bibliography": "output/references.json",
     "manubot-output-citekeys": "output/citations.tsv",
@@ -21,30 +21,34 @@
     "manubot-clear-requests-cache": false
   },
   "manubot": {
-    "date": "November 17, 2020",
+    "date": "November 24, 2020",
     "authors": [
-      {
-        "github": "borcuttjahns",
-        "name": "Brian Orcutt-Jahns",
-        "initials": "BOJ",
-        "orcid": "0000-0002-1436-1224",
-        "affiliations": [
-          "Department of Bioengineering, University of California, Los Angeles"
-        ],
-        "affiliation_numbers": [
-          1
-        ]
-      },
       {
         "github": "cyrillustan",
         "name": "Zhixin Cyrillus Tan",
         "initials": "CT",
         "orcid": "0000-0002-5498-5509",
         "affiliations": [
-          "Bioinformatics Interdepartmental Program, University of California, Los Angeles"
+          "Bioinformatics Interdepartmental Program, University of California, Los Angeles",
+          "These authors contributed equally."
         ],
         "affiliation_numbers": [
+          1,
           2
+        ]
+      },
+      {
+        "github": "borcuttjahns",
+        "name": "Brian Orcutt-Jahns",
+        "initials": "BOJ",
+        "orcid": "0000-0002-1436-1224",
+        "affiliations": [
+          "Department of Bioengineering, University of California, Los Angeles",
+          "These authors contributed equally."
+        ],
+        "affiliation_numbers": [
+          2,
+          3
         ]
       },
       {
@@ -62,28 +66,32 @@
         ],
         "affiliation_numbers": [
           1,
-          2,
           3,
-          4
+          4,
+          5
         ]
       }
     ],
     "affiliations": [
       {
-        "affiliation": "Department of Bioengineering, University of California, Los Angeles",
+        "affiliation": "Bioinformatics Interdepartmental Program, University of California, Los Angeles",
         "affiliation_number": 1
       },
       {
-        "affiliation": "Bioinformatics Interdepartmental Program, University of California, Los Angeles",
+        "affiliation": "These authors contributed equally.",
         "affiliation_number": 2
       },
       {
-        "affiliation": "Jonsson Comprehensive Cancer Center, University of California, Los Angeles",
+        "affiliation": "Department of Bioengineering, University of California, Los Angeles",
         "affiliation_number": 3
       },
       {
-        "affiliation": "Eli and Edythe Broad Center of Regenerative Medicine and Stem Cell Research, University of California, Los Angeles",
+        "affiliation": "Jonsson Comprehensive Cancer Center, University of California, Los Angeles",
         "affiliation_number": 4
+      },
+      {
+        "affiliation": "Eli and Edythe Broad Center of Regenerative Medicine and Stem Cell Research, University of California, Los Angeles",
+        "affiliation_number": 5
       }
     ],
     "ci_source": {
@@ -91,15 +99,15 @@
       "repo_slug": "meyer-lab/cell-selective-ligands",
       "repo_owner": "meyer-lab",
       "repo_name": "cell-selective-ligands",
-      "commit": "cbb26c67cfa8a35c780dfd7dc6bc20518b994b24",
-      "triggering_commit": "cbb26c67cfa8a35c780dfd7dc6bc20518b994b24",
-      "build_url": "https://github.com/meyer-lab/cell-selective-ligands/commit/cbb26c67cfa8a35c780dfd7dc6bc20518b994b24/checks",
+      "commit": "b6f37d01e8bc4b5cf15915412f40b403bb8b5055",
+      "triggering_commit": "b6f37d01e8bc4b5cf15915412f40b403bb8b5055",
+      "build_url": "https://github.com/meyer-lab/cell-selective-ligands/commit/b6f37d01e8bc4b5cf15915412f40b403bb8b5055/checks",
       "job_url": "https://github.com/meyer-lab/cell-selective-ligands/runs/run2"
     },
     "html_url": "https://meyer-lab.github.io/cell-selective-ligands/",
     "pdf_url": "https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf",
-    "html_url_versioned": "https://meyer-lab.github.io/cell-selective-ligands/v/cbb26c67cfa8a35c780dfd7dc6bc20518b994b24/",
-    "pdf_url_versioned": "https://meyer-lab.github.io/cell-selective-ligands/v/cbb26c67cfa8a35c780dfd7dc6bc20518b994b24/manuscript.pdf",
+    "html_url_versioned": "https://meyer-lab.github.io/cell-selective-ligands/v/b6f37d01e8bc4b5cf15915412f40b403bb8b5055/",
+    "pdf_url_versioned": "https://meyer-lab.github.io/cell-selective-ligands/v/b6f37d01e8bc4b5cf15915412f40b403bb8b5055/manuscript.pdf",
     "manubot_version": "0.4.1",
     "rootstock_commit": null,
     "manuscript_stats": {
