@@ -200,13 +200,13 @@ def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowligh
         ax_new.text(item[0], item[1], label,
                     horizontalalignment='center',
                     verticalalignment='center',
-                    fontsize=11,
-                    fontweight='heavy',
+                    fontsize=11.3,
+                    fontweight='bold',
                     color='black')
         ax_new.text(item[0], item[1], label,
                     horizontalalignment='center',
                     verticalalignment='center',
-                    fontsize=10,
+                    fontsize=11,
                     fontweight='light',
                     color='white')
 

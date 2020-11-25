@@ -37,15 +37,15 @@ def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund, valencies=False):
     "Outputs predicted vs. Experimental fluorescent intensities for C5 and B22 binding"
     df1 = pd.read_csv("selecv/data/csizmar_s4a.csv")
     X1, Y1 = model_predict(df1, KxStarF, [1, 0, 0], slopeC5, Kav2, abund, valencies)
-    df1["predicted"] = X1
+    df1["Predicted"] = X1
     df1["data"] = "C5"
 
     df2 = pd.read_csv("selecv/data/csizmar_s4b.csv")
     X2, Y2 = model_predict(df2, KxStarF, [0, 1, 0], slopeB22, Kav2, abund, valencies)
-    df2["predicted"] = X2
+    df2["Predicted"] = X2
     df2["data"] = "B22"
     df = pd.concat([df1, df2])
-    df = df.rename(columns={"valency": "Valency", "data": "Clone", "intensity": "measured fluorescent intensity"})
+    df = df.rename(columns={"valency": "Valency", "data": "Clone", "intensity": "Measured Fluorescent Intensity"})
 
     lr = LinearRegression(fit_intercept=False)
     X, Y = np.array(X1).reshape(-1, 1), np.array(Y1)
@@ -55,7 +55,7 @@ def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund, valencies=False):
     lr.fit(X, Y)
     B22_score = lr.score(X, Y)
 
-    sns.lineplot(x="predicted", y="measured fluorescent intensity", hue="Clone", style="Valency", markers=True, data=df, ax=ax)
+    sns.lineplot(x="Predicted", y="Measured Fluorescent Intensity", hue="Clone", style="Valency", markers=True, data=df, ax=ax)
 
     return C5_score, B22_score
 
