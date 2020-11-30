@@ -7,7 +7,7 @@
   <meta name="author" content="Zhixin Cyrillus Tan" />
   <meta name="author" content="Brian Orcutt-Jahns" />
   <meta name="author" content="Aaron S. Meyer" />
-  <meta name="dcterms.date" content="2020-11-25" />
+  <meta name="dcterms.date" content="2020-11-30" />
   <meta name="keywords" content="bioengineering, protein therapies, systems biology" />
   <title>A quantitative view of strategies to engineer cell-selective ligand binding</title>
   <style>
@@ -27,8 +27,8 @@
   <meta name="citation_title" content="A quantitative view of strategies to engineer cell-selective ligand binding" />
   <meta property="og:title" content="A quantitative view of strategies to engineer cell-selective ligand binding" />
   <meta property="twitter:title" content="A quantitative view of strategies to engineer cell-selective ligand binding" />
-  <meta name="dc.date" content="2020-11-25" />
-  <meta name="citation_publication_date" content="2020-11-25" />
+  <meta name="dc.date" content="2020-11-30" />
+  <meta name="citation_publication_date" content="2020-11-30" />
   <meta name="dc.language" content="en-US" />
   <meta name="citation_language" content="en-US" />
   <meta name="dc.relation.ispartof" content="Manubot" />
@@ -56,9 +56,9 @@
   <meta name="citation_fulltext_html_url" content="https://meyer-lab.github.io/cell-selective-ligands/" />
   <meta name="citation_pdf_url" content="https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf" />
   <link rel="alternate" type="application/pdf" href="https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf" />
-  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/a373389286e26653343f960adb5a33e0b76e7221/" />
-  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/a373389286e26653343f960adb5a33e0b76e7221/" />
-  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/a373389286e26653343f960adb5a33e0b76e7221/manuscript.pdf" />
+  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/f82953e0a37de45c668fab41adc342e2c0885215/" />
+  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/f82953e0a37de45c668fab41adc342e2c0885215/" />
+  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/f82953e0a37de45c668fab41adc342e2c0885215/manuscript.pdf" />
   <meta property="og:type" content="article" />
   <meta property="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/png" sizes="192x192" href="https://manubot.org/favicon-192x192.png" />
@@ -72,7 +72,7 @@
 </header>
 <p><small><em>
 This manuscript
-was automatically generated on November 25, 2020.
+was automatically generated on November 30, 2020.
 </em></small></p>
 <h2 id="authors">Authors</h2>
 <ul>
@@ -105,13 +105,8 @@ Department of Bioengineering, University of California, Los Angeles; Bioinformat
 </ul>
 <h2 class="page_break_before" id="abstract">Abstract</h2>
 <p>A critical property of many therapies is their selective binding to specific target populations. Exceptional specificity can arise from high-affinity binding to unique cell surface targets. In many cases, however, therapeutic targets are only expressed at subtly different levels relative to off-target cells. More complex binding strategies have been developed to overcome this limitation, including multi-specific and multi-valent molecules, but these create a combinatorial explosion of design possibilities. Therefore, guiding strategies for developing cell-specific binding are critical to employ these tools. Here, we extend a multi-valent binding model to multi-ligand and multi-receptor interactions. Using this model, we explore a series of mechanisms to engineer cell selectivity, including mixtures of molecules, affinity adjustments, and valency changes. Each of these strategies maximizes selectivity in distinct cases, leading to synergistic improvements when used in combination. Finally, we identify situations in which selectivity cannot be derived through passive binding alone to highlight areas in need of new developments. In total, this work uses a quantitative model to unify a comprehensive set of design guidelines for engineering cell-specific therapies.</p>
-<h2 id="summary-points">Summary points</h2>
-<ul>
-<li>Affinity, valency, and other alterations to target cell binding provide enhanced selectivity in specific situations.</li>
-<li>Evidence for the effectiveness and limitations of each strategy are abundant within the drug development literature.</li>
-<li>Combining strategies can offer enhanced selectivity.</li>
-<li>A simple, multivalent ligand-receptor binding model can help to direct therapeutic engineering.</li>
-</ul>
+<h2 id="significance-statement">Significance Statement</h2>
+<p>Selective binding to specific target cells is a critical property of many therapies. To provide enhanced selectivity in specific situations, a series of new strategies have been proposed in the drug development literature, including affinity, valency, multi-valent compounds, and other alterations to target cell binding. We have developed a simple, multivalent ligand-receptor binding model that can help to direct therapeutic engineering. Here, using this model, we provide generalized and quantitative analyses of the effectiveness and limitations of each strategy. We also demonstrate that combining strategies can offer enhanced selectivity. This work will provide guidance for future therapeutic development.</p>
 <h2 id="introduction">Introduction</h2>
 <!-- Targeting specific cell populations is a universal challenge in protein therapies. -->
 <p>Many drugs both derive their therapeutic benefit and avoid toxicity through selective binding to specific cells within the body. Often, target cells can differ from off-target populations only subtly in surface receptor expression, making selective activation of target cells difficult to achieve. Even with a drug of very specific molecular binding, genetic and non-genetic heterogeneity can create a wide distribution of cell responses. This can result in reduced effectiveness and increased toxicity. Specific cell targeting is a universal challenge in protein-based therapies. For example, in cancer, resistance to anti-tumor antibodies,<span class="citation" data-cites="dr9JS306"><sup><a href="#ref-dr9JS306" role="doc-biblioref">1</a></sup></span> targeted inhibitors,<span class="citation" data-cites="QzzeTuTF"><sup><a href="#ref-QzzeTuTF" role="doc-biblioref">2</a></sup></span> chemotherapies,<span class="citation" data-cites="10v4cJsaH"><sup><a href="#ref-10v4cJsaH" role="doc-biblioref">3</a></sup></span> and chimeric antigen receptor T cells<span class="citation" data-cites="qUZcGLd9 63ewQnLP"><sup><a href="#ref-qUZcGLd9" role="doc-biblioref">4</a>,<a href="#ref-63ewQnLP" role="doc-biblioref">5</a></sup></span> all can arise through the selection of target cells among heterogeneous cell populations. While the immune system takes advantage of heterogeneity at the single-cell level to translate noisy inflammatory signals into robust yet sensitive responses,<span class="citation" data-cites="3qk2Wsrw"><sup><a href="#ref-3qk2Wsrw" role="doc-biblioref">6</a></sup></span> this heterogeneity impedes our effort of creating a highly specific drug. The intricacies of both inter-population receptor expression differences and intra-population receptor expression heterogeneity present significant challenges that limit the selectivity of therapies within the body.</p>
@@ -273,7 +268,7 @@ R_{\mathrm{bound},n} = \frac{L_0}{K_x^* } \sum_{\mathbf{θ} \in Θ} C_{\mathbf{�
 <p>10. Cho, J. H., Collins, J. J. &amp; Wong, W. W. Universal Chimeric Antigen Receptors for Multiplexed and Logical Control of T Cell Responses. <em>Cell</em> <strong>173</strong>, 1426–1438.e11 (2018).</p>
 </div>
 <div id="ref-12Gx1OssI">
-<p>11. Ianevski, A., Giri, A. K. &amp; Aittokallio, T. Fully-automated cell-type identification with specific markers extracted from single-cell transcriptomic data. <em>bioRxiv</em> (2019). doi:<a href="https://doi.org/10.1101/812131">10.1101/812131</a></p>
+<p>11. Ianevski, A., Giri, A. K. &amp; Aittokallio, T. Fully-automated cell-type identification with specific markers extracted from single-cell transcriptomic data. <em>Cold Spring Harbor Laboratory</em> (2019). doi:<a href="https://doi.org/10.1101/812131">10.1101/812131</a></p>
 </div>
 <div id="ref-10kZoPeON">
 <p>12. Robinson, M. K. <em>et al.</em> Targeting ErbB2 and ErbB3 with a bispecific single-chain Fv enhances targeting selectivity and induces a therapeutic effect in vitro. <em>British Journal of Cancer</em> <strong>99</strong>, 1415–1425 (2008).</p>
@@ -297,7 +292,7 @@ R_{\mathrm{bound},n} = \frac{L_0}{K_x^* } \sum_{\mathbf{θ} \in Θ} C_{\mathbf{�
 <p>18. Csizmar, C. M. <em>et al.</em> Multivalent Ligand Binding to Cell Membrane Antigens: Defining the Interplay of Affinity, Valency, and Expression Density. <em>Journal of the American Chemical Society</em> <strong>141</strong>, 251–261 (2018).</p>
 </div>
 <div id="ref-IanZRiFA">
-<p>19. Mazor, Y. <em>et al.</em> Enhanced tumor-targeting selectivity by modulating bispecific antibody binding affinity and format valence. <em>Scientific Reports</em> <strong>7</strong>, (2017).</p>
+<p>19. Mazor, Y. <em>et al.</em> Enhanced tumor-targeting selectivity by modulating bispecific antibody binding affinity and format valence. <em>Scientific Reports</em> <strong>7</strong>, 40098 (2017).</p>
 </div>
 <div id="ref-luDqQ0zL">
 <p>20. Lehár, J. <em>et al.</em> Synergistic drug combinations tend to improve therapeutically relevant selectivity. <em>Nature Biotechnology</em> <strong>27</strong>, 659–666 (2009).</p>
@@ -342,7 +337,7 @@ R_{\mathrm{bound},n} = \frac{L_0}{K_x^* } \sum_{\mathbf{θ} \in Θ} C_{\mathbf{�
 <p>33. Rezvani, K., Rouce, R., Liu, E. &amp; Shpall, E. Engineering Natural Killer Cells for Cancer Immunotherapy. <em>Molecular Therapy</em> <strong>25</strong>, 1769–1781 (2017).</p>
 </div>
 <div id="ref-8Miti2Gz">
-<p>34. Virtanen, P. <em>et al.</em> SciPy 1.0: fundamental algorithms for scientific computing in Python. <em>Nature Methods</em> (2020). doi:<a href="https://doi.org/10.1038/s41592-019-0686-2">10.1038/s41592-019-0686-2</a></p>
+<p>34. Virtanen, P. <em>et al.</em> SciPy 1.0: fundamental algorithms for scientific computing in Python. <em>Nature Methods</em> <strong>17</strong>, 261–272 (2020).</p>
 </div>
 </div>
 <!-- default theme -->

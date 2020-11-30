@@ -4,7 +4,7 @@ author-meta:
 - Brian Orcutt-Jahns
 - Aaron S. Meyer
 bibliography: []
-date-meta: '2020-11-25'
+date-meta: '2020-11-30'
 header-includes: '<!--
 
   Manubot generated metadata rendered from header-includes-template.html.
@@ -23,9 +23,9 @@ header-includes: '<!--
 
   <meta property="twitter:title" content="A quantitative view of strategies to engineer cell-selective ligand binding" />
 
-  <meta name="dc.date" content="2020-11-25" />
+  <meta name="dc.date" content="2020-11-30" />
 
-  <meta name="citation_publication_date" content="2020-11-25" />
+  <meta name="citation_publication_date" content="2020-11-30" />
 
   <meta name="dc.language" content="en-US" />
 
@@ -81,11 +81,11 @@ header-includes: '<!--
 
   <link rel="alternate" type="application/pdf" href="https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf" />
 
-  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/a373389286e26653343f960adb5a33e0b76e7221/" />
+  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/f82953e0a37de45c668fab41adc342e2c0885215/" />
 
-  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/a373389286e26653343f960adb5a33e0b76e7221/" />
+  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/f82953e0a37de45c668fab41adc342e2c0885215/" />
 
-  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/a373389286e26653343f960adb5a33e0b76e7221/manuscript.pdf" />
+  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/f82953e0a37de45c668fab41adc342e2c0885215/manuscript.pdf" />
 
   <meta property="og:type" content="article" />
 
@@ -114,7 +114,7 @@ title: A quantitative view of strategies to engineer cell-selective ligand bindi
 
 <small><em>
 This manuscript
-was automatically generated on November 25, 2020.
+was automatically generated on November 30, 2020.
 </em></small>
 
 ## Authors
@@ -155,14 +155,9 @@ was automatically generated on November 25, 2020.
 
 A critical property of many therapies is their selective binding to specific target populations. Exceptional specificity can arise from high-affinity binding to unique cell surface targets. In many cases, however, therapeutic targets are only expressed at subtly different levels relative to off-target cells. More complex binding strategies have been developed to overcome this limitation, including multi-specific and multi-valent molecules, but these create a combinatorial explosion of design possibilities. Therefore, guiding strategies for developing cell-specific binding are critical to employ these tools. Here, we extend a multi-valent binding model to multi-ligand and multi-receptor interactions. Using this model, we explore a series of mechanisms to engineer cell selectivity, including mixtures of molecules, affinity adjustments, and valency changes. Each of these strategies maximizes selectivity in distinct cases, leading to synergistic improvements when used in combination. Finally, we identify situations in which selectivity cannot be derived through passive binding alone to highlight areas in need of new developments. In total, this work uses a quantitative model to unify a comprehensive set of design guidelines for engineering cell-specific therapies.
 
-## Summary points
+## Significance Statement
 
-- Affinity, valency, and other alterations to target cell binding provide enhanced selectivity in specific situations.
-- Evidence for the effectiveness and limitations of each strategy are abundant within the drug development literature.
-- Combining strategies can offer enhanced selectivity.
-- A simple, multivalent ligand-receptor binding model can help to direct therapeutic engineering.
-
-
+Selective binding to specific target cells is a critical property of many therapies. To provide enhanced selectivity in specific situations, a series of new strategies have been proposed in the drug development literature, including affinity, valency, multi-valent compounds, and other alterations to target cell binding. We have developed a simple, multivalent ligand-receptor binding model that can help to direct therapeutic engineering. Here, using this model, we provide generalized and quantitative analyses of the effectiveness and limitations of each strategy. We also demonstrate that combining strategies can offer enhanced selectivity. This work will provide guidance for future therapeutic development.
 
 ## Introduction
 
