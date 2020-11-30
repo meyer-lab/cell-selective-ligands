@@ -81,11 +81,11 @@ header-includes: '<!--
 
   <link rel="alternate" type="application/pdf" href="https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf" />
 
-  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/f82953e0a37de45c668fab41adc342e2c0885215/" />
+  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/28314935c488235900857dfd38d19d31687ae244/" />
 
-  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/f82953e0a37de45c668fab41adc342e2c0885215/" />
+  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/28314935c488235900857dfd38d19d31687ae244/" />
 
-  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/f82953e0a37de45c668fab41adc342e2c0885215/manuscript.pdf" />
+  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/28314935c488235900857dfd38d19d31687ae244/manuscript.pdf" />
 
   <meta property="og:type" content="article" />
 
@@ -157,7 +157,8 @@ A critical property of many therapies is their selective binding to specific tar
 
 ## Significance Statement
 
-Selective binding to specific target cells is a critical property of many therapies. To provide enhanced selectivity in specific situations, a series of new strategies have been proposed in the drug development literature, including affinity, valency, multi-valent compounds, and other alterations to target cell binding. We have developed a simple, multivalent ligand-receptor binding model that can help to direct therapeutic engineering. Here, using this model, we provide generalized and quantitative analyses of the effectiveness and limitations of each strategy. We also demonstrate that combining strategies can offer enhanced selectivity. This work will provide guidance for future therapeutic development.
+Selective binding to specific target cells is a critical property of many therapies. To enhance selectivity in specific situations, a series of new strategies have been proposed in the drug development literature, including affinity, valency, multi-specificity, and other alterations to target cell binding. We have developed a simple and general, multivalent ligand-receptor binding model that can help to direct therapeutic engineering. Using this model, we provide generalized and quantitative analyses of the effectiveness and limitations of each strategy. We also demonstrate that combining strategies can offer enhanced selectivity. This work provides guidance for future therapeutic development.
+
 
 ## Introduction
 
