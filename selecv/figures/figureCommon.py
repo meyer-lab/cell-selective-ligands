@@ -184,31 +184,30 @@ def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowligh
     ax_new.set_xlim(scale)
     ax_new.set_ylim(scale)
     for label, item in data.items():
-        color = "blue"
-        if label in highlight:
-            color = "red"
-        elif label in lowlight:
-            color = "purple"
-        ax_new.add_patch(Ellipse(xy=(item[0], item[1]),
-                                 width=item[2],
-                                 height=item[3],
-                                 angle=item[4],
-                                 facecolor=color,
-                                 fill=True,
-                                 alpha=0.8,
-                                 linewidth=1))
-        ax_new.text(item[0], item[1], label,
-                    horizontalalignment='center',
-                    verticalalignment='center',
-                    fontsize=11.3,
-                    fontweight='bold',
-                    color='black')
-        ax_new.text(item[0], item[1], label,
-                    horizontalalignment='center',
-                    verticalalignment='center',
-                    fontsize=11,
-                    fontweight='light',
-                    color='white')
+        if not lowlight or label in [highlight[0], lowlight[0]]:
+            color = "blue"
+            if label in highlight:
+                color = "red"
+            ax_new.add_patch(Ellipse(xy=(item[0], item[1]),
+                                    width=item[2],
+                                    height=item[3],
+                                    angle=item[4],
+                                    facecolor=color,
+                                    fill=True,
+                                    alpha=0.8,
+                                    linewidth=1))
+            ax_new.text(item[0], item[1], label,
+                        horizontalalignment='center',
+                        verticalalignment='center',
+                        fontsize=11.3,
+                        fontweight='bold',
+                        color='black')
+            ax_new.text(item[0], item[1], label,
+                        horizontalalignment='center',
+                        verticalalignment='center',
+                        fontsize=11,
+                        fontweight='light',
+                        color='white')
 
 
 def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title="", cbar=False, layover=True, fully=False, highlight=[]):
