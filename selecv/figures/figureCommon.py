@@ -189,13 +189,13 @@ def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowligh
             if label in highlight:
                 color = "red"
             ax_new.add_patch(Ellipse(xy=(item[0], item[1]),
-                                    width=item[2],
-                                    height=item[3],
-                                    angle=item[4],
-                                    facecolor=color,
-                                    fill=True,
-                                    alpha=0.8,
-                                    linewidth=1))
+                                     width=item[2],
+                                     height=item[3],
+                                     angle=item[4],
+                                     facecolor=color,
+                                     fill=True,
+                                     alpha=0.8,
+                                     linewidth=1))
             ax_new.text(item[0], item[1], label,
                         horizontalalignment='center',
                         verticalalignment='center',
