@@ -4,7 +4,7 @@ author-meta:
 - Brian Orcutt-Jahns
 - Aaron S. Meyer
 bibliography: []
-date-meta: '2020-11-30'
+date-meta: '2020-12-03'
 header-includes: '<!--
 
   Manubot generated metadata rendered from header-includes-template.html.
@@ -23,9 +23,9 @@ header-includes: '<!--
 
   <meta property="twitter:title" content="A quantitative view of strategies to engineer cell-selective ligand binding" />
 
-  <meta name="dc.date" content="2020-11-30" />
+  <meta name="dc.date" content="2020-12-03" />
 
-  <meta name="citation_publication_date" content="2020-11-30" />
+  <meta name="citation_publication_date" content="2020-12-03" />
 
   <meta name="dc.language" content="en-US" />
 
@@ -81,11 +81,11 @@ header-includes: '<!--
 
   <link rel="alternate" type="application/pdf" href="https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf" />
 
-  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/9e792ee50f94af662cb82dc9e8d7692dc2ca181b/" />
+  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/526496068192f9e285b25faed0b44b72db4d7ce9/" />
 
-  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/9e792ee50f94af662cb82dc9e8d7692dc2ca181b/" />
+  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/526496068192f9e285b25faed0b44b72db4d7ce9/" />
 
-  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/9e792ee50f94af662cb82dc9e8d7692dc2ca181b/manuscript.pdf" />
+  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/526496068192f9e285b25faed0b44b72db4d7ce9/manuscript.pdf" />
 
   <meta property="og:type" content="article" />
 
@@ -114,7 +114,7 @@ title: A quantitative view of strategies to engineer cell-selective ligand bindi
 
 <small><em>
 This manuscript
-was automatically generated on November 30, 2020.
+was automatically generated on December 3, 2020.
 </em></small>
 
 ## Authors
