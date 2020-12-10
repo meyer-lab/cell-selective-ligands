@@ -4,7 +4,7 @@ author-meta:
 - Brian Orcutt-Jahns
 - Aaron S. Meyer
 bibliography: []
-date-meta: '2020-12-03'
+date-meta: '2020-12-10'
 header-includes: '<!--
 
   Manubot generated metadata rendered from header-includes-template.html.
@@ -23,9 +23,9 @@ header-includes: '<!--
 
   <meta property="twitter:title" content="A quantitative view of strategies to engineer cell-selective ligand binding" />
 
-  <meta name="dc.date" content="2020-12-03" />
+  <meta name="dc.date" content="2020-12-10" />
 
-  <meta name="citation_publication_date" content="2020-12-03" />
+  <meta name="citation_publication_date" content="2020-12-10" />
 
   <meta name="dc.language" content="en-US" />
 
@@ -81,11 +81,11 @@ header-includes: '<!--
 
   <link rel="alternate" type="application/pdf" href="https://meyer-lab.github.io/cell-selective-ligands/manuscript.pdf" />
 
-  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/526496068192f9e285b25faed0b44b72db4d7ce9/" />
+  <link rel="alternate" type="text/html" href="https://meyer-lab.github.io/cell-selective-ligands/v/3b2728f900df550863552b6993641ddd350334d5/" />
 
-  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/526496068192f9e285b25faed0b44b72db4d7ce9/" />
+  <meta name="manubot_html_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/3b2728f900df550863552b6993641ddd350334d5/" />
 
-  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/526496068192f9e285b25faed0b44b72db4d7ce9/manuscript.pdf" />
+  <meta name="manubot_pdf_url_versioned" content="https://meyer-lab.github.io/cell-selective-ligands/v/3b2728f900df550863552b6993641ddd350334d5/manuscript.pdf" />
 
   <meta property="og:type" content="article" />
 
@@ -114,7 +114,7 @@ title: A quantitative view of strategies to engineer cell-selective ligand bindi
 
 <small><em>
 This manuscript
-was automatically generated on December 3, 2020.
+was automatically generated on December 10, 2020.
 </em></small>
 
 ## Authors
@@ -220,7 +220,7 @@ While mixture engineering fails to enhance binding selectivity between two cell 
 
 ![**Ligand mixtures with non-overlapping responses can enhance selectivity.** a) Heat/contour maps of multivalent ligands bound to cell populations given their expression profiles of two receptors. A mixture of monovalent ligands is used, with ligand 1 binding to receptor 1 and 2 with dissociation constants of $1 \,\mathrm{\mu M}$ and $10 \,\mathrm{\mu M}$ respectively, and ligand 2 binding to receptors 1 and 2 with dissociation constants of $10 \,\mathrm{\mu M}$ and $1 \,\mathrm{\mu M}$ respectively. Ligand concentration $L_0=1 \,\mathrm{nM}$; crosslinking constant $K_x^*=10^{-10}$. b,c) Ratio of ligand bound to cell populations exposed to monovalent mixtures of ligand 1 and 2. The ratio of the target population to the single off target population with the greatest ligand bound is plotted. The shaded areas indicate the variance caused by intrapopulation heterogeneity, estimated by sigma point filters. b) Ligand bound ratio of $R_1^{hi}R_2^{lo}$ to $R_1^{med}R_2^{lo}$, c) $R_1^{hi}R_2^{hi}$ to $R_1^{hi}R_2^{lo}$ and $R_1^{lo}R_2^{hi}$.](figure4.svg){#fig:mixture}
 
-### Heterovalent Bispecific Ligands Exhibit Unique Charateristics When Activated Fully Bound
+### Heterovalent Bispecific Ligands Exhibit Unique Characteristics When Activated Fully Bound
 
 Constructing multispecific drugs has become a promising new strategy for finer target cell specificity with the advancement of engineering techniques [@doi:10.1038/s41586-020-2168-1]. However, the number of possible configurations of multispecific drugs is combinatorially large and impossible to enumerate. Here, we use heterovalent bispecific ligands as examples to explore the unique benefit of multispecificity distinct from any strategy analyzed before. Here, we compare bispecificity with a 50%-50% mixture of two monovalent ligands, and a 50%-50% mixture of two different homogeneous bivalent ligands (Fig. {@fig:bispecific}i). These two strategies both have some similarities to bispecific therapeutics. A bispecific ligand contains two different ligand monomers with equal proportion, similar to a 50%-50% monovalent mixture. By comparing bispecific with a 50%-50% monovalent mixture, we can elucidate the extra benefit of tethering these two monomers into one complex. A bispecific ligand is also by nature bivalent, and by comparing it with homogeneous bivalent drugs, we can understand how having two different subunits in the same complex modify the behavior of a drug. Together, we sought to identify the unique advantages afforded by heterovalent ligands.
 
@@ -249,6 +249,7 @@ While the strategies above provided selectivity in many cases, we recognized tha
 To investigate the effect of ligand competition with an antagonist, we modeled mixtures of ligands, but only quantified the amount of binding for the active ligand. Here we chose to only consider a monovalent agonist and tetravalent antagonist (Fig. {@fig:deadLig}). We found that combinations of monovalent agonistic ligands and multivalent antagonistic ligands were able to uniquely target populations expressing small or intermediate amounts of receptors, which is demonstrated when comparing ligand binding ratios between $R_1^{med}R_2^{lo}$ to $R_1^{hi}R_2^{lo}$ (Fig. {@fig:deadLig}a). Here, a nearly tenfold increase in selectivity can be granted to monovalent agonists with affinities optimized for selectivity when combined with a tetravalent antagonist. In this case, there are greater quantities of agonist bound to $R_1^{med}R_2^{lo}$ than $R_1^{hi}R_2^{lo}$ (Fig. {@fig:deadLig}b). This is striking, as $R_1^{med}R_2^{lo}$ expresses either as many or fewer abundances of receptors one and two when compared to $R_1^{hi}R_2^{lo}$. This phenomenon, which could not be achieved without multivalent antagonists, occurs due to the preferential binding of multivalent antagonists to populations expressing higher abundances of receptors (Fig. {@fig:deadLig}c, {@fig:valency}e). Thus, in cases where previously discussed ligand engineering strategies and approaches fail to achieve selective binding to cells expressing smaller or similar amounts of receptors to off-target populations, combinations of agonistic and antagonistic ligands may provide unique benefits.
 
 ![**Mixtures of receptor agonists and antagonists allow for unique population targeting activity.** Ligand concentration $L_0=1 \mathrm{nM}$. a) Selectivity for $R_1^{med}R_2^{lo}$ against $R_1^{hi}R_2^{lo}$ when exposed to a tetravalent "dead ligand" antagonist with varying affinities for receptors 1 and 2, and a monovalent therapeutic receptor agonists with affinities optimized for selectivity. Only amount of agonist bound is considered in determination of optimal selectivity. b-d) Heatmap of agonist (b), and antagonist (c) ligand bound for antagonist and agonist ligand combination shown to impart greatest selectivity improvement in (a). d) Heatmap of agonist bound in b,c when no antagonist is present.](figure7.svg){#fig:deadLig}
+
 
 ## Discussion
 
