@@ -122,7 +122,7 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
     targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
 
     optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
-    strats = ["Xo", "Affinity", "Mixture+Affinity", "Valency+Affinity", "All"]
+    strats = ["Unaltered", "Affinity", "Mixture+Affinity", "Valency+Affinity", "All"]
     pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
 
     for i, strat in enumerate(strats):
@@ -167,7 +167,7 @@ optBnds = [(np.log(1e-11), np.log(1e-8)),  # log L0
 cBnd = (np.log(1e-9), np.log(1.01e-9))
 
 bndsDict = {
-    "Xo": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0.99, 1.00), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
+    "Unaltered": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0.99, 1.00), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
     "Affinity": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0.99, 1.00), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
     "Mixture+Affinity": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10))),
     "Valency+Affinity": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 16), (0.99, 1.00), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
@@ -181,7 +181,7 @@ def optimizeDesignAnim(targetPop):
     targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
 
     optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
-    strats = ["Xo", "Affinity", "Mixture+Affinity", "Valency+Affinity", "All"]
+    strats = ["Unaltered", "Affinity", "Mixture+Affinity", "Valency+Affinity", "All"]
     pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
     optParamsHold = np.zeros([len(strats), 6])
 
