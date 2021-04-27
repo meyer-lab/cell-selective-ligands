@@ -48,12 +48,13 @@ def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund, valencies=False):
     df = df.rename(columns={"valency": "Valency", "data": "Clone", "intensity": "Measured Fluorescent Intensity"})
 
     lr = LinearRegression(fit_intercept=False)
-    X, Y = np.array(X1).reshape(-1, 1), np.array(Y1)
-    lr.fit(X, Y)
-    C5_score = lr.score(X, Y)
-    X, Y = np.array(X2).reshape(-1, 1), np.array(Y2)
-    lr.fit(X, Y)
-    B22_score = lr.score(X, Y)
+    X11, Y11 = np.array(X1).reshape(-1, 1), np.array(Y1)
+    lr.fit(X11, Y11)
+    C5_score = lr.score(X11, Y11)
+    X22, Y22 = np.array(X2).reshape(-1, 1), np.array(Y2)
+    lr.fit(X22, Y22)
+    B22_score = lr.score(X22, Y22)
+    print(lr.score(np.append(X11, X22).reshape(-1, 1), np.append(Y11, Y22)))
 
     sns.lineplot(x="Predicted", y="Measured Fluorescent Intensity", hue="Clone", style="Valency", markers=True, data=df, ax=ax)
 
