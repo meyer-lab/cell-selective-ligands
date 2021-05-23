@@ -12,7 +12,7 @@ import pandas as pds
 import numpy as np
 import svgutils.transform as st
 from ..sampling import sampleSpec, cellPopulations
-from ..model import polyc, polyfc
+from valentbind import polyc, polyfc
 
 rcParams['pcolor.shading'] = 'auto'
 

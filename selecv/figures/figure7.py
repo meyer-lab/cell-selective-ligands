@@ -9,7 +9,7 @@ import matplotlib.cm as cm
 from scipy.optimize import minimize
 from .figureCommon import subplotLabel, getSetup, cellPopulations, overlapCellPopulation
 from .figure6 import genOnevsAll, genPopMeans
-from ..model import polyc
+from valentbind import polyc
 from ..sampling import sigmaPopC
 
 
