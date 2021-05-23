@@ -8,7 +8,7 @@ from scipy.optimize import minimize
 from .figureCommon import subplotLabel, getSetup, heatmapNorm
 from ..imports import getPopDict
 from ..sampling import sigmaPop
-from ..model import polyfc
+from valentbind import polyfc
 
 
 def makeFigure():

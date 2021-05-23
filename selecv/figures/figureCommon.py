@@ -12,7 +12,7 @@ import pandas as pds
 import numpy as np
 import svgutils.transform as st
 from ..sampling import sampleSpec, cellPopulations
-from ..model import polyc, polyfc
+from valentbind import polyc, polyfc
 
 rcParams['pcolor.shading'] = 'auto'
 
@@ -50,8 +50,7 @@ def overlayCartoon(figFile, cartoonFile, x, y, scalee=1, scale_x=1, scale_y=1):
     template = st.fromfile(figFile)
     cartoon = st.fromfile(cartoonFile).getroot()
 
-    cartoon.moveto(x, y, scale=scalee)
-    cartoon.scale_xy(scale_x, scale_y)
+    cartoon.moveto(x, y, scale_x=scalee * scale_x, scale_y=scalee * scale_y)
 
     template.append(cartoon)
     template.save(figFile)

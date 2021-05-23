@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from .figureCommon import getSetup, subplotLabel, heatmap, cellPopulations, overlapCellPopulation
-from ..model import polyc, polyfc
+from valentbind import polyc, polyfc
 
 
 pairs = [(r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"), (r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"),

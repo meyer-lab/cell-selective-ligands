@@ -6,7 +6,7 @@ import pandas as pd
 import seaborn as sns
 from scipy.optimize import minimize
 from sklearn.linear_model import LinearRegression
-from selecv.model import polyfc
+from valentbind import polyfc
 
 
 Kav = np.array([[5.88e7], [9.09e5], [0]])   # [C5, B22, NT]

@@ -4,7 +4,7 @@ Sample from population to calculation population specificities.
 
 import numpy as np
 
-from .model import polyfc, polyc
+from valentbind import polyfc, polyc
 
 
 nsample = 200
