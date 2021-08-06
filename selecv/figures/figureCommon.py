@@ -71,7 +71,7 @@ def PlotCellPops(ax, df, bbox=False):
     plot.text(10000, 10000, r"$R_1^{hi}R_2^{hi}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
     plot.text(8000, 1000, r"$R_1^{hi}R_2^{med}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
     plot.text(1000, 8000, r"$R_1^{med}R_2^{hi}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    ax.set(xscale="log", yscale="log", xlabel="Receptor 1", ylabel="Receptor 2")
+    ax.set(xscale="log", yscale="log", xlabel="Receptor 1 Abundance", ylabel="Receptor 2 Abundance")
 
 
 def sampleReceptors(df, nsample=100):
