@@ -100,7 +100,7 @@ def demoHeatmap(ax, vmin=1, vmax=4):
     ax_new.add_artist(plt.Circle((2, 4), 0.2, color='w'))
     ax_new.text(2, 4, "3", size=11, color='red', weight='semibold', horizontalalignment='center',
                 verticalalignment='center', backgroundcolor='w')
-    ax.set(xlabel="Receptor 1", ylabel="Receptor 2")
+    ax.set(xlabel="Receptor 1 Abundance", ylabel="Receptor 2 Abundance")
 
 
 def demoPopulations(ax):
@@ -109,5 +109,5 @@ def demoPopulations(ax):
     ax.set_ylim((10 ** 1.5, 10 ** 4.5))
     ax.set_xticks([])
     ax.set_yticks([])
-    ax.set(xscale="log", yscale="log", xlabel="Receptor 1", ylabel="Receptor 2")
+    ax.set(xscale="log", yscale="log", xlabel="Receptor 1 Abundance", ylabel="Receptor 2 Abundance")
     overlapCellPopulation(ax, (1.5, 4.5), data=cellPopulations)
