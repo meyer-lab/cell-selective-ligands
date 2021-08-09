@@ -25,12 +25,14 @@ output/manuscript.html: venv output/manuscript.md $(patsubst %, output/figure%.s
 	. venv/bin/activate && pandoc --verbose \
 		--defaults=./common/templates/manubot/pandoc/common.yaml \
 		--defaults=./common/templates/manubot/pandoc/html.yaml \
+		--csl=./manuscript/integrative-biology.csl \
 		output/manuscript.md
 
 output/manuscript.docx: venv output/manuscript.md $(patsubst %, output/figure%.svg, $(flist))
 	. venv/bin/activate && pandoc --verbose \
 		--defaults=./common/templates/manubot/pandoc/common.yaml \
 		--defaults=./common/templates/manubot/pandoc/docx.yaml \
+		--csl=./manuscript/integrative-biology.csl \
 		output/manuscript.md
 
 test: venv
