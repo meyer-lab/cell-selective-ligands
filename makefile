@@ -15,33 +15,26 @@ venv/bin/activate: requirements.txt
 
 output/figure%.svg: venv genFigures.py selecv/figures/figure%.py
 	mkdir -p ./manuscript/figures
-	. venv/bin/activate && JAX_PLATFORM_NAME=cpu ./genFigures.py $*
+	. venv/bin/activate && ./genFigures.py $*
 
 output/manuscript.md: venv manuscript/*.md
 	. venv/bin/activate && manubot process --content-directory=manuscript --output-directory=output --cache-directory=cache --skip-citations --log-level=INFO
 	git remote rm rootstock
 
-output/manuscript.html: venv output/manuscript.md $(patsubst %, output/figure%.svg, $(flist))
+output/manuscript.html: venv output/manuscript.md
 	. venv/bin/activate && pandoc --verbose \
-		--defaults=./common/templates/manubot/pandoc/common.yaml \
+		--defaults=./common.yaml \
 		--defaults=./common/templates/manubot/pandoc/html.yaml \
-		--resource-path=. \
-		--csl=./manuscript/integrative-biology.csl \
 		output/manuscript.md
 
-output/manuscript.docx: venv output/manuscript.md $(patsubst %, output/figure%.svg, $(flist))
+output/manuscript.docx: venv output/manuscript.md
 	. venv/bin/activate && pandoc --verbose \
-		--defaults=./common/templates/manubot/pandoc/common.yaml \
+		--defaults=./common.yaml \
 		--defaults=./common/templates/manubot/pandoc/docx.yaml \
-		--resource-path=. \
-		--csl=./manuscript/integrative-biology.csl \
 		output/manuscript.md
 
 test: venv
-	. venv/bin/activate; JAX_PLATFORM_NAME=cpu pytest -s -v
+	. venv/bin/activate; pytest -s -v
 
 clean:
-	mv output/requests-cache.sqlite requests-cache.sqlite || true
-	rm -rf output
-	mkdir output
-	mv requests-cache.sqlite output/requests-cache.sqlite || true
+	rm -rf output venv
