@@ -49,7 +49,7 @@ def sampleSpec(L0, KxStar, f, names, LigC, Kav):
     quantsNum = sigmaPop(names[0], L0, KxStar, f, LigC, Kav)
     quants = np.zeros([len(names) - 1, len(quantsNum)**2])
     qmean = np.zeros([len(names) - 1])
-    
+
     for ii in range(1, len(names)):
         calc = sigmaPop(names[ii], L0, KxStar, f, LigC, Kav)
         quants[ii - 1, :] = np.reshape(quantsNum.reshape(-1, 1) / calc, -1)
