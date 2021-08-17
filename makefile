@@ -32,7 +32,7 @@ output/manuscript.docx: venv output/manuscript.md $(patsubst %, output/figure%.s
 	. venv/bin/activate && pandoc --verbose \
 		--defaults=./common/templates/manubot/pandoc/common.yaml \
 		--defaults=./common/templates/manubot/pandoc/docx.yaml \
-		--csl=./manuscript/integrative-biology.csl \
+		--csl=./manuscript/sage-vancouver.csl \
 		output/manuscript.md
 
 test: venv
