@@ -25,15 +25,12 @@ output/manuscript.html: venv output/manuscript.md
 	. venv/bin/activate && pandoc --verbose \
 		--defaults=./common.yaml \
 		--defaults=./common/templates/manubot/pandoc/html.yaml \
-		--csl=./manuscript/sage-vancouver.csl \
-
 		output/manuscript.md
 
 output/manuscript.docx: venv output/manuscript.md
 	. venv/bin/activate && pandoc --verbose \
 		--defaults=./common.yaml \
 		--defaults=./common/templates/manubot/pandoc/docx.yaml \
-		--csl=./manuscript/sage-vancouver.csl \
 		output/manuscript.md
 
 test: venv
