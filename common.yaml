@@ -8,5 +8,5 @@ filters:
 - citeproc
 wrap: preserve
 metadata:
-  csl: https://www.zotero.org/styles/integrative-biology
+  csl: https://www.zotero.org/styles/sage-vancouver
   link-citations: true
