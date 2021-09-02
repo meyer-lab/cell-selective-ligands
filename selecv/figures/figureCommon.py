@@ -255,11 +255,11 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
     X, Y = np.meshgrid(abundScan, abundScan)
     Z = func(X, Y) / func0
 
-    contours = ax.contour(X, Y, Z, levels=np.logspace(-10, 10, 101), colors="black", linewidths=0.5)
+    contours = ax.contour(X, Y, Z, levels=np.logspace(-10, 10, 76), colors="black", linewidths=0.5)
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(title)
-    plt.clabel(contours, inline=True, fontsize=6, fmt="%1.1f")
+    plt.clabel(contours, inline=True, fontsize=6, fmt="%1.2f")
     ax.pcolor(X, Y, Z, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
     norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
     if cbar:
