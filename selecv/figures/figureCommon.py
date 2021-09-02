@@ -259,7 +259,7 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(title)
-    plt.clabel(contours, inline=True, fontsize=6)
+    plt.clabel(contours, inline=True, fontsize=6, fmt="%1.1f")
     ax.pcolor(X, Y, Z, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
     norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
     if cbar:
