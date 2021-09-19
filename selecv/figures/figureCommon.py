@@ -15,6 +15,7 @@ from ..sampling import sampleSpec, cellPopulations
 from valentbind import polyc, polyfc
 
 rcParams['pcolor.shading'] = 'auto'
+rcParams['svg.fonttype'] = 'none'
 
 
 def getSetup(figsize, gridd):
