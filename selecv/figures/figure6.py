@@ -16,10 +16,18 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((16, 8), (3, 6))
     subplotLabel(ax)
+    fsize = 7.5
 
     optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"], vrange=(0, 3))
     optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 1.5))
     optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 10))
+
+    for subax in ax:
+        subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
+        subax.set_yticklabels(subax.get_yticklabels(), fontsize=fsize)
+        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
+        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
+        subax.set_title(subax.get_title(), fontsize=fsize)
 
     return f
 
@@ -150,7 +158,7 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
 
     sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax[0])
     ax[0].set(title="Optimization of " + targetPop[0])
-    ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=25, horizontalalignment='right')
+    ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=40, horizontalalignment='center')
     ax[0].set_ylim(0, 20)
 
 

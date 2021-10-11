@@ -17,6 +17,7 @@ def makeFigure():
     """ main function for Figure 5 """
     ax, f = getSetup((10, 10), (3, 3))
     subplotLabel(ax, list(range(9)))
+    fsize = 9.5
 
     L0 = 1e-8
     Kav = [[1e7, 1e5], [1e5, 1e6]]
@@ -39,6 +40,13 @@ def makeFigure():
     KxStarVary(ax[6], L0, Kav, ylim=(-9, 9), compare="tether")
     KxStarVary(ax[7], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
     ax[8].axis("off")
+
+    for subax in ax:
+        subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
+        subax.set_yticklabels(subax.get_yticklabels(), fontsize=fsize)
+        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
+        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
+        subax.set_title(subax.get_title(), fontsize=8)
 
     return f
 

@@ -19,12 +19,20 @@ def makeFigure():
     subplotLabel(ax, [0] + list(range(10, 14)))
     ax[14].axis("off")
     affinity(f, ax[0:9], 1e-9, 1e-10, [1.0], ff=1, vmin=-1, vmax=5.5)
+    fsize = 12
 
     showPopulations(ax[9])
     popCompare(ax[10], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{hi}$"], "Aff", Kav=[5, 7])
     popCompare(ax[11], [r"$R_1^{med}R_2^{hi}$", r"$R_1^{hi}R_2^{med}$"], "Aff", Kav=[5, 7])
     popCompare(ax[12], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], "Aff", Kav=[5, 7])
     popCompare(ax[13], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], "Aff", Kav=[5, 7])
+
+    for subax in ax:
+        subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
+        subax.set_yticklabels(subax.get_yticklabels(), fontsize=fsize)
+        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
+        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
+        subax.set_title(subax.get_title(), fontsize=fsize)
 
     return f
 
