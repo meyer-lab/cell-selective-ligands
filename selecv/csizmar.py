@@ -112,7 +112,7 @@ def xeno(ax, KxStarX, KavX):
         df = df.append({"Ligand": ligandDict[str(lig)], "ratio": (mcf / mda)}, ignore_index=True)
     sns.barplot(x="Ligand", y="ratio", data=df, ax=ax)
     ax.set(xlabel="", ylabel="Binding Ratio")
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=25, horizontalalignment='right')
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=25, horizontalalignment='center')
     ax.set(ylim=(0, 200))
     return ax
 

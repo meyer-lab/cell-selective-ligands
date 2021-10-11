@@ -133,7 +133,7 @@ def affHeatMap(ax, names, Kav, L0, KxStar, f, Title, Cbar=True):
     else:
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
     ax.set(xlabel="Rec 1 Affinity ($K_d$, in nM)", ylabel="Rec 2 Affinity ($K_d$, in nM)")
-    ax.set_title(Title, fontsize=8)
+    ax.set_title(Title, fontsize=10)
 
 
 def ValencyPlot(ax, names, Kav, L0, KxStar, f, Title):
@@ -151,7 +151,7 @@ def ValencyPlot(ax, names, Kav, L0, KxStar, f, Title):
         ax.fill_between(f, underDev, overDev, color=colors[ii], alpha=0.1)
     ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 60))
     ax.set_xticks((4, 8, 12, 16))
-    ax.legend(prop={"size": 6})
+    ax.legend(prop={"size": 7})
 
 
 def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
@@ -167,11 +167,11 @@ def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
     ax.fill_between(mixRatio, underDev, overDev, color="royalblue", alpha=0.1)
     if len(names) == 2:
         ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 12), xlim=(0, 1))  # , title=Title + " binding ratio")
-        ax.set_title(Title, fontsize=7)
+        ax.set_title(Title, fontsize=8)
         ax.grid()
     else:
         ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 5), xlim=(0, 1))
-        ax.set_title(Title, fontsize=7)
+        ax.set_title(Title, fontsize=8)
         ax.grid()
 
 
