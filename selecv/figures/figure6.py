@@ -129,12 +129,13 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5), recFactor=1.0):
         if strat == "Mixture+Affinity":
             optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [0.9, 0.1], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
         elif strat == "All":
-            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 15, [0.9, 0.1], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, optParams[1], optParams[2], [0.9, 0.1], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
         elif strat == "Valency+Affinity":
             optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 15, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
         else:
             optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
         stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
+
         optDF = optDF.append(stratRow, ignore_index=True)
         optParams = optimized.x
         optParams[0:2] = np.exp(optParams[0:2])
