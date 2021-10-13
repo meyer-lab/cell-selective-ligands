@@ -241,7 +241,7 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
         overlapCellPopulation(ax, abundRange, highlight=highlight)
 
 
-def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=True, highlight=[], recFactor=1.0):
+def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=True, highlight=[],  lineN=101, recFactor=1.0):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
     abundRange = (1.5 + np.log10(recFactor), 4.5 + np.log10(recFactor))
