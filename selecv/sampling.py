@@ -3,7 +3,7 @@ Sample from population to calculation population specificities.
 """
 
 import numpy as np
-
+from copy import copy
 from .model import polyfc, polyc
 
 
@@ -22,10 +22,11 @@ cellPopulations = {
 }
 
 
-def sigmapts(name, h=None):
+def sigmapts(name, h=None, recFactor=1.0):
     if h is None:
         h = np.sqrt(3)
-    l = cellPopulations[name]
+    l = copy(cellPopulations[name])
+    l[0:2] = l[0:2] + np.log10(recFactor)
     x = np.array([l[0], l[1]])
     rot = np.array([[np.cos(np.deg2rad(l[4])), -np.sin(np.deg2rad(l[4]))], [np.sin(np.deg2rad(l[4])), np.cos(np.deg2rad(l[4]))]])
     srlamb = np.diag([l[2], l[3]])
@@ -33,8 +34,8 @@ def sigmapts(name, h=None):
     return np.power(10, [x, x + h * srcov[:, 0], x - h * srcov[:, 0], x + h * srcov[:, 1], x - h * srcov[:, 1]])
 
 
-def sigmaPop(name, L0, KxStar, f, LigC, Kav, quantity=0, h=None):
-    return np.array([polyfc(L0, KxStar, f, Rtot, LigC, Kav)[quantity] for Rtot in sigmapts(name, h=h)]).reshape(-1)
+def sigmaPop(name, L0, KxStar, f, LigC, Kav, quantity=0, h=None, recFactor=1.0):
+    return np.array([polyfc(L0, KxStar, f, Rtot, LigC, Kav)[quantity] for Rtot in sigmapts(name, h=h, recFactor=recFactor)]).reshape(-1)
 
 
 def sigmaPopC(name, L0, KxStar, Cplx, Ctheta, Kav, quantity=0, h=None):
