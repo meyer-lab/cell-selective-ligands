@@ -6,7 +6,7 @@ import pandas as pd
 import seaborn as sns
 from scipy.optimize import minimize
 from sklearn.linear_model import LinearRegression
-from selecv.model import polyfc
+from valentbind import polyfc
 
 
 Kav = np.array([[5.88e7], [9.09e5], [0]])   # [C5, B22, NT]
@@ -48,12 +48,13 @@ def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund, valencies=False):
     df = df.rename(columns={"valency": "Valency", "data": "Clone", "intensity": "Measured Fluorescent Intensity"})
 
     lr = LinearRegression(fit_intercept=False)
-    X, Y = np.array(X1).reshape(-1, 1), np.array(Y1)
-    lr.fit(X, Y)
-    C5_score = lr.score(X, Y)
-    X, Y = np.array(X2).reshape(-1, 1), np.array(Y2)
-    lr.fit(X, Y)
-    B22_score = lr.score(X, Y)
+    X11, Y11 = np.array(X1).reshape(-1, 1), np.array(Y1)
+    lr.fit(X11, Y11)
+    C5_score = lr.score(X11, Y11)
+    X22, Y22 = np.array(X2).reshape(-1, 1), np.array(Y2)
+    lr.fit(X22, Y22)
+    B22_score = lr.score(X22, Y22)
+    print(lr.score(np.append(X11, X22).reshape(-1, 1), np.append(Y11, Y22)))
 
     sns.lineplot(x="Predicted", y="Measured Fluorescent Intensity", hue="Clone", style="Valency", markers=True, data=df, ax=ax)
 
@@ -111,7 +112,7 @@ def xeno(ax, KxStarX, KavX):
         df = df.append({"Ligand": ligandDict[str(lig)], "ratio": (mcf / mda)}, ignore_index=True)
     sns.barplot(x="Ligand", y="ratio", data=df, ax=ax)
     ax.set(xlabel="", ylabel="Binding Ratio")
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=25, horizontalalignment='right')
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=25, horizontalalignment='center')
     ax.set(ylim=(0, 200))
     return ax
 
@@ -127,10 +128,15 @@ def resids(x):
     return np.linalg.norm(X2 - Y2) + np.linalg.norm(X1 - Y1)
 
 
-def fitfunc():
+def fitfunc(fitAff=True):
     "Runs least squares fitting for various model parameters, and returns the minimizers"
     x0 = np.array([np.log(10 ** -14.714), 0.01, 0.01, np.log(Kav[0])[0], np.log(Kav[1])[0], np.log(3.8e6), 1, 2, 4, 8])  # KXSTAR, slopeC5, slopeB22, KA C5, KA, B22, receps MH-7
-    bnds = ((None, None), (None, None), (None, None), (None, None), (None, None), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1.01), (2, 2.01), (4, 4.01), (8, 8.01))
+    if fitAff:
+        bnds = ((None, None), (None, None), (None, None), (None, None), (None, None), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1.01), (2, 2.01), (4, 4.01), (8, 8.01))
+    else:
+        bnds = ((None, None), (None, None), (None, None), (np.log(Kav[0])[0], np.log(Kav[0])[0] * 1.0001), (np.log(Kav[1])[0],
+                np.log(Kav[1])[0] * 1.0001), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1.01), (2, 2.01), (4, 4.01), (8, 8.01))
+
     parampredicts = minimize(resids, x0, jac="3-point", bounds=bnds)
     assert parampredicts.success
     return parampredicts.x

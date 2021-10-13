@@ -9,7 +9,7 @@ import matplotlib.cm as cm
 from scipy.optimize import minimize
 from .figureCommon import subplotLabel, getSetup, cellPopulations, overlapCellPopulation
 from .figure6 import genOnevsAll, genPopMeans
-from ..model import polyc
+from valentbind import polyc
 from ..sampling import sigmaPopC
 
 
@@ -19,6 +19,7 @@ def makeFigure():
     ax, f = getSetup((18, 4), (1, 4))
     subplotLabel(ax)
     affDLsub = np.array([6, 10])
+    fsize = 11
 
     fDLsub = 4
     optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{med}R_2^{lo}$"], fDLsub, affDLsub, specPops=[r"$R_1^{hi}R_2^{lo}$"])
@@ -28,6 +29,13 @@ def makeFigure():
               [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=False, dead=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
     heatmapDL(ax[3], np.exp(optParams[0]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
               [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=True, dead=False, jTherap=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
+
+    for subax in ax:
+        subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
+        subax.set_yticklabels(subax.get_yticklabels(), fontsize=fsize)
+        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
+        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
+        subax.set_title(subax.get_title(), fontsize=fsize)
 
     return f
 

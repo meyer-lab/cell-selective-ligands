@@ -7,7 +7,7 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
 from .figureCommon import subplotLabel, getSetup, popCompare, heatmap
-from ..model import polyfc
+from valentbind import polyfc
 
 ligConc = np.array([1e-8])
 KxStarP = 1e-10
@@ -19,6 +19,7 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((9, 9), (3, 3))
     subplotLabel(ax, [0] + list(range(3, 9)))
+    fsize = 10
 
     valency(f, ax[0:3], 1e-9, 10 ** -10, [1.0], Kav=[[1e7, 0.01]], vmin=0.0, vmax=9)
     valencyScan = np.linspace(1, 16, num=32)
@@ -28,6 +29,13 @@ def makeFigure():
     vieqPlot(ax[6], 1e4, 8)
     vieqPlot(ax[7], 1e3, 8)
     ratePlot(ax[8])
+
+    for subax in ax:
+        subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
+        subax.set_yticklabels(subax.get_yticklabels(), fontsize=fsize)
+        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
+        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
+        subax.set_title(subax.get_title(), fontsize=fsize)
 
     return f
 

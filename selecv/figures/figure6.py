@@ -8,7 +8,7 @@ from scipy.optimize import minimize
 from .figureCommon import subplotLabel, getSetup, heatmapNorm
 from ..imports import getPopDict
 from ..sampling import sigmaPop
-from ..model import polyfc
+from valentbind import polyfc
 
 
 def makeFigure():
@@ -16,10 +16,18 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((16, 8), (3, 6))
     subplotLabel(ax)
+    fsize = 7.5
 
     optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"], vrange=(0, 3))
     optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 1.5))
     optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 10))
+
+    for subax in ax:
+        subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
+        subax.set_yticklabels(subax.get_yticklabels(), fontsize=fsize)
+        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
+        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
+        subax.set_title(subax.get_title(), fontsize=fsize)
 
     return f
 
@@ -122,7 +130,7 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5), recFactor=1.0):
     targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
 
     optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
-    strats = ["Xo", "Affinity", "Mixture+Affinity", "Valency+Affinity", "All"]
+    strats = ["Unoptimized", "Affinity", "Mixture+Affinity", "Valency+Affinity", "All"]
     pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
 
     for i, strat in enumerate(strats):
@@ -171,7 +179,7 @@ optBnds = [(np.log(1e-11), np.log(1e-8)),  # log L0
 cBnd = (np.log(1e-9), np.log(1.01e-9))
 
 bndsDict = {
-    "Xo": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0.99, 1.00), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
+    "Unoptimized": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0.99, 1.00), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
     "Affinity": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0.99, 1.00), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
     "Mixture+Affinity": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10))),
     "Valency+Affinity": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 16), (0.99, 1.00), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
@@ -185,7 +193,7 @@ def optimizeDesignAnim(targetPop):
     targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
 
     optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
-    strats = ["Xo", "Affinity", "Mixture+Affinity", "Valency+Affinity", "All"]
+    strats = ["Unoptimized", "Affinity", "Mixture+Affinity", "Valency+Affinity", "All"]
     pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
     optParamsHold = np.zeros([len(strats), 6])
 

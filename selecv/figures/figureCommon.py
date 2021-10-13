@@ -12,9 +12,10 @@ import pandas as pds
 import numpy as np
 import svgutils.transform as st
 from ..sampling import sampleSpec, cellPopulations
-from ..model import polyc, polyfc
+from valentbind import polyc, polyfc
 
 rcParams['pcolor.shading'] = 'auto'
+rcParams['svg.fonttype'] = 'none'
 
 
 def getSetup(figsize, gridd):
@@ -50,8 +51,7 @@ def overlayCartoon(figFile, cartoonFile, x, y, scalee=1, scale_x=1, scale_y=1):
     template = st.fromfile(figFile)
     cartoon = st.fromfile(cartoonFile).getroot()
 
-    cartoon.moveto(x, y, scale=scalee)
-    cartoon.scale_xy(scale_x, scale_y)
+    cartoon.moveto(x, y, scale_x=scalee * scale_x, scale_y=scalee * scale_y)
 
     template.append(cartoon)
     template.save(figFile)
@@ -72,7 +72,7 @@ def PlotCellPops(ax, df, bbox=False):
     plot.text(10000, 10000, r"$R_1^{hi}R_2^{hi}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
     plot.text(8000, 1000, r"$R_1^{hi}R_2^{med}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
     plot.text(1000, 8000, r"$R_1^{med}R_2^{hi}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    ax.set(xscale="log", yscale="log", xlabel="Receptor 1", ylabel="Receptor 2")
+    ax.set(xscale="log", yscale="log", xlabel="Receptor 1 Abundance", ylabel="Receptor 2 Abundance")
 
 
 def sampleReceptors(df, nsample=100):
@@ -133,7 +133,7 @@ def affHeatMap(ax, names, Kav, L0, KxStar, f, Title, Cbar=True):
     else:
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
     ax.set(xlabel="Rec 1 Affinity ($K_d$, in nM)", ylabel="Rec 2 Affinity ($K_d$, in nM)")
-    ax.set_title(Title, fontsize=8)
+    ax.set_title(Title, fontsize=10)
 
 
 def ValencyPlot(ax, names, Kav, L0, KxStar, f, Title):
@@ -151,7 +151,7 @@ def ValencyPlot(ax, names, Kav, L0, KxStar, f, Title):
         ax.fill_between(f, underDev, overDev, color=colors[ii], alpha=0.1)
     ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 60))
     ax.set_xticks((4, 8, 12, 16))
-    ax.legend(prop={"size": 6})
+    ax.legend(prop={"size": 7})
 
 
 def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
@@ -167,11 +167,11 @@ def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
     ax.fill_between(mixRatio, underDev, overDev, color="royalblue", alpha=0.1)
     if len(names) == 2:
         ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 12), xlim=(0, 1))  # , title=Title + " binding ratio")
-        ax.set_title(Title, fontsize=7)
+        ax.set_title(Title, fontsize=8)
         ax.grid()
     else:
         ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 5), xlim=(0, 1))
-        ax.set_title(Title, fontsize=7)
+        ax.set_title(Title, fontsize=8)
         ax.grid()
 
 
@@ -256,15 +256,15 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
     X, Y = np.meshgrid(abundScan, abundScan)
     Z = func(X, Y) / func0
 
-    contours = ax.contour(X, Y, Z, levels=np.logspace(-10, 10, 101), colors="black", linewidths=0.5)
+    contours = ax.contour(X, Y, Z, levels=np.logspace(-10, 10, lineN), colors="black", linewidths=0.5)
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(title)
-    plt.clabel(contours, inline=True, fontsize=6)
-    ax.pcolor(X, Y, Z, cmap='summer', vmin=vrange[0], vmax=vrange[1])
+    plt.clabel(contours, inline=True, fontsize=6, fmt="%1.3f")
+    ax.pcolor(X, Y, Z, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
     norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
     if cbar:
-        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='summer'), ax=ax)
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
         cbar.set_label("Relative Ligand Bound")
     if layover:
         overlapCellPopulation(ax, abundRange, highlight=highlight, recFactor=np.log10(recFactor))

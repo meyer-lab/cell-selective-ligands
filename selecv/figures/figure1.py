@@ -18,8 +18,8 @@ def makeFigure():
     """ Make figure 1. """
     # Get list of axis objects
     ax, f = getSetup((10, 7), (2, 3))
-
     subplotLabel(ax, [0, 3, 4, 5])
+    fsize = 11
 
     ax[0].axis("off")
     ax[1].axis("off")
@@ -28,7 +28,13 @@ def makeFigure():
 
     demoHeatmap(ax[4], vmin=1, vmax=5)
     demoPopulations(ax[5])
-    #PlotCellPops(ax[5], getPopDict()[1])
+
+    for subax in ax:
+        subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
+        subax.set_yticklabels(subax.get_yticklabels(), fontsize=fsize)
+        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
+        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
+        subax.set_title(subax.get_title(), fontsize=fsize)
 
     return f
 
@@ -100,7 +106,7 @@ def demoHeatmap(ax, vmin=1, vmax=4):
     ax_new.add_artist(plt.Circle((2, 4), 0.2, color='w'))
     ax_new.text(2, 4, "3", size=11, color='red', weight='semibold', horizontalalignment='center',
                 verticalalignment='center', backgroundcolor='w')
-    ax.set(xlabel="Receptor 1", ylabel="Receptor 2")
+    ax.set(xlabel="Receptor 1 Abundance", ylabel="Receptor 2 Abundance")
 
 
 def demoPopulations(ax):
@@ -109,5 +115,5 @@ def demoPopulations(ax):
     ax.set_ylim((10 ** 1.5, 10 ** 4.5))
     ax.set_xticks([])
     ax.set_yticks([])
-    ax.set(xscale="log", yscale="log", xlabel="Receptor 1", ylabel="Receptor 2")
+    ax.set(xscale="log", yscale="log", xlabel="Receptor 1 Abundance", ylabel="Receptor 2 Abundance")
     overlapCellPopulation(ax, (1.5, 4.5), data=cellPopulations)

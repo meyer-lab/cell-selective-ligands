@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from .figureCommon import getSetup, subplotLabel, heatmap, cellPopulations, overlapCellPopulation
-from ..model import polyc, polyfc
+from valentbind import polyc, polyfc
 
 
 pairs = [(r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"), (r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"),
@@ -17,21 +17,22 @@ def makeFigure():
     """ main function for Figure 5 """
     ax, f = getSetup((10, 10), (3, 3))
     subplotLabel(ax, list(range(9)))
+    fsize = 9.5
 
     L0 = 1e-8
     Kav = [[1e7, 1e5], [1e5, 1e6]]
 
     KxStar = 1e-12
     heatmap(ax[0], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=False,
-            title="Bispecific Lbound, $K_x^*$={}".format(KxStar), cbar=False)
+            title="Bispecific Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False)
     heatmap(ax[1], L0 * 2, KxStar, Kav, [0.5, 0.5], f=1, vrange=(-4, 7), fully=False,
-            title="Mixture of monovalents Lbound, $K_x^*$={}".format(KxStar), cbar=False)
+            title="Mixture of monovalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False)
     heatmap(ax[2], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(-4, 7), fully=False,
-            title="Mixture of bivalents Lbound, $K_x^*$={}".format(KxStar), cbar=True)
+            title="Mixture of bivalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=True)
 
     for i, KxStar in enumerate([1e-10, 1e-12, 1e-14]):
         heatmap(ax[i + 3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=True,
-                title="Bispecific log fully bound with $K_x^*$={}".format(KxStar), cbar=(i == 2))
+                title="Bispecific log fully bound with $K_x^*$={} cell·M".format(KxStar), cbar=(i == 2))
 
     for i in range(6):
         ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
@@ -39,6 +40,13 @@ def makeFigure():
     KxStarVary(ax[6], L0, Kav, ylim=(-9, 9), compare="tether")
     KxStarVary(ax[7], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
     ax[8].axis("off")
+
+    for subax in ax:
+        subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
+        subax.set_yticklabels(subax.get_yticklabels(), fontsize=fsize)
+        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
+        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
+        subax.set_title(subax.get_title(), fontsize=8)
 
     return f
 
