@@ -175,7 +175,7 @@ def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
         ax.grid()
 
 
-def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowlight=[]):
+def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowlight=[], recFactor=0.0):
     ax_new = ax.twinx().twiny()
     ax_new.set_xscale("linear")
     ax_new.set_yscale("linear")
@@ -188,7 +188,7 @@ def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowligh
             color = "blue"
             if label in highlight:
                 color = "red"
-            ax_new.add_patch(Ellipse(xy=(item[0], item[1]),
+            ax_new.add_patch(Ellipse(xy=(item[0] + recFactor, item[1] + recFactor),
                                      width=item[2],
                                      height=item[3],
                                      angle=item[4],
@@ -196,13 +196,13 @@ def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowligh
                                      fill=True,
                                      alpha=0.8,
                                      linewidth=1))
-            ax_new.text(item[0], item[1], label,
+            ax_new.text(item[0] + recFactor, item[1] + recFactor, label,
                         horizontalalignment='center',
                         verticalalignment='center',
                         fontsize=11.3,
                         fontweight='bold',
                         color='black')
-            ax_new.text(item[0], item[1], label,
+            ax_new.text(item[0] + recFactor, item[1] + recFactor, label,
                         horizontalalignment='center',
                         verticalalignment='center',
                         fontsize=11,
@@ -241,10 +241,10 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
         overlapCellPopulation(ax, abundRange, highlight=highlight)
 
 
-def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=True, highlight=[], lineN=101):
+def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=True, highlight=[],  lineN=101, recFactor=1.0):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
-    abundRange = (1.5, 4.5)
+    abundRange = (1.5 + np.log10(recFactor), 4.5 + np.log10(recFactor))
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
     if f is None:
@@ -252,7 +252,7 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
     else:
         func = np.vectorize(lambda abund1, abund2: polyfc(L0, KxStar, f, [abund1, abund2], Comp, Kav)[0])
 
-    func0 = func(10**R0[0], 10**R0[1])
+    func0 = func(10**(R0[0] + np.log10(recFactor)), 10**(R0[1] + np.log10(recFactor)))
     X, Y = np.meshgrid(abundScan, abundScan)
     Z = func(X, Y) / func0
 
@@ -267,4 +267,4 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
         cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
         cbar.set_label("Relative Ligand Bound")
     if layover:
-        overlapCellPopulation(ax, abundRange, highlight=highlight)
+        overlapCellPopulation(ax, abundRange, highlight=highlight, recFactor=np.log10(recFactor))

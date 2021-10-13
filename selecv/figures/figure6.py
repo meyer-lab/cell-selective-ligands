@@ -93,18 +93,18 @@ def genOnevsAll(targetPop, specPops=False, means=False):
     return targPops, offTargPops
 
 
-def minSigmaVar(x, tPops, offTPops, h=None):
+def minSigmaVar(x, tPops, offTPops, h=None, recFactor=1.0):
     targetBound, offTargetBound = 0, 0
     for tPop in tPops:
         targetBound += sum(sigmaPop(tPop, np.exp(x[0]), np.exp(x[1]), x[2], [x[3], 1 - x[3]],
-                                    np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]), quantity=0, h=h))
+                                    np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]), quantity=0, h=h, recFactor=recFactor))
     for offTPop in offTPops:
         offTargetBound += sum(sigmaPop(offTPop, np.exp(x[0]), np.exp(x[1]), x[2], [x[3], 1 - x[3]],
-                                       np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]), quantity=0, h=h))
+                                       np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]), quantity=0, h=h, recFactor=recFactor))
     return (offTargetBound) / (targetBound)
 
 
-def optimize(pmOptNo, targPops, offTargPops, L0, KxStar, f, LigC, Kav, bound=None):
+def optimize(pmOptNo, targPops, offTargPops, L0, KxStar, f, LigC, Kav, bound=None, recFactor=1.0):
     """ A more general purpose optimizer """
     # OPT = [log L0, log KxStar, f, LigC[0], log Ka(diag), log Ka(offdiag)]
     Kav = np.array(Kav)
@@ -116,7 +116,7 @@ def optimize(pmOptNo, targPops, offTargPops, L0, KxStar, f, LigC, Kav, bound=Non
     if bound is not None:
         Bnds = bound
 
-    optimized = minimize(minSigmaVar, xnot, bounds=np.array(Bnds), args=(targPops, offTargPops))
+    optimized = minimize(minSigmaVar, xnot, bounds=np.array(Bnds), args=(targPops, offTargPops, None, recFactor))
     if not optimized.success:
         print(Bnds)
         print(optimized)
@@ -124,7 +124,7 @@ def optimize(pmOptNo, targPops, offTargPops, L0, KxStar, f, LigC, Kav, bound=Non
     return optimized
 
 
-def optimizeDesign(ax, targetPop, vrange=(0, 5)):
+def optimizeDesign(ax, targetPop, vrange=(0, 5), recFactor=1.0):
     "Runs optimization and determines optimal parameters for selectivity of one population vs. another"
     targPops, offTargPops = genOnevsAll(targetPop)
     targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
@@ -135,14 +135,15 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
 
     for i, strat in enumerate(strats):
         if strat == "Mixture+Affinity":
-            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [0.9, 0.1], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [0.9, 0.1], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
         elif strat == "All":
-            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 15, [0.9, 0.1], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, optParams[1], optParams[2], [0.9, 0.1], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
         elif strat == "Valency+Affinity":
-            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 15, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 15, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
         else:
-            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
         stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
+
         optDF = optDF.append(stratRow, ignore_index=True)
         optParams = optimized.x
         optParams[0:2] = np.exp(optParams[0:2])
@@ -150,16 +151,19 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5)):
 
         if i < 4:
             heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
-                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=True, highlight=targetPop[0], lineN=41)
+                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=True, highlight=targetPop[0], lineN=41, recFactor=recFactor)
         else:
             heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
-                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=True, layover=True, highlight=targetPop[0], lineN=41)
-        ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$)", ylabel="Receptor 2 Abundance ($cell^{-1}$)")
+                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=True, layover=True, highlight=targetPop[0], lineN=41, recFactor=recFactor)
+        ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
 
     sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax[0])
     ax[0].set(title="Optimization of " + targetPop[0])
-    ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=40, horizontalalignment='center')
-    ax[0].set_ylim(0, 20)
+    ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=25, horizontalalignment='right')
+    if recFactor == 1.0:
+        ax[0].set_ylim(0, 20)
+    else:
+        ax[0].set_ylim(0, 50)
 
 
 optBnds = [(np.log(1e-11), np.log(1e-8)),  # log L0
