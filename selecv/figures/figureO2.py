@@ -7,7 +7,7 @@ from scipy.optimize import minimize
 from .figureCommon import subplotLabel, getSetup
 from ..imports import getPopDict
 from ..sampling import sampleSpec
-from ..model import polyfc
+from valentBind import polyfc
 
 
 def makeFigure():
