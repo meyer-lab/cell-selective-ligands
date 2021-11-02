@@ -135,7 +135,7 @@ def fitfunc(fitAff=True):
         bnds = ((None, None), (None, None), (None, None), (None, None), (None, None), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1.01), (2, 2.01), (4, 4.01), (8, 8.01))
     else:
         bnds = ((None, None), (None, None), (None, None), (np.log(Kav[0])[0], np.log(Kav[0])[0] * 1.0001), (np.log(Kav[1])[0],
-                np.log(Kav[1])[0] * 1.0001), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1.01), (2, 2.01), (4, 4.01), (8, 8.01))
+                                                                                                            np.log(Kav[1])[0] * 1.0001), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1.01), (2, 2.01), (4, 4.01), (8, 8.01))
 
     parampredicts = minimize(resids, x0, jac="3-point", bounds=bnds)
     assert parampredicts.success
