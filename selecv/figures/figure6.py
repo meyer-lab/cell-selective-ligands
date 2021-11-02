@@ -149,12 +149,21 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5), recFactor=1.0):
         optParams[0:2] = np.exp(optParams[0:2])
         optParams[4::] = np.exp(optParams[4::])
 
-        if i < 4:
-            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
-                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=True, highlight=targetPop[0], lineN=41, recFactor=recFactor)
+        if i <= 0:
+            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1],
+                        [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
+                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=2,
+                        highlight=targetPop[0], lineN=41, recFactor=recFactor)
+        elif i < 4:
+            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1],
+                        [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
+                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=1,
+                        highlight=targetPop[0], lineN=41, recFactor=recFactor)
         else:
-            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1], [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
-                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=True, layover=True, highlight=targetPop[0], lineN=41, recFactor=recFactor)
+            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1],
+                        [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
+                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=True, layover=1,
+                        highlight=targetPop[0], lineN=41, recFactor=recFactor)
         ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
 
     sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax[0])

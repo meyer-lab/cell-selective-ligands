@@ -175,7 +175,7 @@ def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
         ax.grid()
 
 
-def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowlight=[], recFactor=0.0):
+def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowlight=[], recFactor=0.0, pname=True):
     ax_new = ax.twinx().twiny()
     ax_new.set_xscale("linear")
     ax_new.set_yscale("linear")
@@ -196,21 +196,22 @@ def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowligh
                                      fill=True,
                                      alpha=0.8,
                                      linewidth=1))
-            ax_new.text(item[0] + recFactor, item[1] + recFactor, label,
-                        horizontalalignment='center',
-                        verticalalignment='center',
-                        fontsize=11.3,
-                        fontweight='bold',
-                        color='black')
-            ax_new.text(item[0] + recFactor, item[1] + recFactor, label,
-                        horizontalalignment='center',
-                        verticalalignment='center',
-                        fontsize=11,
-                        fontweight='light',
-                        color='white')
+            if pname:
+                ax_new.text(item[0] + recFactor, item[1] + recFactor, label,
+                            horizontalalignment='center',
+                            verticalalignment='center',
+                            fontsize=11.3,
+                            fontweight='bold',
+                            color='black')
+                ax_new.text(item[0] + recFactor, item[1] + recFactor, label,
+                            horizontalalignment='center',
+                            verticalalignment='center',
+                            fontsize=11,
+                            fontweight='light',
+                            color='white')
 
 
-def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title="", cbar=False, layover=True, fully=False, highlight=[]):
+def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title="", cbar=False, layover=2, fully=False, highlight=[]):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
     abundRange = (1.5, 4.5)
@@ -237,11 +238,14 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
     if cbar:
         cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
         cbar.set_label("Log Ligand Bound")
-    if layover:
-        overlapCellPopulation(ax, abundRange, highlight=highlight)
+    ## layover: 2 = with name; 1 = only pop w/o name; 0 = none
+    if layover == 2:
+        overlapCellPopulation(ax, abundRange, highlight=highlight, pname=True)
+    elif layover == 1:
+        overlapCellPopulation(ax, abundRange, highlight=highlight, pname=False)
 
 
-def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=True, highlight=[],  lineN=101, recFactor=1.0):
+def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=2, highlight=[],  lineN=101, recFactor=1.0):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
     abundRange = (1.5 + np.log10(recFactor), 4.5 + np.log10(recFactor))
@@ -266,5 +270,8 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
     if cbar:
         cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
         cbar.set_label("Relative Ligand Bound")
-    if layover:
-        overlapCellPopulation(ax, abundRange, highlight=highlight, recFactor=np.log10(recFactor))
+    ## layover: 2 = with name; 1 = only pop w/o name; 0 = none
+    if layover == 2:
+        overlapCellPopulation(ax, abundRange, highlight=highlight, recFactor=np.log10(recFactor), pname=True)
+    elif layover == 1:
+        overlapCellPopulation(ax, abundRange, highlight=highlight, recFactor=np.log10(recFactor), pname=False)

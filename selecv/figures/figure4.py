@@ -39,7 +39,7 @@ def mixture(fig, axs, L0, KxStar, Kav=[[1e6, 1e5], [1e5, 1e6]], ff=5, vmin=-2, v
         cbar = False
         if i in [2, 4]:
             cbar = True
-        heatmap(axs[i], L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vrange=(vmin, vmax), cbar=cbar)
+        heatmap(axs[i], L0, KxStar, Kav, [comp, 1 - comp], f=ff, Cplx=None, vrange=(vmin, vmax), cbar=cbar, layover=1)
         axs[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
         axs[i].set_title("Ligand 1 = {}%, Ligand 2 = {}%".format(comp * 100, 100 - comp * 100))
 

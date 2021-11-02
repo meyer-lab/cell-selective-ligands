@@ -24,11 +24,11 @@ def makeFigure():
 
     KxStar = 1e-12
     heatmap(ax[0], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=False,
-            title="Bispecific Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False)
+            title="Bispecific Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False, layover=1)
     heatmap(ax[1], L0 * 2, KxStar, Kav, [0.5, 0.5], f=1, vrange=(-4, 7), fully=False,
-            title="Mixture of monovalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False)
+            title="Mixture of monovalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False, layover=1)
     heatmap(ax[2], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(-4, 7), fully=False,
-            title="Mixture of bivalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=True)
+            title="Mixture of bivalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=True, layover=1)
 
     for i, KxStar in enumerate([1e-10, 1e-12, 1e-14]):
         heatmap(ax[i + 3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=True,
