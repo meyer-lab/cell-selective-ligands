@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from selecv.sampling import cellPopulations
-from selecv.figures.figure6 import genOnevsAll, minSelecFunc, minSigmaVar
+from selecv.figures.figure5 import genOnevsAll, minSelecFunc, minSigmaVar
 
 
 @pytest.mark.parametrize("targetPop", cellPopulations.keys())

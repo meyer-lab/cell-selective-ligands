@@ -1,144 +1,153 @@
 """
-Figure 3. Exploration of Valency.
+Figure 3. Heterovalent bispecific
 """
-import numpy as np
-import pandas as pds
-import seaborn as sns
-from matplotlib import pyplot as plt
-from matplotlib.lines import Line2D
-from .figureCommon import subplotLabel, getSetup, popCompare, heatmap
-from valentbind import polyfc
 
-ligConc = np.array([1e-8])
-KxStarP = 1e-10
-affinity = 1e8  # 7
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+from .figureCommon import getSetup, subplotLabel, heatmap, cellPopulations, overlapCellPopulation
+from valentbind import polyc, polyfc
+
+
+pairs = [(r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"), (r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"),
+         (r"$R_1^{med}R_2^{hi}$", r"$R_1^{hi}R_2^{med}$"), (r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{hi}$")]
 
 
 def makeFigure():
-    """ Make figure 3. """
-    # Get list of axis objects
-    ax, f = getSetup((9, 9), (3, 3))
-    subplotLabel(ax, [0] + list(range(3, 9)))
-    fsize = 10
+    """ main function for Figure 3 """
+    ax, f = getSetup((10, 10), (3, 3))
+    subplotLabel(ax, list(range(9)))
+    fsize = 9.5
 
-    valency(f, ax[0:3], 1e-9, 10 ** -10, [1.0], Kav=[[1e7, 0.01]], vmin=0.0, vmax=9)
-    valencyScan = np.linspace(1, 16, num=32)
-    popCompare(ax[3], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
-    popCompare(ax[4], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
-    popCompare(ax[5], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
-    vieqPlot(ax[6], 1e4, 8)
-    vieqPlot(ax[7], 1e3, 8)
-    ratePlot(ax[8])
+    L0 = 1e-8
+    Kav = [[1e7, 1e5], [1e5, 1e6]]
+
+    KxStar = 1e-12
+    heatmap(ax[0], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=False,
+            title="Bispecific Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False, layover=1)
+    heatmap(ax[1], L0 * 2, KxStar, Kav, [0.5, 0.5], f=1, vrange=(-4, 7), fully=False,
+            title="Mixture of monovalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False, layover=1)
+    heatmap(ax[2], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(-4, 7), fully=False,
+            title="Mixture of bivalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=True, layover=1)
+
+    for i, KxStar in enumerate([1e-10, 1e-12, 1e-14]):
+        heatmap(ax[i + 3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=True,
+                title="Bispecific log fully bound with $K_x^*$={} cell·M".format(KxStar), cbar=(i == 2))
+
+    for i in range(6):
+        ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
+
+    KxStarVary(ax[6], L0, Kav, ylim=(-9, 9), compare="tether")
+    KxStarVary(ax[7], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
+    ax[8].axis("off")
 
     for subax in ax:
         subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
         subax.set_yticklabels(subax.get_yticklabels(), fontsize=fsize)
         subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
         subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
-        subax.set_title(subax.get_title(), fontsize=fsize)
+        subax.set_title(subax.get_title(), fontsize=8)
 
     return f
 
 
-def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None, vmin=-2, vmax=4):
-    ffs = [1, 4, 16]
-
-    for i, v in enumerate(ffs):
-        cbar = False
-        if i in [2]:
-            cbar = True
-        heatmap(axs[i], L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vrange=(vmin, vmax), cbar=cbar, layover=1)
-        axs[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
-        plt.plot([3.32, 3.7], [2, 2], color="black", marker=2)
-        plt.text(3.5, 2.1, "b", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        plt.plot([3.3, 3.8], [3.2, 3.7], color="black", marker=2)
-        plt.text(3.65, 3.8, "c", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        plt.plot([3.4, 3.6], [3, 3], color="black", marker=1, markersize=4)
-        plt.text(3.6, 2.8, "d", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        axs[i].set_title("Valency = {}".format(v))
-
-    return fig
+def tetheredYN(L0, KxStar, Rtot, Kav, fully=True):
+    """ Compare tethered (bispecific) vs monovalent  """
+    if fully:
+        return polyc(L0, KxStar, Rtot, [[1, 1]], [1.0], Kav)[2][0] / \
+            polyfc(L0 * 2, KxStar, 1, Rtot, [0.5, 0.5], Kav)[0]
+    else:
+        return polyc(L0, KxStar, Rtot, [[1, 1]], [1.0], Kav)[0][0] / \
+            polyfc(L0 * 2, KxStar, 1, Rtot, [0.5, 0.5], Kav)[0]
 
 
-def valDemo(ax):
-    "Demonstrate effect of valency"
-    affs = [1e8, 1e7]
-    colors = ["royalblue", "orange", "limegreen", "orangered"]
-    lines = ["-", ":"]
-    nPoints = 100
-    recScan = np.logspace(0, 8, nPoints)
-    labels = ["Monovalent", "Bivalent", "Trivalent", "Tetravalent"]
-    percHold = np.zeros(nPoints)
-    for ii, aff in enumerate(affs):
-        for jj, valencyLab in enumerate(labels):
-            for kk, recCount in enumerate(recScan):
-                percHold[kk] = polyfc(ligConc / (jj + 1), KxStarP, jj + 1, recCount, [1], np.array([[aff]]))[0] / recCount
-            ax.plot(recScan, percHold, label=valencyLab, linestyle=lines[ii], color=colors[jj])
-
-    ax.set(xlim=(1, 100000000), xlabel="Receptor Abundance", ylabel="Lig bound / Receptor", xscale="log")  # ylim=(0, 1),
-    handles, _ = ax.get_legend_handles_labels()
-    handles = handles[0:4]
-    line = Line2D([], [], color="black", marker="_", linestyle="None", markersize=6, label="High Affinity")
-    point = Line2D([], [], color="black", marker=".", linestyle="None", markersize=6, label="Low Affinity")
-    handles.append(line)
-    handles.append(point)
-    ax.legend(handles=handles, prop={"size": 6})
+def mixBispecYN(L0, KxStar, Rtot, Kav, fully=True):
+    """ Compare bispecific to mixture of bivalent  """
+    if fully:
+        return polyc(L0, KxStar, Rtot, [[1, 1]], [1.0], Kav)[2][0] / \
+            np.sum(polyc(L0, KxStar, Rtot, [[2, 0], [0, 2]], [0.5, 0.5], Kav)[2])
+    else:
+        return polyc(L0, KxStar, Rtot, [[1, 1]], [1.0], Kav)[0][0] / \
+            np.sum(polyc(L0, KxStar, Rtot, [[2, 0], [0, 2]], [0.5, 0.5], Kav)[0])
 
 
-def ConcValPlot(ax):
-    "Keep valency constant and high - vary concentration"
-    concScan = np.logspace(-11, -7, 5)
-    valency = 4
-    recScan = np.logspace(0, 8, 100)
-    percHold = np.zeros(100)
+def normHeatmap(ax, L0, KxStar, Kav, vrange=(-4, 2), title="", cbar=False, fully=True, layover=True, normby=tetheredYN):
+    """ Make a heatmap normalized by another binding value """
+    nAbdPts = 70
+    abundRange = (1.5, 4.5)
+    abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
-    for conc in concScan:
-        for jj, recCount in enumerate(recScan):
-            percHold[jj] = polyfc(conc / valency, KxStarP, valency, recCount, [1], np.array([[affinity]]))[0] / recCount
-        ax.plot(recScan, percHold, label=str(conc * 1e9) + " nM")
+    func = np.vectorize(lambda abund1, abund2: normby(L0, KxStar, [abund1, abund2], Kav, fully=fully))
+    X, Y = np.meshgrid(abundScan, abundScan)
+    logZ = np.log(func(X, Y))
 
-    ax.set(xlim=(1, 100000000), xlabel="Receptor Abundance", ylabel="Lig Bound / Receptor", xscale="log")  # ylim=(0, 1),
-    ax.legend(prop={"size": 6})
-
-
-def vieqPlot(ax, recCount, val):
-    "Demonstrate effect of valency"
-    vieqDF = pds.DataFrame(columns=["Degree of Binding", "# Ligand Bound", "$K_d$ nM"])
-    Conc = 1e-9
-    affs = [1e8, 1e7, 1e6]
-    afflabs = ["10", "100", "1000"]
-    for ii, aff in enumerate(affs):
-        vieq = polyfc(Conc / (val), KxStarP, val, recCount, [1], np.array([[aff]]))[2]  # val + 1
-        for jj, bound in enumerate(vieq):
-            ligboundDF = pds.DataFrame({"Degree of Binding": jj + 1, "# Ligand Bound": [bound], "$K_d$ nM": afflabs[ii]})
-            vieqDF = vieqDF.append(ligboundDF)
-    sns.stripplot(x="Degree of Binding", y="# Ligand Bound", hue="$K_d$ nM", data=vieqDF, ax=ax)
-    ax.set(yscale="log", ylim=(0.1, 1e4), title="Binding Degrees Distribution, " + str(int(recCount)) + " receptors", ylabel="Ligand Bound", xlabel="Degree of Binding")
-
-
-def ratePlot(ax):
-    "Plots rate of bivalent binding over dissocation rate for monovalently bound complexes"
-    # kxstar * Ka, * val-1 * rec-1
-    recScan = np.logspace(0, 6, 100)
-    val = np.arange(2, 5)
-    affinities = [1e8, 1e6]
-    KxStarPl = 10 ** -10.0
-    lines = ["-", ":"]
-    colors = ["orange", "limegreen", "orangered"]
-    rateHolder = np.zeros([100])
-    for ii, Ka in enumerate(affinities):
-        for jj, f in enumerate(val):
-            for kk, recCount in enumerate(recScan):
-                rateHolder[kk] = KxStarPl * Ka * (f - 1) * recCount
-            ax.plot(recScan, rateHolder, color=colors[jj], label="Valency = " + str(f), linestyle=lines[ii])
-    ax.set(xlim=(1, 1000000), xlabel="Receptor Abundance", ylabel="Forward/Reverse Rate", xscale="log", ylim=(0.1, 5))  # ylim=(0, 1),
-    handles, _ = ax.get_legend_handles_labels()
-    handles = handles[0:3]
-    line = Line2D([], [], color="black", marker="_", linestyle="None", markersize=6, label="$K_d$ nM = 10")
-    point = Line2D([], [], color="black", marker=".", linestyle="None", markersize=6, label="$K_d$ nM = 1000")
-    handles.append(line)
-    handles.append(point)
-    ax.legend(handles=handles, prop={"size": 6})
+    contours = ax.contour(X, Y, logZ, levels=np.arange(-20, 20, 0.5), colors="black", linewidths=0.5)
+    ax.set_xscale("log")
     ax.set_yscale("log")
-    ax.set_ylim(1e-1, 1e3)
-    ax.set_title("Reaction rate for second degree binding")
+    ax.set_title(title)
+    plt.clabel(contours, inline=True, fontsize=6)
+    ax.pcolor(X, Y, logZ, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
+    norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
+    if cbar:
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
+        cbar.set_label("Log ratio")
+    if layover:
+        overlapCellPopulation(ax, abundRange)
+
+
+def selectivity(pop1name, pop2name, L0, KxStar, Cplx, Ctheta, Kav, fully=True, untethered=False):
+    """ Always calculate the full binding of the 1st kind of complex """
+    pop1 = cellPopulations[pop1name][0], cellPopulations[pop1name][1]
+    pop2 = cellPopulations[pop2name][0], cellPopulations[pop2name][1]
+    if untethered:  # mixture of monovalent
+        return polyfc(L0, KxStar, 1, np.power(10, pop1), [0.5, 0.5], Kav)[0] \
+            / polyfc(L0, KxStar, 1, np.power(10, pop2), [0.5, 0.5], Kav)[0]
+    if fully:
+        return np.sum(polyc(L0, KxStar, np.power(10, pop1), Cplx, Ctheta, Kav)[2]) \
+            / np.sum(polyc(L0, KxStar, np.power(10, pop2), Cplx, Ctheta, Kav)[2])
+    else:
+        return np.sum(polyc(L0, KxStar, np.power(10, pop1), Cplx, Ctheta, Kav)[0]) \
+            / np.sum(polyc(L0, KxStar, np.power(10, pop2), Cplx, Ctheta, Kav)[0])
+
+
+def KxStarVary(ax, L0, Kav, ylim=(-7, 5), fully=True, compare=None):
+    """ Line plot for selectivity with different KxStar """
+    nPoints = 50
+    Kxaxis = np.logspace(-15, -7, nPoints)
+
+    colors = ["royalblue", "orange", "limegreen", "orangered"]
+    sHolder = np.zeros((nPoints))
+    for i, pair in enumerate(pairs):
+        for j, KxStar in enumerate(Kxaxis):
+            if compare == "tether":
+                sHolder[j] = selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=fully, untethered=False) \
+                    / selectivity(pair[0], pair[1], L0 * 2, KxStar, None, None, Kav, untethered=True)
+            elif compare == "bisp":
+                sHolder[j] = selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=fully, untethered=False) \
+                    / selectivity(pair[0], pair[1], L0, KxStar, [[2, 0], [0, 2]], [0.5, 0.5], Kav, fully=fully)
+            elif compare == " fully":
+                sHolder[j] = selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=True, untethered=False) \
+                    / selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=False, untethered=False)
+            else:
+                sHolder[j] = np.log(selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=fully, untethered=False))
+        ax.plot(Kxaxis, sHolder, color=colors[i], label=pair[0] + " to " + pair[1], linestyle="-")
+
+    ax.set(xlim=(1e-15, 1e-7), ylim=ylim,
+           xlabel="$K_x^*$")
+    ax.set_xscale('log')
+    if compare == "tether":
+        ax.set_ylabel("Bispecific selectivity / Monovalent selectivity")
+        ax.set_title("Bispecific advantage over monovalent mixture")
+    elif compare == "bisp":
+        ax.set_ylabel("Bispecific selectivity / Bivalent selectivity")
+        ax.set_title("Bispecific advantage over homo-bivalent mixture")
+    elif compare == "fully":
+        ax.set_ylabel("Ratio of selectivity")
+        ax.set_title("Fully bound selectivity / Ligand bound selectivity")
+    else:
+        ax.set_ylabel("Log selectivity of [1, 1]")
+        if fully:
+            ax.set_title("Log selectivity varies with $K_x^*$ for Lfbnd")
+        else:
+            ax.set_title("Log selectivity varies with $K_x^*$ for Lbound")
+    ax.legend(loc='lower right', fancybox=True, framealpha=1)

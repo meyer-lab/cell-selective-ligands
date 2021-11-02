@@ -1,153 +1,218 @@
 """
-Figure 5. Heterovalent bispecific
+Figure 5. Optimization
 """
-
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-from .figureCommon import getSetup, subplotLabel, heatmap, cellPopulations, overlapCellPopulation
-from valentbind import polyc, polyfc
-
-
-pairs = [(r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"), (r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"),
-         (r"$R_1^{med}R_2^{hi}$", r"$R_1^{hi}R_2^{med}$"), (r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{hi}$")]
+import pandas as pd
+import seaborn as sns
+from scipy.optimize import minimize
+from .figureCommon import subplotLabel, getSetup, heatmapNorm
+from ..imports import getPopDict
+from ..sampling import sigmaPop
+from valentbind import polyfc
 
 
 def makeFigure():
-    """ main function for Figure 5 """
-    ax, f = getSetup((10, 10), (3, 3))
-    subplotLabel(ax, list(range(9)))
-    fsize = 9.5
+    """ Make figure 5. """
+    # Get list of axis objects
+    ax, f = getSetup((16, 8), (3, 6))
+    subplotLabel(ax)
+    fsize = 7.5
 
-    L0 = 1e-8
-    Kav = [[1e7, 1e5], [1e5, 1e6]]
-
-    KxStar = 1e-12
-    heatmap(ax[0], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=False,
-            title="Bispecific Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False, layover=1)
-    heatmap(ax[1], L0 * 2, KxStar, Kav, [0.5, 0.5], f=1, vrange=(-4, 7), fully=False,
-            title="Mixture of monovalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False, layover=1)
-    heatmap(ax[2], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(-4, 7), fully=False,
-            title="Mixture of bivalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=True, layover=1)
-
-    for i, KxStar in enumerate([1e-10, 1e-12, 1e-14]):
-        heatmap(ax[i + 3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=True,
-                title="Bispecific log fully bound with $K_x^*$={} cell·M".format(KxStar), cbar=(i == 2))
-
-    for i in range(6):
-        ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
-
-    KxStarVary(ax[6], L0, Kav, ylim=(-9, 9), compare="tether")
-    KxStarVary(ax[7], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
-    ax[8].axis("off")
+    optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"], vrange=(0, 3))
+    optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 1.5))
+    optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 10))
 
     for subax in ax:
         subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
         subax.set_yticklabels(subax.get_yticklabels(), fontsize=fsize)
         subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
         subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
-        subax.set_title(subax.get_title(), fontsize=8)
+        subax.set_title(subax.get_title(), fontsize=fsize)
 
     return f
 
 
-def tetheredYN(L0, KxStar, Rtot, Kav, fully=True):
-    """ Compare tethered (bispecific) vs monovalent  """
-    if fully:
-        return polyc(L0, KxStar, Rtot, [[1, 1]], [1.0], Kav)[2][0] / \
-            polyfc(L0 * 2, KxStar, 1, Rtot, [0.5, 0.5], Kav)[0]
-    else:
-        return polyc(L0, KxStar, Rtot, [[1, 1]], [1.0], Kav)[0][0] / \
-            polyfc(L0 * 2, KxStar, 1, Rtot, [0.5, 0.5], Kav)[0]
+_, df = getPopDict()
 
 
-def mixBispecYN(L0, KxStar, Rtot, Kav, fully=True):
-    """ Compare bispecific to mixture of bivalent  """
-    if fully:
-        return polyc(L0, KxStar, Rtot, [[1, 1]], [1.0], Kav)[2][0] / \
-            np.sum(polyc(L0, KxStar, Rtot, [[2, 0], [0, 2]], [0.5, 0.5], Kav)[2])
-    else:
-        return polyc(L0, KxStar, Rtot, [[1, 1]], [1.0], Kav)[0][0] / \
-            np.sum(polyc(L0, KxStar, Rtot, [[2, 0], [0, 2]], [0.5, 0.5], Kav)[0])
+def genPopMeans(popName):
+    assert isinstance(popName, list)
+    res = []
+    for name in popName:
+        dfPop = df[df["Population"] == name]
+        res.append(np.array([dfPop["Receptor_1"].to_numpy()[0], dfPop["Receptor_2"].to_numpy()[0]]))
+    return res
 
 
-def normHeatmap(ax, L0, KxStar, Kav, vrange=(-4, 2), title="", cbar=False, fully=True, layover=True, normby=tetheredYN):
-    """ Make a heatmap normalized by another binding value """
-    nAbdPts = 70
-    abundRange = (1.5, 4.5)
-    abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
+def minSelecFunc(x, tPops, offTPops):
+    """Provides the function to be minimized to get optimal selectivity"""
+    offTargetBound = 0
+    tMeans, offTMeans = genPopMeans(tPops), genPopMeans(offTPops)
 
-    func = np.vectorize(lambda abund1, abund2: normby(L0, KxStar, [abund1, abund2], Kav, fully=fully))
-    X, Y = np.meshgrid(abundScan, abundScan)
-    logZ = np.log(func(X, Y))
+    targetBound = polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**tMeans[0][0], 10**tMeans[0][1]], [x[3], 1 - x[3]],
+                         np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]))[0]
+    for means in offTMeans:
+        offTargetBound += polyfc(np.exp(x[0]), np.exp(x[1]), x[2], [10**means[0], 10**means[1]], [x[3], 1 - x[3]],
+                                 np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]))[0]
 
-    contours = ax.contour(X, Y, logZ, levels=np.arange(-20, 20, 0.5), colors="black", linewidths=0.5)
-    ax.set_xscale("log")
-    ax.set_yscale("log")
-    ax.set_title(title)
-    plt.clabel(contours, inline=True, fontsize=6)
-    ax.pcolor(X, Y, logZ, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
-    norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
-    if cbar:
-        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
-        cbar.set_label("Log ratio")
-    if layover:
-        overlapCellPopulation(ax, abundRange)
+    return (offTargetBound) / (targetBound)
 
 
-def selectivity(pop1name, pop2name, L0, KxStar, Cplx, Ctheta, Kav, fully=True, untethered=False):
-    """ Always calculate the full binding of the 1st kind of complex """
-    pop1 = cellPopulations[pop1name][0], cellPopulations[pop1name][1]
-    pop2 = cellPopulations[pop2name][0], cellPopulations[pop2name][1]
-    if untethered:  # mixture of monovalent
-        return polyfc(L0, KxStar, 1, np.power(10, pop1), [0.5, 0.5], Kav)[0] \
-            / polyfc(L0, KxStar, 1, np.power(10, pop2), [0.5, 0.5], Kav)[0]
-    if fully:
-        return np.sum(polyc(L0, KxStar, np.power(10, pop1), Cplx, Ctheta, Kav)[2]) \
-            / np.sum(polyc(L0, KxStar, np.power(10, pop2), Cplx, Ctheta, Kav)[2])
-    else:
-        return np.sum(polyc(L0, KxStar, np.power(10, pop1), Cplx, Ctheta, Kav)[0]) \
-            / np.sum(polyc(L0, KxStar, np.power(10, pop2), Cplx, Ctheta, Kav)[0])
-
-
-def KxStarVary(ax, L0, Kav, ylim=(-7, 5), fully=True, compare=None):
-    """ Line plot for selectivity with different KxStar """
-    nPoints = 50
-    Kxaxis = np.logspace(-15, -7, nPoints)
-
-    colors = ["royalblue", "orange", "limegreen", "orangered"]
-    sHolder = np.zeros((nPoints))
-    for i, pair in enumerate(pairs):
-        for j, KxStar in enumerate(Kxaxis):
-            if compare == "tether":
-                sHolder[j] = selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=fully, untethered=False) \
-                    / selectivity(pair[0], pair[1], L0 * 2, KxStar, None, None, Kav, untethered=True)
-            elif compare == "bisp":
-                sHolder[j] = selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=fully, untethered=False) \
-                    / selectivity(pair[0], pair[1], L0, KxStar, [[2, 0], [0, 2]], [0.5, 0.5], Kav, fully=fully)
-            elif compare == " fully":
-                sHolder[j] = selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=True, untethered=False) \
-                    / selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=False, untethered=False)
-            else:
-                sHolder[j] = np.log(selectivity(pair[0], pair[1], L0, KxStar, [[1, 1]], [1], Kav, fully=fully, untethered=False))
-        ax.plot(Kxaxis, sHolder, color=colors[i], label=pair[0] + " to " + pair[1], linestyle="-")
-
-    ax.set(xlim=(1e-15, 1e-7), ylim=ylim,
-           xlabel="$K_x^*$")
-    ax.set_xscale('log')
-    if compare == "tether":
-        ax.set_ylabel("Bispecific selectivity / Monovalent selectivity")
-        ax.set_title("Bispecific advantage over monovalent mixture")
-    elif compare == "bisp":
-        ax.set_ylabel("Bispecific selectivity / Bivalent selectivity")
-        ax.set_title("Bispecific advantage over homo-bivalent mixture")
-    elif compare == "fully":
-        ax.set_ylabel("Ratio of selectivity")
-        ax.set_title("Fully bound selectivity / Ligand bound selectivity")
-    else:
-        ax.set_ylabel("Log selectivity of [1, 1]")
-        if fully:
-            ax.set_title("Log selectivity varies with $K_x^*$ for Lfbnd")
+def genOnevsAll(targetPop, specPops=False, means=False):
+    assert isinstance(targetPop, list)
+    targPops, offTargPops = [], []
+    if means:
+        if specPops:
+            for _, pop in enumerate(df["Population"].unique()):
+                dfPop = df[df["Population"] == pop]
+                if pop == targetPop[0]:
+                    targPops.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+                elif pop in specPops:
+                    offTargPops.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
         else:
-            ax.set_title("Log selectivity varies with $K_x^*$ for Lbound")
-    ax.legend(loc='lower right', fancybox=True, framealpha=1)
+            for _, pop in enumerate(df["Population"].unique()):
+                dfPop = df[df["Population"] == pop]
+                if pop == targetPop[0]:
+                    targPops.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+                else:
+                    offTargPops.append(np.array([dfPop["Receptor_1"].to_numpy(), dfPop["Receptor_2"].to_numpy()]).flatten())
+    else:
+        if specPops:
+            for _, pop in enumerate(df["Population"].unique()):
+                if pop == targetPop[0]:
+                    targPops.append(pop)
+                elif pop in specPops:
+                    offTargPops.append(pop)
+        else:
+            for _, pop in enumerate(df["Population"].unique()):
+                if pop == targetPop[0]:
+                    targPops.append(pop)
+                else:
+                    offTargPops.append(pop)
+
+    return targPops, offTargPops
+
+
+def minSigmaVar(x, tPops, offTPops, h=None, recFactor=1.0):
+    targetBound, offTargetBound = 0, 0
+    for tPop in tPops:
+        targetBound += sum(sigmaPop(tPop, np.exp(x[0]), np.exp(x[1]), x[2], [x[3], 1 - x[3]],
+                                    np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]), quantity=0, h=h, recFactor=recFactor))
+    for offTPop in offTPops:
+        offTargetBound += sum(sigmaPop(offTPop, np.exp(x[0]), np.exp(x[1]), x[2], [x[3], 1 - x[3]],
+                                       np.array([[np.exp(x[4]), np.exp(x[5])], [np.exp(x[6]), np.exp(x[7])]]), quantity=0, h=h, recFactor=recFactor))
+    return (offTargetBound) / (targetBound)
+
+
+def optimize(pmOptNo, targPops, offTargPops, L0, KxStar, f, LigC, Kav, bound=None, recFactor=1.0):
+    """ A more general purpose optimizer """
+    # OPT = [log L0, log KxStar, f, LigC[0], log Ka(diag), log Ka(offdiag)]
+    Kav = np.array(Kav)
+    xnot = np.array([np.log(L0), np.log(KxStar), f, LigC[0], np.log(Kav[0, 0]), np.log(Kav[0, 1]), np.log(Kav[1, 0]), np.log(Kav[1, 1])])
+    Bnds = [(i, i + 0.001) for i in xnot]
+
+    for pmopt in pmOptNo:
+        Bnds[pmopt] = optBnds[pmopt]
+    if bound is not None:
+        Bnds = bound
+
+    optimized = minimize(minSigmaVar, xnot, bounds=np.array(Bnds), args=(targPops, offTargPops, None, recFactor))
+    if not optimized.success:
+        print(Bnds)
+        print(optimized)
+
+    return optimized
+
+
+def optimizeDesign(ax, targetPop, vrange=(0, 5), recFactor=1.0):
+    "Runs optimization and determines optimal parameters for selectivity of one population vs. another"
+    targPops, offTargPops = genOnevsAll(targetPop)
+    targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
+
+    optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
+    strats = ["Unoptimized", "Affinity", "Mixture+Affinity", "Valency+Affinity", "All"]
+    pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
+
+    for i, strat in enumerate(strats):
+        if strat == "Mixture+Affinity":
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [0.9, 0.1], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
+        elif strat == "All":
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, optParams[1], optParams[2], [0.9, 0.1], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
+        elif strat == "Valency+Affinity":
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 15, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
+        else:
+            optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
+        stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
+
+        optDF = optDF.append(stratRow, ignore_index=True)
+        optParams = optimized.x
+        optParams[0:2] = np.exp(optParams[0:2])
+        optParams[4::] = np.exp(optParams[4::])
+
+        if i <= 0:
+            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1],
+                        [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
+                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=2,
+                        highlight=targetPop[0], lineN=41, recFactor=recFactor)
+        elif i < 4:
+            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1],
+                        [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
+                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=False, layover=1,
+                        highlight=targetPop[0], lineN=41, recFactor=recFactor)
+        else:
+            heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1],
+                        [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
+                        [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=True, layover=1,
+                        highlight=targetPop[0], lineN=41, recFactor=recFactor)
+        ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
+
+    sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax[0])
+    ax[0].set(title="Optimization of " + targetPop[0])
+    ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=25, horizontalalignment='right')
+    if recFactor == 1.0:
+        ax[0].set_ylim(0, 20)
+    else:
+        ax[0].set_ylim(0, 50)
+
+
+optBnds = [(np.log(1e-11), np.log(1e-8)),  # log L0
+           (np.log(1e-15), np.log(1e-9)),  # log KxStar
+           (1, 16),  # f
+           (0.0, 1.0),  # LigC[0]
+           (np.log(1e2), np.log(1e9)),  # log Ka(diag)
+           (np.log(1e2), np.log(1e9)),
+           (np.log(1e2), np.log(1e9)),
+           (np.log(1e2), np.log(1e9))]  # log Ka(offdiag)
+
+
+cBnd = (np.log(1e-9), np.log(1.01e-9))
+
+bndsDict = {
+    "Unoptimized": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0.99, 1.00), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
+    "Affinity": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0.99, 1.00), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
+    "Mixture+Affinity": (cBnd, (np.log(1e-12), np.log(1.01e-12)), (1, 1.01), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10))),
+    "Valency+Affinity": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 16), (0.99, 1.00), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e6), np.log(1.01e6)), (np.log(1e6), np.log(1.01e6))),
+    "All": (cBnd, (np.log(1e-15), np.log(1e-9)), (1, 16), (0, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
+}
+
+
+def optimizeDesignAnim(targetPop):
+    """ Runs optimization and determines optimal parameters for selectivity of one population vs. another. """
+    targPops, offTargPops = genOnevsAll(targetPop)
+    targMeans, offTargMeans = genPopMeans(targPops), genPopMeans(offTargPops)
+
+    optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
+    strats = ["Unoptimized", "Affinity", "Mixture+Affinity", "Valency+Affinity", "All"]
+    pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
+    optParamsHold = np.zeros([len(strats), 6])
+
+    for i, strat in enumerate(strats):
+        optimized = optimize(pmOpts[i], targMeans, offTargMeans, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat])
+        stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
+        optDF = optDF.append(stratRow, ignore_index=True)
+        optParams = optimized.x
+        optParams[0:2] = np.exp(optParams[0:2])
+        optParams[4::] = np.exp(optParams[4::])
+        optParamsHold[i, :] = optParams
+
+    return optParamsHold, strats

@@ -8,7 +8,7 @@ import pandas as pd
 import seaborn as sns
 from celluloid import Camera
 from .figureCommon import getSetup, heatmapNorm
-from .figure6 import optimizeDesignAnim, genOnevsAll, minSelecFunc
+from .figure5 import optimizeDesignAnim, genOnevsAll, minSelecFunc
 
 
 def makeFigure():
