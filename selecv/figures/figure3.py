@@ -32,7 +32,7 @@ def makeFigure():
 
     for i, KxStar in enumerate([1e-10, 1e-12, 1e-14]):
         heatmap(ax[i + 3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(-4, 7), fully=True,
-                title="Bispecific log fully bound with $K_x^*$={} cell·M".format(KxStar), cbar=(i == 2))
+                title="Bispecific log fully bound with $K_x^*$={} cell·M".format(KxStar), cbar=(i == 2), layover=1)
 
     for i in range(6):
         ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
