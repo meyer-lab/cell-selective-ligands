@@ -214,7 +214,7 @@ def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowligh
 def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title="", cbar=False, layover=2, fully=False, highlight=[]):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
-    abundRange = (1.5, 4.5)
+    abundRange = (1.5, 6.5)
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
     if f is None:
