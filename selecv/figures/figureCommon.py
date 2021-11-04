@@ -17,6 +17,7 @@ from valentbind import polyc, polyfc
 rcParams['pcolor.shading'] = 'auto'
 rcParams['svg.fonttype'] = 'none'
 
+LR, HR = 1.5, 6.5
 
 def getSetup(figsize, gridd):
     """ Establish figure set-up with subplots. """
@@ -131,7 +132,7 @@ def ValencyPlot(ax, names, Kav, L0, KxStar, f, Title):
 
         ax.plot(f, sampMeans, color=colors[ii], label=labels[ii])
         ax.fill_between(f, underDev, overDev, color=colors[ii], alpha=0.1)
-    ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 60))
+    ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 120))
     ax.set_xticks((4, 8, 12, 16))
     ax.legend(prop={"size": 7})
 
@@ -148,11 +149,11 @@ def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
     ax.plot(mixRatio, sampMeans, color="royalblue")
     ax.fill_between(mixRatio, underDev, overDev, color="royalblue", alpha=0.1)
     if len(names) == 2:
-        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 12), xlim=(0, 1))  # , title=Title + " binding ratio")
+        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 24), xlim=(0, 1))  # , title=Title + " binding ratio")
         ax.set_title(Title, fontsize=8)
         ax.grid()
     else:
-        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 5), xlim=(0, 1))
+        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 10), xlim=(0, 1))
         ax.set_title(Title, fontsize=8)
         ax.grid()
 
@@ -196,7 +197,7 @@ def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowligh
 def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title="", cbar=False, layover=2, fully=False, highlight=[]):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
-    abundRange = (1.5, 6.5)
+    abundRange = (LR, HR)
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
     if f is None:
@@ -230,7 +231,7 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
 def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=2, highlight=[],  lineN=101, recFactor=1.0):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
-    abundRange = (1.5 + np.log10(recFactor), 4.5 + np.log10(recFactor))
+    abundRange = (LR + np.log10(recFactor), HR + np.log10(recFactor))
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
     if f is None:
