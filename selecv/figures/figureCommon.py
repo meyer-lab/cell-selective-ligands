@@ -150,11 +150,11 @@ def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
     ax.plot(mixRatio, sampMeans, color="royalblue")
     ax.fill_between(mixRatio, underDev, overDev, color="royalblue", alpha=0.1)
     if len(names) == 2:
-        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 24), xlim=(0, 1))  # , title=Title + " binding ratio")
+        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 96), xlim=(0, 1))  # , title=Title + " binding ratio")
         ax.set_title(Title, fontsize=8)
         ax.grid()
     else:
-        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 10), xlim=(0, 1))
+        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 20), xlim=(0, 1))
         ax.set_title(Title, fontsize=8)
         ax.grid()
 
