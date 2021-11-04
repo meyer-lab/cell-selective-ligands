@@ -25,6 +25,9 @@ if __name__ == '__main__':
                        './selecv/graphics/figure_1a.svg', 10, 15, scalee=0.02, scale_x=0.45, scale_y=0.45)
         overlayCartoon(fdir + 'figure1.svg',
                        './selecv/graphics/figure_1b.svg', 5, 280, scalee=0.12, scale_x=0.3, scale_y=0.3)
+    if sys.argv[1] == '2':
+        overlayCartoon(fdir + 'figure2.svg',
+                       './selecv/graphics/figure_2a.svg', 10, 0, scalee=0.18, scale_x=1, scale_y=1)
     if sys.argv[1] == '3':
         overlayCartoon(fdir + 'figure3.svg',
                        './selecv/graphics/figure_3i.svg', 480, 490, scalee=0.15, scale_x=1, scale_y=1)

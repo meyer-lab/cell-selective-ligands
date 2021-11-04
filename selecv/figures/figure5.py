@@ -170,7 +170,7 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5), recFactor=1.0):
     ax[0].set(title="Optimization of " + targetPop[0])
     ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=25, horizontalalignment='right')
     if recFactor == 1.0:
-        ax[0].set_ylim(0, 20)
+        ax[0].set_ylim(0, 16)
     else:
         ax[0].set_ylim(0, 50)
 
