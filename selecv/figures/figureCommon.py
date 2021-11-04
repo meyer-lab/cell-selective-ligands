@@ -57,24 +57,6 @@ def overlayCartoon(figFile, cartoonFile, x, y, scalee=1, scale_x=1, scale_y=1):
     template.save(figFile)
 
 
-def PlotCellPops(ax, df, bbox=False):
-    "Plots theoretical populations"
-    sampleData = sampleReceptors(df, 20000)
-    sns.set_palette("husl", 8)
-    for pop in sampleData.Population.unique():
-        popDF = sampleData.loc[sampleData["Population"] == pop]
-        plot = sns.kdeplot(x=popDF.Receptor_1, y=popDF.Receptor_2, ax=ax, label=pop, shade=True, thresh=0.05, legend=False)
-    plot.text(100, 100, r'$R_1^{lo}R_2^{lo}$', size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(1000, 100, r"$R_1^{med}R_2^{lo}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(10000, 100, r"$R_1^{hi}R_2^{lo}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(100, 10000, r"$R_1^{lo}R_2^{hi}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(1250, 1250, r"$R_1^{med}R_2^{med}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(10000, 10000, r"$R_1^{hi}R_2^{hi}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(8000, 1000, r"$R_1^{hi}R_2^{med}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(1000, 8000, r"$R_1^{med}R_2^{hi}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    ax.set(xscale="log", yscale="log", xlabel="Receptor 1 Abundance", ylabel="Receptor 2 Abundance")
-
-
 def sampleReceptors(df, nsample=100):
     """
     Generate samples in each sample space

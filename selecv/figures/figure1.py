@@ -13,6 +13,7 @@ ligConc = np.array([1e-8])
 KxStarP = 1e-10
 val = 16.0
 
+LR, HR = 1.5, 6.5
 
 def makeFigure():
     """ Make figure 1. """
@@ -94,8 +95,8 @@ def demoHeatmap(ax, vmin=1, vmax=4):
     ax_new.set_yscale("linear")
     ax_new.set_xticks([])
     ax_new.set_yticks([])
-    ax_new.set_xlim((1.5, 4.5))
-    ax_new.set_ylim((1.5, 4.5))
+    ax_new.set_xlim((LR, HR))
+    ax_new.set_ylim((LR, HR))
 
     ax_new.add_artist(plt.Circle((2, 3), 0.2, color='w'))
     ax_new.text(2, 3, "1", size=11, color='red', weight='semibold', horizontalalignment='center',
@@ -111,9 +112,9 @@ def demoHeatmap(ax, vmin=1, vmax=4):
 
 def demoPopulations(ax):
     ax.set_facecolor('darkgoldenrod')
-    ax.set_xlim((10 ** 1.5, 10 ** 4.5))
-    ax.set_ylim((10 ** 1.5, 10 ** 4.5))
+    ax.set_xlim((10 ** LR, 10 ** HR))
+    ax.set_ylim((10 ** LR, 10 ** HR))
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set(xscale="log", yscale="log", xlabel="Receptor 1 Abundance", ylabel="Receptor 2 Abundance")
-    overlapCellPopulation(ax, (1.5, 4.5), data=cellPopulations)
+    overlapCellPopulation(ax, (LR, HR), data=cellPopulations)

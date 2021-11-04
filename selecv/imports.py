@@ -40,25 +40,6 @@ def getAffDict1():
     return mutaff
 
 
-theoreticalpops = {
-    r"$R_1^{lo}R_2^{lo}$": [2, 2, [[0.01, 0.005], [0.005, 0.01]]],
-    r"$R_1^{med}R_2^{lo}$": [3, 2, [[0.015, 0.00], [0.00, 0.005]]],
-    r"$R_1^{hi}R_2^{lo}$": [4, 2, [[0.015, 0.00], [0.00, 0.005]]],
-    r"$R_1^{lo}R_2^{hi}$": [2, 4, [[0.005, 0.00], [0.00, 0.015]]],
-    r"$R_1^{med}R_2^{hi}$": [3, 3.9, [[0.01, 0.005], [0.005, 0.01]]],
-    r"$R_1^{hi}R_2^{med}$": [3.9, 3, [[0.01, 0.005], [0.005, 0.01]]],
-    r"$R_1^{hi}R_2^{hi}$": [4, 4, [[0.01, 0.01], [0.02, 0.01]]],
-    r"$R_1^{med}R_2^{med}$": [3.1, 3.1, [[0.05, -0.04], [-0.04, 0.05]]],
-}
-
-
-def getPopDict():
-    """Returns dictionary and dataframe containt theoretical populations"""
-    populationdf = pds.DataFrame.from_dict(data=theoreticalpops, orient="index", columns=["Receptor_1", "Receptor_2", "Covariance_Matrix"])
-    populationdf = populationdf.reset_index()
-    populationdf.columns = ["Population", "Receptor_1", "Receptor_2", "Covariance_Matrix"]
-    return theoreticalpops, populationdf
-
 
 affDict = {
     "IL2·IL2Rα": [1 / 10 * 10e8, "Cytokine"],
