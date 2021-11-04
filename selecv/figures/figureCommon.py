@@ -132,8 +132,9 @@ def ValencyPlot(ax, names, Kav, L0, KxStar, f, Title):
 
         ax.plot(f, sampMeans, color=colors[ii], label=labels[ii])
         ax.fill_between(f, underDev, overDev, color=colors[ii], alpha=0.1)
-    ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 120))
-    ax.set_xticks((4, 8, 12, 16))
+    ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 480))
+    ax.set_xticks((2, 4, 6, 8))
+    #ax.set_xticks((4, 8, 12, 16))
     ax.legend(prop={"size": 7})
 
 
