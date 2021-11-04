@@ -39,6 +39,24 @@ def getAffDict1():
     """Returns a dictionary containing mutant dissociation constants for 2Ra and BGc"""
     return mutaff
 
+theoreticalpops = {
+    r"$R_1^{lo}R_2^{lo}$": [2.2, 2.2, [[0.01, 0.005], [0.005, 0.01]]],
+    r"$R_1^{med}R_2^{lo}$": [4, 2.2, [[0.015, 0.00], [0.00, 0.005]]],
+    r"$R_1^{hi}R_2^{lo}$": [5.8, 2.2, [[0.015, 0.00], [0.00, 0.005]]],
+    r"$R_1^{lo}R_2^{hi}$": [2.2, 5.8, [[0.005, 0.00], [0.00, 0.015]]],
+    r"$R_1^{med}R_2^{hi}$": [4.0, 5.7, [[0.01, 0.005], [0.005, 0.01]]],
+    r"$R_1^{hi}R_2^{med}$": [5.7, 4.0, [[0.01, 0.005], [0.005, 0.01]]],
+    r"$R_1^{hi}R_2^{hi}$": [5.8, 5.8, [[0.01, 0.01], [0.02, 0.01]]],
+    r"$R_1^{med}R_2^{med}$": [3.9, 3.9, [[0.05, -0.04], [-0.04, 0.05]]],
+}
+
+
+def getPopDict():
+    """Returns dictionary and dataframe containt theoretical populations"""
+    populationdf = pds.DataFrame.from_dict(data=theoreticalpops, orient="index", columns=["Receptor_1", "Receptor_2", "Covariance_Matrix"])
+    populationdf = populationdf.reset_index()
+    populationdf.columns = ["Population", "Receptor_1", "Receptor_2", "Covariance_Matrix"]
+    return theoreticalpops, populationdf
 
 
 affDict = {
