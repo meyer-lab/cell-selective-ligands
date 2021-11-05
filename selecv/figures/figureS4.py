@@ -22,12 +22,13 @@ def makeFigure():
     ax[5].axis("off")
 
     for subax in ax:
-        subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
-        subax.set_yticklabels(subax.get_yticklabels(), fontsize=fsize)
+        yticks = subax.get_yticks()
+        xticks = subax.get_xticks()
+        subax.set_xticklabels(xticks, fontsize=fsize)
+        subax.set_yticklabels(yticks, fontsize=fsize)
         subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
         subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
         subax.set_title(subax.get_title(), fontsize=fsize)
-
     return f
 
 

@@ -27,8 +27,10 @@ def makeFigure():
     popCompare(ax[13], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], "Aff", Kav=[5, 7])
 
     for subax in ax:
-        subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
-        subax.set_yticklabels(subax.get_yticklabels(), fontsize=fsize)
+        yticks = subax.get_yticks()
+        xticks = subax.get_xticks()
+        subax.set_xticklabels(xticks, fontsize=fsize)
+        subax.set_yticklabels(yticks, fontsize=fsize)
         subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
         subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
         subax.set_title(subax.get_title(), fontsize=fsize)
