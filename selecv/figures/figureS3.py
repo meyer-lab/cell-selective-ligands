@@ -16,18 +16,15 @@ affinity = 1e8  # 7
 
 def makeFigure():
     # Get list of axis objects
-    ax, f = getSetup((9, 9), (3, 3))
-    subplotLabel(ax, [0] + list(range(3, 9)))
+    ax, f = getSetup((9, 6), (2, 3))
+    subplotLabel(ax, [0] + list(range(3, 6)))
     fsize = 10
 
     valency(f, ax[0:3], 1e-9, 10 ** -10, [1.0], Kav=[[1e7, 0.01]], vmin=0.0, vmax=9)
-    valencyScan = np.linspace(1, 16, num=32)
-    popCompare(ax[3], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
-    popCompare(ax[4], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
-    popCompare(ax[5], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
-    vieqPlot(ax[6], 1e4, 8)
-    vieqPlot(ax[7], 1e3, 8)
-    ratePlot(ax[8])
+    valencyScan = np.linspace(1, 8, num=32)
+    popCompare(ax[3], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
+    popCompare(ax[4], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
+    ratePlot(ax[5])
 
     for subax in ax:
         yticks = subax.get_yticks()
@@ -50,12 +47,12 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
             cbar = True
         heatmap(axs[i], L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vrange=(vmin, vmax), cbar=cbar, layover=1)
         axs[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
-        plt.plot([3.32, 3.7], [2, 2], color="black", marker=2)
-        plt.text(3.5, 2.1, "b", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        plt.plot([3.3, 3.8], [3.2, 3.7], color="black", marker=2)
-        plt.text(3.65, 3.8, "c", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        plt.plot([3.4, 3.6], [3, 3], color="black", marker=1, markersize=4)
-        plt.text(3.6, 2.8, "d", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        plt.plot([4.3, 5.1], [2, 2], color="black", marker=2)
+        plt.text(5.0, 2.2, "b", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        plt.plot([4.3, 5.3], [4.4, 5.4], color="black", marker=2)
+        plt.text(5.0, 5.6, "c", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        plt.plot([4.5, 5.0], [4.0, 4.0], color="black", marker=1, markersize=4)
+        plt.text(5.0, 3.6, "d", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
         axs[i].set_title("Valency = {}".format(v))
 
     return fig

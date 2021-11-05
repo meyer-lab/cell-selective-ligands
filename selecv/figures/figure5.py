@@ -19,8 +19,8 @@ def makeFigure():
     fsize = 7.5
 
     optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"], vrange=(0, 3))
-    optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 1.5))
-    optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 10))
+    optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 3))
+    optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 100))
 
     for subax in ax:
         yticks = subax.get_yticks()
@@ -172,7 +172,7 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5), recFactor=1.0):
     ax[0].set(title="Optimization of " + targetPop[0])
     ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=25, horizontalalignment='right')
     if recFactor == 1.0:
-        ax[0].set_ylim(0, 20)
+        ax[0].set_ylim(0, 16)
     else:
         ax[0].set_ylim(0, 50)
 

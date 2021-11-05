@@ -17,6 +17,7 @@ from valentbind import polyc, polyfc
 rcParams['pcolor.shading'] = 'auto'
 rcParams['svg.fonttype'] = 'none'
 
+LR, HR = 1.5, 6.5
 
 def getSetup(figsize, gridd):
     """ Establish figure set-up with subplots. """
@@ -55,24 +56,6 @@ def overlayCartoon(figFile, cartoonFile, x, y, scalee=1, scale_x=1, scale_y=1):
 
     template.append(cartoon)
     template.save(figFile)
-
-
-def PlotCellPops(ax, df, bbox=False):
-    "Plots theoretical populations"
-    sampleData = sampleReceptors(df, 20000)
-    sns.set_palette("husl", 8)
-    for pop in sampleData.Population.unique():
-        popDF = sampleData.loc[sampleData["Population"] == pop]
-        plot = sns.kdeplot(x=popDF.Receptor_1, y=popDF.Receptor_2, ax=ax, label=pop, shade=True, thresh=0.05, legend=False)
-    plot.text(100, 100, r'$R_1^{lo}R_2^{lo}$', size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(1000, 100, r"$R_1^{med}R_2^{lo}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(10000, 100, r"$R_1^{hi}R_2^{lo}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(100, 10000, r"$R_1^{lo}R_2^{hi}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(1250, 1250, r"$R_1^{med}R_2^{med}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(10000, 10000, r"$R_1^{hi}R_2^{hi}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(8000, 1000, r"$R_1^{hi}R_2^{med}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    plot.text(1000, 8000, r"$R_1^{med}R_2^{hi}$", size='small', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-    ax.set(xscale="log", yscale="log", xlabel="Receptor 1 Abundance", ylabel="Receptor 2 Abundance")
 
 
 def sampleReceptors(df, nsample=100):
@@ -149,8 +132,9 @@ def ValencyPlot(ax, names, Kav, L0, KxStar, f, Title):
 
         ax.plot(f, sampMeans, color=colors[ii], label=labels[ii])
         ax.fill_between(f, underDev, overDev, color=colors[ii], alpha=0.1)
-    ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 60))
-    ax.set_xticks((4, 8, 12, 16))
+    ax.set(xlabel="Valency", ylabel="Binding Ratio", title=Title, xlim=(1, max(f)), ylim=(0, 480))
+    ax.set_xticks((2, 4, 6, 8))
+    #ax.set_xticks((4, 8, 12, 16))
     ax.legend(prop={"size": 7})
 
 
@@ -166,11 +150,11 @@ def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
     ax.plot(mixRatio, sampMeans, color="royalblue")
     ax.fill_between(mixRatio, underDev, overDev, color="royalblue", alpha=0.1)
     if len(names) == 2:
-        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 12), xlim=(0, 1))  # , title=Title + " binding ratio")
+        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 96), xlim=(0, 1))  # , title=Title + " binding ratio")
         ax.set_title(Title, fontsize=8)
         ax.grid()
     else:
-        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 5), xlim=(0, 1))
+        ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 20), xlim=(0, 1))
         ax.set_title(Title, fontsize=8)
         ax.grid()
 
@@ -214,7 +198,7 @@ def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowligh
 def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title="", cbar=False, layover=2, fully=False, highlight=[]):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
-    abundRange = (1.5, 4.5)
+    abundRange = (LR, HR)
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
     if f is None:
@@ -248,7 +232,7 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
 def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=2, highlight=[], lineN=101, recFactor=1.0):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
-    abundRange = (1.5 + np.log10(recFactor), 4.5 + np.log10(recFactor))
+    abundRange = (LR + np.log10(recFactor), HR + np.log10(recFactor))
     abundScan = np.logspace(abundRange[0], abundRange[1], nAbdPts)
 
     if f is None:

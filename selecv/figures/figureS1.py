@@ -55,16 +55,16 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
 
 def showPopulations(ax):
     demoPopulations(ax)
-    ax.plot([10**2, 10**3.7], [10**3.5, 10**2.2], color="w", marker=2)
-    ax.text(10**2.3, 10**3.5, "b", size='large', color='white', weight='semibold', horizontalalignment='center',
+    ax.plot([10**2, 10**5.4], [10**5.0, 10**2.4], color="w", marker=2)
+    ax.text(10**2.6, 10**5.0, "b", size='large', color='white', weight='semibold', horizontalalignment='center',
             verticalalignment='center')
-    ax.plot([10**3.3, 10**3.7], [10**3.6, 10**3.2], color="w", marker=2)
-    ax.text(10**3.4, 10**3.63, "c", size='large', color='white', weight='semibold', horizontalalignment='center',
+    ax.plot([10**4.6, 10**5.4], [10**5.2, 10**4.4], color="w", marker=2)
+    ax.text(10**4.8, 10**5.3, "c", size='large', color='white', weight='semibold', horizontalalignment='center',
             verticalalignment='center')
-    ax.plot([10**3.3, 10**3.7], [10**2, 10**2], color="w", marker=2)
-    ax.text(10**3.5, 10**2.1, "d", size='large', color='white', weight='semibold', horizontalalignment='center',
+    ax.plot([10**4.6, 10**5.4], [10**2, 10**2], color="w", marker=2)
+    ax.text(10**5.0, 10**2.2, "d", size='large', color='white', weight='semibold', horizontalalignment='center',
             verticalalignment='center')
-    ax.plot([10**3.3, 10**3.8], [10**3.2, 10**3.7], color="w", marker=2)
-    ax.text(10**3.7, 10**3.85, "e", size='large', color='white', weight='semibold', horizontalalignment='center',
+    ax.plot([10**4.6, 10**5.6], [10**4.4, 10**5.4], color="w", marker=2)
+    ax.text(10**5.4, 10**5.7, "e", size='large', color='white', weight='semibold', horizontalalignment='center',
             verticalalignment='center')
     ax.set_title("Population pairs to be compared in b, c, d, e")

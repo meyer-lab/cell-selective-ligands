@@ -23,11 +23,11 @@ def makeFigure():
     fDLsub = 4
     optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{med}R_2^{lo}$"], fDLsub, affDLsub, specPops=[r"$R_1^{hi}R_2^{lo}$"])
     heatmapDL(ax[1], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-6, 3), cbar=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-7, 3), cbar=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
     heatmapDL(ax[2], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=False, dead=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 14), cbar=False, dead=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
     heatmapDL(ax[3], np.exp(optParams[0]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 10), cbar=True, dead=False, jTherap=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
+              [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 14), cbar=True, dead=False, jTherap=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
 
     valScanOpt(ax[4:7], [r"$R_1^{med}R_2^{lo}$"], specPops=[r"$R_1^{hi}R_2^{lo}$"])
 
@@ -81,7 +81,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
         ratioDF[ratioDF.columns[ii]] = sampMeans
 
     Cbar = True
-    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=4, cbar=Cbar, cbar_kws={'label': 'Selectivity Ratio w Antagonist', 'aspect': 40}, annot=True)
+    sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=16, cbar=Cbar, cbar_kws={'label': 'Selectivity Ratio w Antagonist', 'aspect': 40}, annot=True)
     ax.set(xlabel="Antagonist Rec 1 Affinity ($K_d$, in nM)", ylabel="Antagonist Rec 2 Affinity ($K_d$, in nM)")
 
     if specPops:
