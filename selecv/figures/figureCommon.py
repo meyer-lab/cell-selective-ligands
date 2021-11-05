@@ -222,14 +222,14 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
     if cbar:
         cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
         cbar.set_label("Log Ligand Bound")
-    ## layover: 2 = with name; 1 = only pop w/o name; 0 = none
+    # layover: 2 = with name; 1 = only pop w/o name; 0 = none
     if layover == 2:
         overlapCellPopulation(ax, abundRange, highlight=highlight, pname=True)
     elif layover == 1:
         overlapCellPopulation(ax, abundRange, highlight=highlight, pname=False)
 
 
-def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=2, highlight=[],  lineN=101, recFactor=1.0):
+def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=2, highlight=[], lineN=101, recFactor=1.0):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
     abundRange = (LR + np.log10(recFactor), HR + np.log10(recFactor))
@@ -254,7 +254,7 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
     if cbar:
         cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
         cbar.set_label("Relative Ligand Bound")
-    ## layover: 2 = with name; 1 = only pop w/o name; 0 = none
+    # layover: 2 = with name; 1 = only pop w/o name; 0 = none
     if layover == 2:
         overlapCellPopulation(ax, abundRange, highlight=highlight, recFactor=np.log10(recFactor), pname=True)
     elif layover == 1:
