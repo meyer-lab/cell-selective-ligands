@@ -16,18 +16,15 @@ affinity = 1e8  # 7
 
 def makeFigure():
     # Get list of axis objects
-    ax, f = getSetup((9, 9), (3, 3))
-    subplotLabel(ax, [0] + list(range(3, 9)))
+    ax, f = getSetup((9, 6), (2, 3))
+    subplotLabel(ax, [0] + list(range(3, 6)))
     fsize = 10
 
     valency(f, ax[0:3], 1e-9, 10 ** -10, [1.0], Kav=[[1e7, 0.01]], vmin=0.0, vmax=9)
     valencyScan = np.linspace(1, 8, num=32)
-    popCompare(ax[3], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
-    popCompare(ax[4], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
-    popCompare(ax[5], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
-    vieqPlot(ax[6], 1e4, 8)
-    vieqPlot(ax[7], 1e3, 8)
-    ratePlot(ax[8])
+    popCompare(ax[3], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
+    popCompare(ax[4], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
+    ratePlot(ax[5])
 
     for subax in ax:
         subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
