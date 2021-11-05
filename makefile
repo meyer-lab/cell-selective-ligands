@@ -2,7 +2,7 @@ SHELL := /bin/bash
 
 .PHONY: clean test
 
-flist = 1 3 4 5 S1 S2 S3 S4
+flist = 1 2 3 4 5 S1 S2 S3 S4
 
 all: output/manuscript.md $(patsubst %, output/figure%.svg, $(flist))
 
