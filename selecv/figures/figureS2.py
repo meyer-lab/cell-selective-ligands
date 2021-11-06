@@ -3,7 +3,7 @@ Figure S2. Plotting Csizmar reimplementation
 """
 
 import numpy as np
-from .figureCommon import subplotLabel, getSetup
+from .figureCommon import subplotLabel, setFontSize, getSetup
 from ..csizmar import fit_slope, discrim2, fitfunc, xeno
 
 
@@ -11,7 +11,6 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((12, 3), (1, 4))
     subplotLabel(ax)
-    fsize = 9
     fit = fitfunc()
     FitKX, FitSlopeC5, FitSlopeB22, Kav, Fitabund = np.exp(fit[0]), fit[1], fit[2], [[np.exp(fit[3])], [np.exp(fit[4])], [0]], np.exp(fit[5])
 
@@ -25,13 +24,5 @@ def makeFigure():
 
     fit_slope(ax[3], FitKXnA, FitSlopeC5nA, FitSlopeB22nA, KavnA, FitabundnA)
 
-    for subax in ax:
-        yticks = subax.get_yticks()
-        xticks = subax.get_xticks()
-        subax.set_xticklabels(xticks, fontsize=fsize)
-        subax.set_yticklabels(yticks, fontsize=fsize)
-        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
-        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
-        subax.set_title(subax.get_title(), fontsize=fsize)
-
+    setFontSize(ax, 9)
     return f

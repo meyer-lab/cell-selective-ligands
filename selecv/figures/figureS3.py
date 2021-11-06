@@ -6,7 +6,7 @@ import pandas as pds
 import seaborn as sns
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
-from .figureCommon import subplotLabel, getSetup, popCompare, heatmap
+from .figureCommon import subplotLabel, setFontSize, getSetup, popCompare, heatmap
 from valentbind import polyfc
 
 ligConc = np.array([1e-8])
@@ -18,7 +18,6 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((9, 6), (2, 3))
     subplotLabel(ax, [0] + list(range(3, 6)))
-    fsize = 10
 
     valency(f, ax[0:3], 1e-9, 10 ** -10, [1.0], Kav=[[1e7, 0.01]], vmin=0.0, vmax=9)
     valencyScan = np.linspace(1, 8, num=32)
@@ -26,15 +25,7 @@ def makeFigure():
     popCompare(ax[4], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
     ratePlot(ax[5])
 
-    for subax in ax:
-        yticks = subax.get_yticks()
-        xticks = subax.get_xticks()
-        subax.set_xticklabels(xticks, fontsize=fsize)
-        subax.set_yticklabels(yticks, fontsize=fsize)
-        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
-        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
-        subax.set_title(subax.get_title(), fontsize=fsize)
-
+    setFontSize(ax, 10)
     return f
 
 

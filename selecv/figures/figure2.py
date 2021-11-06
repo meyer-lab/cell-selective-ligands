@@ -2,7 +2,7 @@
 Figure S3. Exploration of Valency.
 """
 import numpy as np
-from .figureCommon import subplotLabel, getSetup, popCompare
+from .figureCommon import subplotLabel, setFontSize, getSetup, popCompare
 from .figureS3 import vieqPlot
 
 ligConc = np.array([1e-8])
@@ -14,7 +14,6 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((9, 6), (2, 3))
     subplotLabel(ax, [0] + list(range(3, 6)))
-    fsize = 10
 
     ax[0].axis("off")
     ax[1].axis("off")
@@ -25,11 +24,5 @@ def makeFigure():
     vieqPlot(ax[4], 1e4, 8)
     vieqPlot(ax[5], 1e3, 8)
 
-    for subax in ax:
-        subax.set_xticklabels(subax.get_xticklabels(), fontsize=fsize)
-        subax.set_yticklabels(subax.get_yticklabels(), fontsize=fsize)
-        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
-        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
-        subax.set_title(subax.get_title(), fontsize=fsize)
-
+    setFontSize(ax, 10)
     return f

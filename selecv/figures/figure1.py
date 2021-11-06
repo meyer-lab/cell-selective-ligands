@@ -5,7 +5,7 @@ Figure 1. Introduce the model system.
 import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
-from .figureCommon import subplotLabel, getSetup, heatmap, overlapCellPopulation
+from .figureCommon import subplotLabel, setFontSize, getSetup, heatmap, overlapCellPopulation
 from ..sampling import sampleSpec, cellPopulations
 
 
@@ -20,7 +20,6 @@ def makeFigure():
     # Get list of axis objects
     ax, f = getSetup((10, 7), (2, 3))
     subplotLabel(ax, [0, 3, 4, 5])
-    fsize = 11
 
     ax[0].axis("off")
     ax[1].axis("off")
@@ -30,15 +29,7 @@ def makeFigure():
     demoHeatmap(ax[4], vmin=0, vmax=10)
     demoPopulations(ax[5])
 
-    for subax in ax:
-        yticks = subax.get_yticks()
-        xticks = subax.get_xticks()
-        subax.set_xticklabels(xticks, fontsize=fsize)
-        subax.set_yticklabels(yticks, fontsize=fsize)
-        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
-        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
-        subax.set_title(subax.get_title(), fontsize=fsize)
-
+    setFontSize(ax, 11)
     return f
 
 

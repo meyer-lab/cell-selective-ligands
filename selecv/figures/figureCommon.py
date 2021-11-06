@@ -6,6 +6,7 @@ from matplotlib import gridspec, pyplot as plt
 from matplotlib.patches import Ellipse
 import matplotlib.cm as cm
 from matplotlib import rcParams
+import matplotlib.ticker as mticker
 from scipy.stats import multivariate_normal
 import seaborn as sns
 import pandas as pds
@@ -43,6 +44,17 @@ def subplotLabel(axs, indices=False):
     else:
         for jj, index in enumerate(indices):
             axs[index].text(-0.2, 1.25, ascii_lowercase[jj], transform=axs[index].transAxes, fontsize=16, fontweight="bold", va="top")
+
+
+def setFontSize(ax, fsize):
+    for subax in ax:
+        yticks = subax.get_yticks()
+        xticks = subax.get_xticks()
+        subax.set_xticklabels(xticks, fontsize=fsize)
+        subax.set_yticklabels(yticks, fontsize=fsize)
+        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
+        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
+        subax.set_title(subax.get_title(), fontsize=fsize)
 
 
 def overlayCartoon(figFile, cartoonFile, x, y, scalee=1, scale_x=1, scale_y=1):
@@ -215,6 +227,9 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
     contours = ax.contour(X, Y, logZ, levels=np.arange(-20, 20, 0.5), colors="black", linewidths=0.5)
     ax.set_xscale("log")
     ax.set_yscale("log")
+
+    ax.yaxis.set_major_formatter(mticker.ScalarFormatter(useOffset=False, useMathText=True))
+
     ax.set_title(title)
     plt.clabel(contours, inline=True, fontsize=6)
     ax.pcolor(X, Y, logZ, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
