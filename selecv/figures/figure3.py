@@ -5,7 +5,7 @@ Figure 3. Heterovalent bispecific
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-from .figureCommon import getSetup, subplotLabel, heatmap, cellPopulations, overlapCellPopulation
+from .figureCommon import getSetup, subplotLabel, setFontSize, heatmap, cellPopulations, overlapCellPopulation
 from valentbind import polyc, polyfc
 
 
@@ -17,7 +17,6 @@ def makeFigure():
     """ main function for Figure 3 """
     ax, f = getSetup((10, 10), (3, 3))
     subplotLabel(ax, list(range(9)))
-    fsize = 9.5
 
     L0 = 1e-8
     Kav = [[1e7, 1e5], [1e5, 1e6]]
@@ -41,15 +40,7 @@ def makeFigure():
     KxStarVary(ax[7], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
     ax[8].axis("off")
 
-    for subax in ax:
-        yticks = subax.get_yticks()
-        xticks = subax.get_xticks()
-        subax.set_xticklabels(xticks, fontsize=fsize)
-        subax.set_yticklabels(yticks, fontsize=fsize)
-        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
-        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
-        subax.set_title(subax.get_title(), fontsize=fsize)
-
+    setFontSize(ax, 9.5)
     return f
 
 

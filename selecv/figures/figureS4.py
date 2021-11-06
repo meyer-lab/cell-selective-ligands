@@ -3,7 +3,7 @@ Figure S4. Mixtures for enhanced targeting.
 """
 
 import numpy as np
-from .figureCommon import subplotLabel, getSetup, popCompare, heatmap
+from .figureCommon import subplotLabel, setFontSize, getSetup, popCompare, heatmap
 
 ligConc = np.array([1e-8])
 KxStarP = 1e-10
@@ -21,14 +21,7 @@ def makeFigure():
     popCompare(ax[4], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{hi}$"], "Mix", Kav=np.array([[1e6, 1e5], [1e5, 1e6]]))
     ax[5].axis("off")
 
-    for subax in ax:
-        yticks = subax.get_yticks()
-        xticks = subax.get_xticks()
-        subax.set_xticklabels(xticks, fontsize=fsize)
-        subax.set_yticklabels(yticks, fontsize=fsize)
-        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
-        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
-        subax.set_title(subax.get_title(), fontsize=fsize)
+    setFontSize(ax, 10)
     return f
 
 

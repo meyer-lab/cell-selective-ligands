@@ -7,7 +7,7 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 import matplotlib.cm as cm
 from scipy.optimize import minimize
-from .figureCommon import subplotLabel, getSetup, cellPopulations, overlapCellPopulation
+from .figureCommon import subplotLabel, setFontSize, getSetup, cellPopulations, overlapCellPopulation
 from .figure5 import genOnevsAll, genPopMeans
 from valentbind import polyc
 from ..sampling import sigmaPopC
@@ -19,7 +19,6 @@ def makeFigure():
     ax, f = getSetup((22, 8), (2, 5))
     subplotLabel(ax)
     affDLsub = np.array([6, 10])
-    fsize = 11
     fDLsub = 4
     optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{med}R_2^{lo}$"], fDLsub, affDLsub, specPops=[r"$R_1^{hi}R_2^{lo}$"])
     heatmapDL(ax[1], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
@@ -32,16 +31,7 @@ def makeFigure():
     valScanOpt(ax[4:7], [r"$R_1^{med}R_2^{lo}$"], specPops=[r"$R_1^{hi}R_2^{lo}$"])
     mixScanOpt(ax[7:10], [r"$R_1^{med}R_2^{lo}$"], specPops=[r"$R_1^{hi}R_2^{lo}$"])
 
-    for subax in ax:
-        #xticks = subax.get_xticklabels()
-        yticks = subax.get_yticks()
-        xticks = subax.get_xticks()
-        subax.set_xticklabels(xticks, fontsize=9)
-        subax.set_yticklabels(yticks, fontsize=fsize)
-        subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
-        subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
-        subax.set_title(subax.get_title(), fontsize=fsize)
-
+    setFontSize(ax, 11)
     return f
 
 
