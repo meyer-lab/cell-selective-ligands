@@ -40,7 +40,7 @@ def makeFigure():
     KxStarVary(ax[7], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
     ax[8].axis("off")
 
-    setFontSize(ax, 8.5)
+    setFontSize(ax, 8.5, heatmaplocs=[0, 1, 2, 3, 4, 5])
     return f
 
 

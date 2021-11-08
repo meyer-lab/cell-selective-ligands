@@ -47,10 +47,13 @@ def subplotLabel(axs, indices=False):
             axs[index].text(-0.2, 1.25, ascii_lowercase[jj], transform=axs[index].transAxes, fontsize=16, fontweight="bold", va="top")
 
 
-def setFontSize(ax, fsize):
-    for subax in ax:
+def setFontSize(ax, fsize, heatmaplocs=[]):
+    for i, subax in enumerate(ax):
         yticks = subax.get_yticks()
         xticks = subax.get_xticks()
+        if i in (heatmaplocs):
+            xticks = ['{:.0e}'.format(item) for item in xticks]
+            yticks = ['{:.0e}'.format(item) for item in yticks]
         subax.set_xticklabels(xticks, fontsize=fsize)
         subax.set_yticklabels(yticks, fontsize=fsize)
         subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
@@ -244,7 +247,6 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
         overlapCellPopulation(ax, abundRange, highlight=highlight, pname=True)
     elif layover == 1:
         overlapCellPopulation(ax, abundRange, highlight=highlight, pname=False)
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=30)
 
 
 def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=2, highlight=[], lineN=101, recFactor=1.0):
@@ -277,4 +279,3 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
         overlapCellPopulation(ax, abundRange, highlight=highlight, recFactor=np.log10(recFactor), pname=True)
     elif layover == 1:
         overlapCellPopulation(ax, abundRange, highlight=highlight, recFactor=np.log10(recFactor), pname=False)
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=30)
