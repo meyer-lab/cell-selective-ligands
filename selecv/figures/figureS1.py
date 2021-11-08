@@ -25,7 +25,7 @@ def makeFigure():
     popCompare(ax[12], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], "Aff", Kav=[5, 7])
     popCompare(ax[13], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], "Aff", Kav=[5, 7])
 
-    setFontSize(ax, 12)
+    setFontSize(ax, 11, heatmaplocs=range(10))
     return f
 
 

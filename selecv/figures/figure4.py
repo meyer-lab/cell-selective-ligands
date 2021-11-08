@@ -29,9 +29,10 @@ def makeFigure():
               [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 14), cbar=True, dead=False, jTherap=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
 
     valScanOpt(ax[4:7], [r"$R_1^{med}R_2^{lo}$"], specPops=[r"$R_1^{hi}R_2^{lo}$"])
+
     mixScanOpt(ax[7:10], [r"$R_1^{med}R_2^{lo}$"], specPops=[r"$R_1^{hi}R_2^{lo}$"])
 
-    setFontSize(ax, 11)
+    setFontSize(ax, 10, heatmaplocs=[1, 2, 3])
     return f
 
 
@@ -55,7 +56,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
     else:
         targPops, offTargPops = targetPop, specPops
 
-    npoints = 4
+    npoints = 5
     ticks = np.full([npoints], None)
     affScan = np.logspace(affDL[0], affDL[1], npoints)
     ticks[0], ticks[-1] = "1e" + str(9 - affDL[0]), "1e" + str(9 - affDL[1])
@@ -134,7 +135,7 @@ def minSelecFuncDLVal(x, targPop, offTpops, fDL):
 
 def valScanOpt(ax, targetPop, specPops=False):
     """Scans through antagonist valencies and finds best specificity and affinities"""
-    vals = np.linspace(1, 8, num=8)
+    vals = np.linspace(1, 8, num=15)
     resultDF = pd.DataFrame(columns=["Valency", "Specificity"])
     AgDF = pd.DataFrame(columns=["Valency", "Receptor", "Affinity"])
     AntagDF = pd.DataFrame(columns=["Valency", "Receptor", "Affinity"])
@@ -159,27 +160,30 @@ def valScanOpt(ax, targetPop, specPops=False):
         AntagDF = AntagDF.append(pd.DataFrame({"Valency": [val], "Receptor": "R1 Affinity", "Affinity": optimArr[2]}))
         AntagDF = AntagDF.append(pd.DataFrame({"Valency": [val], "Receptor": "R2 Affinity", "Affinity": optimArr[3]}))
 
-    sns.lineplot(data=resultDF, x="Valency", y="Specificity", ax=ax[0])
+    sns.lineplot(data=resultDF, x="Valency", y="Specificity", ax=ax[0], palette='k')
     ax[0].set(xlabel="Antagonist Valency", ylabel="Optimal Specificty", ylim=(0, 25))
     sns.lineplot(data=AgDF, x="Valency", y="Affinity", hue="Receptor", ax=ax[1])
-    ax[1].set(xlabel="Antagonist Valency", ylabel=r"K$_D$ ($log_{10}(nM))", title="Agonist Affinity", ylim=(-1, 7))
+    ax[1].set(xlabel="Antagonist Valency", ylabel=r"K$_D$ ($log_{10}(nM))", title="Agonist Affinity", ylim=((-2, 8)))
     sns.lineplot(data=AntagDF, x="Valency", y="Affinity", hue="Receptor", ax=ax[2])
-    ax[2].set(xlabel="Antagonist Valency", ylabel=r"K$_D$ ($log_{10}(nM))", title="Antagonist Affinity", ylim=(-1, 7))
+    ax[2].set(xlabel="Antagonist Valency", ylabel=r"K$_D$ ($log_{10}(nM))", title="Antagonist Affinity", ylim=((-2, 8)))
 
 
 def minSelecFuncDLMix(x, targPop, offTpops, agMix):
     """ Provides the function to be minimized to get optimal selectivity with addition of dead ligand. """
     offTargetBound, targetBound = 0, 0
     for tPop in targPop:
-        targetBound += sum(sigmaPopC(tPop, np.exp(x[0]), np.exp(x[1]), [[4, 0], [0, x[2]]], [1-agMix, agMix], np.array([[np.exp(x[5]), np.exp(x[6])], [np.exp(x[3]), np.exp(x[4])]]), quantity=0))
+        targetBound += sum(sigmaPopC(tPop, np.exp(x[0]), np.exp(x[1]), [[4, 0], [0, x[2]]], [1 - agMix, agMix], np.array([[np.exp(x[5]), np.exp(x[6])], [np.exp(x[3]), np.exp(x[4])]]), quantity=0))
     for offTPop in offTpops:
-        offTargetBound += sum(sigmaPopC(offTPop, np.exp(x[0]), np.exp(x[1]), [[4, 0], [0, x[2]]], [1-agMix, agMix], np.array([[np.exp(x[5]), np.exp(x[6])], [np.exp(x[3]), np.exp(x[4])]]), quantity=0))
+        offTargetBound += sum(sigmaPopC(offTPop, np.exp(x[0]), np.exp(x[1]), [[4, 0], [0, x[2]]], [1 - agMix, agMix],
+                              np.array([[np.exp(x[5]), np.exp(x[6])], [np.exp(x[3]), np.exp(x[4])]]), quantity=0))
     return offTargetBound / targetBound
 
 
 def mixScanOpt(ax, targetPop, specPops=False):
     """Scans through antagonist valencies and finds best specificity and affinities"""
-    mixs = np.linspace(0.05, 0.95, num=10)
+    mixs1 = np.logspace(-3, -.3, num=7)
+    mixs2 = (1 - mixs1)[0:-1]
+    mixs = np.append(mixs1, mixs2)
     resultDF = pd.DataFrame(columns=["Agonist Mix", "Specificity"])
     AgDF = pd.DataFrame(columns=["Agonist Mix", "Receptor", "Affinity"])
     AntagDF = pd.DataFrame(columns=["Agonist Mix", "Receptor", "Affinity"])
@@ -204,9 +208,9 @@ def mixScanOpt(ax, targetPop, specPops=False):
         AntagDF = AntagDF.append(pd.DataFrame({"Agonist Mix": [mix * 100], "Receptor": "R1 Affinity", "Affinity": optimArr[2]}))
         AntagDF = AntagDF.append(pd.DataFrame({"Agonist Mix": [mix * 100], "Receptor": "R2 Affinity", "Affinity": optimArr[3]}))
 
-    sns.lineplot(data=resultDF, x="Agonist Mix", y="Specificity", ax=ax[0])
+    sns.lineplot(data=resultDF, x="Agonist Mix", y="Specificity", ax=ax[0], palette='k')
     ax[0].set(xlabel="Agonist Mix (%)", ylabel="Optimal Specificity", xlim=(0, 100), ylim=(0, 25))
     sns.lineplot(data=AgDF, x="Agonist Mix", y="Affinity", hue="Receptor", ax=ax[1])
-    ax[1].set(xlabel="Agonist Mix (%)", ylabel=r"K$_D$ ($log_{10}(nM))", title="Agonist Affinity", xlim=(0, 100), ylim=(-1, 7))
+    ax[1].set(xlabel="Agonist Mix (%)", ylabel=r"K$_D$ ($log_{10}(nM))", title="Agonist Affinity", xlim=(0, 100), ylim=((-2, 8)))
     sns.lineplot(data=AntagDF, x="Agonist Mix", y="Affinity", hue="Receptor", ax=ax[2])
-    ax[2].set(xlabel="Agonist Mix (%)", ylabel=r"K$_D$ ($log_{10}(nM))", title="Antagonist Affinity", xlim=(0, 100), ylim=(-1, 7))
+    ax[2].set(xlabel="Agonist Mix (%)", ylabel=r"K$_D$ ($log_{10}(nM))", title="Antagonist Affinity", xlim=(0, 100), ylim=((-2, 8)))

@@ -15,6 +15,7 @@ val = 16.0
 
 LR, HR = 1.5, 6.5
 
+
 def makeFigure():
     """ Make figure 1. """
     # Get list of axis objects
@@ -29,7 +30,7 @@ def makeFigure():
     demoHeatmap(ax[4], vmin=0, vmax=10)
     demoPopulations(ax[5])
 
-    setFontSize(ax, 11)
+    setFontSize(ax, 11, heatmaplocs=[4, 5])
     return f
 
 

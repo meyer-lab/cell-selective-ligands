@@ -20,6 +20,7 @@ rcParams['svg.fonttype'] = 'none'
 
 LR, HR = 1.5, 6.5
 
+
 def getSetup(figsize, gridd):
     """ Establish figure set-up with subplots. """
     sns.set(style="whitegrid", font_scale=0.7, color_codes=True, palette="colorblind", rc={"grid.linestyle": "dotted", "axes.linewidth": 0.6})
@@ -46,10 +47,13 @@ def subplotLabel(axs, indices=False):
             axs[index].text(-0.2, 1.25, ascii_lowercase[jj], transform=axs[index].transAxes, fontsize=16, fontweight="bold", va="top")
 
 
-def setFontSize(ax, fsize):
-    for subax in ax:
+def setFontSize(ax, fsize, heatmaplocs=[]):
+    for i, subax in enumerate(ax):
         yticks = subax.get_yticks()
         xticks = subax.get_xticks()
+        if i in (heatmaplocs):
+            xticks = ['{:.0e}'.format(item) for item in xticks]
+            yticks = ['{:.0e}'.format(item) for item in yticks]
         subax.set_xticklabels(xticks, fontsize=fsize)
         subax.set_yticklabels(yticks, fontsize=fsize)
         subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
@@ -228,6 +232,7 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
     ax.set_xscale("log")
     ax.set_yscale("log")
 
+    ax.xaxis.set_major_formatter(mticker.ScalarFormatter(useOffset=False, useMathText=True))
     ax.yaxis.set_major_formatter(mticker.ScalarFormatter(useOffset=False, useMathText=True))
 
     ax.set_title(title)
