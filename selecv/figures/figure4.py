@@ -32,7 +32,7 @@ def makeFigure():
 
     mixScanOpt(ax[7:10], [r"$R_1^{med}R_2^{lo}$"], specPops=[r"$R_1^{hi}R_2^{lo}$"])
 
-    setFontSize(ax, 11)
+    setFontSize(ax, 10)
     return f
 
 
@@ -121,6 +121,7 @@ def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cb
         cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax, aspect=40)
         cbar.set_label("Log Ligand Bound")
     overlapCellPopulation(ax, abundRange, data=cellPopulations, highlight=highlight, lowlight=lowlight)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=30)
 
 
 def minSelecFuncDLVal(x, targPop, offTpops, fDL):

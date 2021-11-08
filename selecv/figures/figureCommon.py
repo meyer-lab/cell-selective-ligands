@@ -20,6 +20,7 @@ rcParams['svg.fonttype'] = 'none'
 
 LR, HR = 1.5, 6.5
 
+
 def getSetup(figsize, gridd):
     """ Establish figure set-up with subplots. """
     sns.set(style="whitegrid", font_scale=0.7, color_codes=True, palette="colorblind", rc={"grid.linestyle": "dotted", "axes.linewidth": 0.6})
@@ -228,6 +229,7 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
     ax.set_xscale("log")
     ax.set_yscale("log")
 
+    ax.xaxis.set_major_formatter(mticker.ScalarFormatter(useOffset=False, useMathText=True))
     ax.yaxis.set_major_formatter(mticker.ScalarFormatter(useOffset=False, useMathText=True))
 
     ax.set_title(title)
@@ -242,6 +244,7 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
         overlapCellPopulation(ax, abundRange, highlight=highlight, pname=True)
     elif layover == 1:
         overlapCellPopulation(ax, abundRange, highlight=highlight, pname=False)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=30)
 
 
 def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=2, highlight=[], lineN=101, recFactor=1.0):
@@ -274,3 +277,4 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
         overlapCellPopulation(ax, abundRange, highlight=highlight, recFactor=np.log10(recFactor), pname=True)
     elif layover == 1:
         overlapCellPopulation(ax, abundRange, highlight=highlight, recFactor=np.log10(recFactor), pname=False)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=30)

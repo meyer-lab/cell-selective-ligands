@@ -39,6 +39,7 @@ def getAffDict1():
     """Returns a dictionary containing mutant dissociation constants for 2Ra and BGc"""
     return mutaff
 
+
 theoreticalpops = {
     r"$R_1^{lo}R_2^{lo}$": [2.2, 2.2, [[0.01, 0.005], [0.005, 0.01]]],
     r"$R_1^{med}R_2^{lo}$": [4, 2.2, [[0.015, 0.00], [0.00, 0.005]]],

@@ -15,6 +15,7 @@ val = 16.0
 
 LR, HR = 1.5, 6.5
 
+
 def makeFigure():
     """ Make figure 1. """
     # Get list of axis objects

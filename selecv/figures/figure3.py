@@ -17,6 +17,7 @@ def makeFigure():
     """ main function for Figure 3 """
     ax, f = getSetup((10, 10), (3, 3))
     subplotLabel(ax, list(range(9)))
+    ax[0].ticklabel_format(axis='both', style='sci')
 
     L0 = 1e-8
     Kav = [[1e7, 1e5], [1e5, 1e6]]
@@ -40,7 +41,7 @@ def makeFigure():
     KxStarVary(ax[7], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
     ax[8].axis("off")
 
-    setFontSize(ax, 9.5)
+    setFontSize(ax, 8.5)
     return f
 
 
@@ -77,6 +78,7 @@ def normHeatmap(ax, L0, KxStar, Kav, vrange=(-4, 2), title="", cbar=False, fully
     contours = ax.contour(X, Y, logZ, levels=np.arange(-20, 20, 0.5), colors="black", linewidths=0.5)
     ax.set_xscale("log")
     ax.set_yscale("log")
+    ax.ticklabel_format(axis='both', style='sci')
     ax.set_title(title)
     plt.clabel(contours, inline=True, fontsize=6)
     ax.pcolor(X, Y, logZ, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
