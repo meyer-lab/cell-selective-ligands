@@ -30,7 +30,7 @@ if __name__ == '__main__':
                        './selecv/graphics/figure_2a.svg', 10, 0, scalee=0.18, scale_x=1, scale_y=1)
     if sys.argv[1] == '3':
         overlayCartoon(fdir + 'figure3.svg',
-                       './selecv/graphics/figure_3i.svg', 480, 490, scalee=0.15, scale_x=1, scale_y=1)
+                       './selecv/graphics/figure_3a.svg', 30, 0, scalee=0.22, scale_x=1, scale_y=1)
     if sys.argv[1] == '4':
         overlayCartoon(fdir + 'figure4.svg',
                        './selecv/graphics/figure_4a.svg', 10, 0, scalee=0.18, scale_x=1, scale_y=1)
