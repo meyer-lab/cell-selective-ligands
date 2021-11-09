@@ -15,4 +15,4 @@ jax==0.2.21
 svgutils==0.3.4
 celluloid==0.2.0
 ffmpeg==1.4
-git+https://github.com/meyer-lab/valentBind.git#main
+git+https://github.com/meyer-lab/valentBind.git@v0.1.0
