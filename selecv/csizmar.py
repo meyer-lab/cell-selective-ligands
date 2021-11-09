@@ -56,6 +56,7 @@ def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund, valencies=False):
     X22, Y22 = np.array(X2).reshape(-1, 1), np.array(Y2)
     lr.fit(X22, Y22)
     B22_score = lr.score(X22, Y22)
+    print(lr.score(np.append(X11, X22).reshape(-1, 1), np.append(Y11, Y22)))
 
     sns.lineplot(x="Predicted", y="Measured Fluorescent Intensity", hue="Clone", style="Valency", markers=True, data=df, ax=ax)
 
@@ -114,7 +115,7 @@ def xeno(ax, KxStarX, KavX, valencies):
     sns.barplot(x="Ligand", y="ratio", data=df, ax=ax)
     ax.set(xlabel="", ylabel="Binding Ratio")
     ax.set_xticklabels(ax.get_xticklabels(), rotation=25, horizontalalignment='center')
-    ax.set(ylim=(0, 200))
+    ax.set(ylim=(0, 100))
     return ax
 
 
