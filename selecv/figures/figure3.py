@@ -15,32 +15,35 @@ pairs = [(r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"), (r"$R_1^{hi}R_2^{hi}$"
 
 def makeFigure():
     """ main function for Figure 3 """
-    ax, f = getSetup((10, 10), (3, 3))
-    subplotLabel(ax, list(range(9)))
+    ax, f = getSetup((10, 12), (4, 3))
+    subplotLabel(ax, [0,3,4,5,6,7,8,9,10])
+    ax[0].axis("off")
+    ax[1].axis("off")
+    ax[2].axis("off")
 
     L0 = 1e-8
     Kav = [[1e7, 1e5], [1e5, 1e6]]
 
     KxStar = 1e-12
-    heatmap(ax[0], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(2, 12), fully=False,
+    heatmap(ax[3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(2, 12), fully=False,
             title="Bispecific Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False, layover=1)
-    heatmap(ax[1], L0 * 2, KxStar, Kav, [0.5, 0.5], f=1, vrange=(2, 12), fully=False,
+    heatmap(ax[4], L0 * 2, KxStar, Kav, [0.5, 0.5], f=1, vrange=(2, 12), fully=False,
             title="Mixture of monovalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False, layover=1)
-    heatmap(ax[2], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(2, 12), fully=False,
+    heatmap(ax[5], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(2, 12), fully=False,
             title="Mixture of bivalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=True, layover=1)
 
     for i, KxStar in enumerate([1e-10, 1e-12, 1e-14]):
-        heatmap(ax[i + 3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(2, 12), fully=True,
+        heatmap(ax[i + 6], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(2, 12), fully=True,
                 title="Bispecific log fully bound with $K_x^*$={} cell·M".format(KxStar), cbar=(i == 2), layover=1)
 
-    for i in range(6):
+    for i in range(3,9):
         ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
 
-    KxStarVary(ax[6], L0, Kav, ylim=(-9, 9), compare="tether")
-    KxStarVary(ax[7], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
-    ax[8].axis("off")
+    KxStarVary(ax[9], L0, Kav, ylim=(-9, 9), compare="tether")
+    KxStarVary(ax[10], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
+    ax[11].axis("off")
 
-    setFontSize(ax, 8.5, heatmaplocs=[0, 1, 2, 3, 4, 5])
+    setFontSize(ax, 8.5, xsci=[3,4,5,6,7,8,9,10], ysci=[3,4,5,6,7,8])
     return f
 
 

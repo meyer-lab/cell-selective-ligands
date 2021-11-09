@@ -17,7 +17,7 @@ def makeFigure():
     ax, f = getSetup((12, 14), (5, 3))
     subplotLabel(ax, [0] + list(range(10, 14)))
     ax[14].axis("off")
-    affinity(f, ax[0:9], 1e-9, 1e-10, [1.0], ff=1, vmin=-1, vmax=5.5)
+    affinity(f, ax[0:9], 1e-9, 1e-10, [1.0], ff=1, vmin=-1, vmax=10)
 
     showPopulations(ax[9])
     popCompare(ax[10], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{hi}$"], "Aff", Kav=[5, 7])
@@ -25,7 +25,7 @@ def makeFigure():
     popCompare(ax[12], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"], "Aff", Kav=[5, 7])
     popCompare(ax[13], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], "Aff", Kav=[5, 7])
 
-    setFontSize(ax, 11, heatmaplocs=range(10))
+    setFontSize(ax, 11, xsci=range(10), ysci=range(10))
     return f
 
 
