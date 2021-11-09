@@ -17,7 +17,7 @@ def makeFigure():
     ax, f = getSetup((12, 14), (5, 3))
     subplotLabel(ax, [0] + list(range(10, 14)))
     ax[14].axis("off")
-    affinity(f, ax[0:9], 1e-9, 1e-10, [1.0], ff=1, vmin=-1, vmax=5.5)
+    affinity(f, ax[0:9], 1e-9, 1e-10, [1.0], ff=1, vmin=-1, vmax=10)
 
     showPopulations(ax[9])
     popCompare(ax[10], [r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{hi}$"], "Aff", Kav=[5, 7])
