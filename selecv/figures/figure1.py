@@ -30,7 +30,7 @@ def makeFigure():
     demoHeatmap(ax[4], vmin=0, vmax=10)
     demoPopulations(ax[5])
 
-    setFontSize(ax, 11, xsci=[4,5], ysci=[4,5])
+    setFontSize(ax, 11, xsci=[4, 5], ysci=[4, 5])
     return f
 
 

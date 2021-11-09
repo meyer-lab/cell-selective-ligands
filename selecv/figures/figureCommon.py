@@ -47,13 +47,13 @@ def subplotLabel(axs, indices=False):
             axs[index].text(-0.2, 1.25, ascii_lowercase[jj], transform=axs[index].transAxes, fontsize=16, fontweight="bold", va="top")
 
 
-
 def num2str(num, decimals=2, dropone=True):
     ex = int(np.floor(np.log10(num)))
     sig = num / (10 ** ex)
     if sig == 1 and dropone:
         return r"$10^{{{}}}$".format(ex)
     return str(np.round_(sig, decimals=decimals)) + r"×$10^{{{}}}$".format(ex)
+
 
 def setFontSize(ax, fsize, xsci=[], ysci=[]):
     for i, subax in enumerate(ax):

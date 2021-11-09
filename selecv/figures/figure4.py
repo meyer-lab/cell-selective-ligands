@@ -35,7 +35,6 @@ def makeFigure():
 
     ax[11].axis("off")
 
-
     setFontSize(ax, 10, xsci=[2, 3, 4], ysci=[2, 3, 4])
     return f
 

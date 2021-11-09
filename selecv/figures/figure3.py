@@ -16,7 +16,7 @@ pairs = [(r"$R_1^{hi}R_2^{lo}$", r"$R_1^{med}R_2^{lo}$"), (r"$R_1^{hi}R_2^{hi}$"
 def makeFigure():
     """ main function for Figure 3 """
     ax, f = getSetup((10, 12), (4, 3))
-    subplotLabel(ax, [0,3,4,5,6,7,8,9,10])
+    subplotLabel(ax, [0, 3, 4, 5, 6, 7, 8, 9, 10])
     ax[0].axis("off")
     ax[1].axis("off")
     ax[2].axis("off")
@@ -36,14 +36,14 @@ def makeFigure():
         heatmap(ax[i + 6], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(2, 12), fully=True,
                 title="Bispecific log fully bound with $K_x^*$={} cell·M".format(KxStar), cbar=(i == 2), layover=1)
 
-    for i in range(3,9):
+    for i in range(3, 9):
         ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
 
     KxStarVary(ax[9], L0, Kav, ylim=(-9, 9), compare="tether")
     KxStarVary(ax[10], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
     ax[11].axis("off")
 
-    setFontSize(ax, 8.5, xsci=[3,4,5,6,7,8,9,10], ysci=[3,4,5,6,7,8])
+    setFontSize(ax, 8.5, xsci=[3, 4, 5, 6, 7, 8, 9, 10], ysci=[3, 4, 5, 6, 7, 8])
     return f
 
 
