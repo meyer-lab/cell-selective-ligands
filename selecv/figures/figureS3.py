@@ -25,7 +25,7 @@ def makeFigure():
     popCompare(ax[4], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
     ratePlot(ax[5])
 
-    setFontSize(ax, 10, heatmaplocs=range(3))
+    setFontSize(ax, 10, xsci=[0,1,2,5], ysci=[0,1,2,5])
     return f
 
 

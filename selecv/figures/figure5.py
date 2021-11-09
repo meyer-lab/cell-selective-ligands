@@ -21,7 +21,9 @@ def makeFigure():
     optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 3))
     optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 100))
 
-    setFontSize(ax, 7.5, heatmaplocs=[1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17])
+    setFontSize(ax, 7.5,
+                xsci=[1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17],
+                ysci=[1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17])
     return f
 
 

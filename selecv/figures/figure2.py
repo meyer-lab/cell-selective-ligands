@@ -24,5 +24,5 @@ def makeFigure():
     vieqPlot(ax[4], 1e4, 8)
     vieqPlot(ax[5], 1e3, 8)
 
-    setFontSize(ax, 10)
+    setFontSize(ax, 10, ysci=[4,5])
     return f
