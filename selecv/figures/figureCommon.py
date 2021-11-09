@@ -47,13 +47,18 @@ def subplotLabel(axs, indices=False):
             axs[index].text(-0.2, 1.25, ascii_lowercase[jj], transform=axs[index].transAxes, fontsize=16, fontweight="bold", va="top")
 
 
-def setFontSize(ax, fsize, heatmaplocs=[]):
+def setFontSize(ax, fsize, heatmaplocs=[], xscis=[], yscis=[]):
     for i, subax in enumerate(ax):
-        yticks = subax.get_yticks()
         xticks = subax.get_xticks()
+        yticks = subax.get_yticks()
         if i in (heatmaplocs):
-            xticks = ['{:.0e}'.format(item) for item in xticks]
-            yticks = ['{:.0e}'.format(item) for item in yticks]
+            if i in xscis:
+                xticks = ['{:.0e}'.format(item) for item in xticks]
+            elif i in yscis:
+                yticks = ['{:.0e}'.format(item) for item in yticks]
+            else:
+                xticks = ['{:.0e}'.format(item) for item in xticks]
+                yticks = ['{:.0e}'.format(item) for item in yticks]
         subax.set_xticklabels(xticks, fontsize=fsize)
         subax.set_yticklabels(yticks, fontsize=fsize)
         subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
@@ -232,7 +237,6 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
     ax.set_xscale("log")
     ax.set_yscale("log")
 
-    ax.xaxis.set_major_formatter(mticker.ScalarFormatter(useOffset=False, useMathText=True))
     ax.yaxis.set_major_formatter(mticker.ScalarFormatter(useOffset=False, useMathText=True))
 
     ax.set_title(title)
