@@ -89,8 +89,6 @@ def discrim2(ax, KxStarD, slopeC5, slopeB22, KavD, valencies=False):
 
     else:
         for i, lig in enumerate([[8, 0, 0], [4, 0, 4]]):
-            print(lig)
-            print(i)
             for rec in Recep.values():
                 res = polyfc(50 * 1e-9, KxStarD, valencies[i], [rec], lig, KavD)
                 df = df.append({"Ligand": ligandDict[str(lig)], "Recep": rec, "value": res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
