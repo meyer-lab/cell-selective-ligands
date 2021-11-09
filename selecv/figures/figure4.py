@@ -16,23 +16,26 @@ from ..sampling import sigmaPopC
 def makeFigure():
     """ Make figure 4. """
     # Get list of axis objects
-    ax, f = getSetup((22, 8), (2, 5))
-    subplotLabel(ax)
+    ax, f = getSetup((10, 12), (4, 3))
+    subplotLabel(ax[0:11])
     affDLsub = np.array([6, 10])
     fDLsub = 4
-    optParams, DLaffs = optimizeDesignDL(ax[0], [r"$R_1^{med}R_2^{lo}$"], fDLsub, affDLsub, specPops=[r"$R_1^{hi}R_2^{lo}$"])
-    heatmapDL(ax[1], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
-              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-7, 3), cbar=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
+    ax[0].axis("off")
+    optParams, DLaffs = optimizeDesignDL(ax[1], [r"$R_1^{med}R_2^{lo}$"], fDLsub, affDLsub, specPops=[r"$R_1^{hi}R_2^{lo}$"])
     heatmapDL(ax[2], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+              [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(-7, 3), cbar=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
+    heatmapDL(ax[3], np.exp(optParams[0]), np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
               [0.5, 0.5], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 14), cbar=False, dead=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
-    heatmapDL(ax[3], np.exp(optParams[0]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
+    heatmapDL(ax[4], np.exp(optParams[0]) / 2, np.exp(optParams[1]), np.array([[DLaffs[0], DLaffs[1]], [np.exp(optParams[4]), np.exp(optParams[5])]]),
               [0, 1], Cplx=np.array([[fDLsub, 0], [0, optParams[2]]]), vrange=(3, 14), cbar=True, dead=False, jTherap=True, highlight=[r"$R_1^{med}R_2^{lo}$"], lowlight=[r"$R_1^{hi}R_2^{lo}$"])
 
-    valScanOpt(ax[4:7], [r"$R_1^{med}R_2^{lo}$"], specPops=[r"$R_1^{hi}R_2^{lo}$"])
+    valScanOpt(ax[5:8], [r"$R_1^{med}R_2^{lo}$"], specPops=[r"$R_1^{hi}R_2^{lo}$"])
 
-    mixScanOpt(ax[7:10], [r"$R_1^{med}R_2^{lo}$"], specPops=[r"$R_1^{hi}R_2^{lo}$"])
+    mixScanOpt(ax[8:11], [r"$R_1^{med}R_2^{lo}$"], specPops=[r"$R_1^{hi}R_2^{lo}$"])
 
-    setFontSize(ax, 10, heatmaplocs=[1, 2, 3])
+    ax[11].axis("off")
+
+    setFontSize(ax, 10, heatmaplocs=[2, 3, 4])
     return f
 
 
@@ -135,7 +138,7 @@ def minSelecFuncDLVal(x, targPop, offTpops, fDL):
 
 def valScanOpt(ax, targetPop, specPops=False):
     """Scans through antagonist valencies and finds best specificity and affinities"""
-    vals = np.linspace(1, 8, num=15)
+    vals = np.linspace(1, 8, num=8)
     resultDF = pd.DataFrame(columns=["Valency", "Specificity"])
     AgDF = pd.DataFrame(columns=["Valency", "Receptor", "Affinity"])
     AntagDF = pd.DataFrame(columns=["Valency", "Receptor", "Affinity"])
@@ -163,9 +166,9 @@ def valScanOpt(ax, targetPop, specPops=False):
     sns.lineplot(data=resultDF, x="Valency", y="Specificity", ax=ax[0], palette='k')
     ax[0].set(xlabel="Antagonist Valency", ylabel="Optimal Specificty", ylim=(0, 25))
     sns.lineplot(data=AgDF, x="Valency", y="Affinity", hue="Receptor", ax=ax[1])
-    ax[1].set(xlabel="Antagonist Valency", ylabel=r"K$_D$ ($log_{10}(nM))", title="Agonist Affinity", ylim=((-2, 8)))
+    ax[1].set(xlabel="Antagonist Valency", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Agonist Affinity", ylim=((-2, 8)))
     sns.lineplot(data=AntagDF, x="Valency", y="Affinity", hue="Receptor", ax=ax[2])
-    ax[2].set(xlabel="Antagonist Valency", ylabel=r"K$_D$ ($log_{10}(nM))", title="Antagonist Affinity", ylim=((-2, 8)))
+    ax[2].set(xlabel="Antagonist Valency", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Antagonist Affinity", ylim=((-2, 8)))
 
 
 def minSelecFuncDLMix(x, targPop, offTpops, agMix):
@@ -211,6 +214,6 @@ def mixScanOpt(ax, targetPop, specPops=False):
     sns.lineplot(data=resultDF, x="Agonist Mix", y="Specificity", ax=ax[0], palette='k')
     ax[0].set(xlabel="Agonist Mix (%)", ylabel="Optimal Specificity", xlim=(0, 100), ylim=(0, 25))
     sns.lineplot(data=AgDF, x="Agonist Mix", y="Affinity", hue="Receptor", ax=ax[1])
-    ax[1].set(xlabel="Agonist Mix (%)", ylabel=r"K$_D$ ($log_{10}(nM))", title="Agonist Affinity", xlim=(0, 100), ylim=((-2, 8)))
+    ax[1].set(xlabel="Agonist Mix (%)", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Agonist Affinity", xlim=(0, 100), ylim=((-2, 8)))
     sns.lineplot(data=AntagDF, x="Agonist Mix", y="Affinity", hue="Receptor", ax=ax[2])
-    ax[2].set(xlabel="Agonist Mix (%)", ylabel=r"K$_D$ ($log_{10}(nM))", title="Antagonist Affinity", xlim=(0, 100), ylim=((-2, 8)))
+    ax[2].set(xlabel="Agonist Mix (%)", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Antagonist Affinity", xlim=(0, 100), ylim=((-2, 8)))
