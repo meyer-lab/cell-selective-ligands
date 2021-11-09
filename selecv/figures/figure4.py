@@ -77,7 +77,7 @@ def optimizeDesignDL(ax, targetPop, fDL, affDL, specPops=False):
 
     Cbar = True
     sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=16, cbar=Cbar, cbar_kws={'label': 'Selectivity Ratio w Antagonist', 'aspect': 40}, annot=True)
-    ax.set(xlabel="Antagonist Rec 1 Affinity ($K_d$, in nM)", ylabel="Antagonist Rec 2 Affinity ($K_d$, in nM)")
+    ax.set(xlabel="Antagonist $R_1$ Affinity ($K_d$, in nM)", ylabel="Antagonist $R_2$ Affinity ($K_d$, in nM)")
 
     if specPops:
         ax.set_title("Agonist bound with antagonist, " + targetPop[0] + " vs " + specPops[0], fontsize=8)
@@ -138,7 +138,7 @@ def minSelecFuncDLVal(x, targPop, offTpops, fDL):
 
 def valScanOpt(ax, targetPop, specPops=False):
     """Scans through antagonist valencies and finds best specificity and affinities"""
-    vals = np.linspace(1, 8, num=8)
+    vals = np.linspace(2, 8, num=7)
     resultDF = pd.DataFrame(columns=["Valency", "Specificity"])
     AgDF = pd.DataFrame(columns=["Valency", "Receptor", "Affinity"])
     AntagDF = pd.DataFrame(columns=["Valency", "Receptor", "Affinity"])
