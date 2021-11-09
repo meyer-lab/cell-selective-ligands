@@ -47,13 +47,20 @@ def subplotLabel(axs, indices=False):
             axs[index].text(-0.2, 1.25, ascii_lowercase[jj], transform=axs[index].transAxes, fontsize=16, fontweight="bold", va="top")
 
 
+def num2str(num, dropone=True):
+    ex = int(np.floor(np.log10(num)))
+    sig = num / (10 ** ex)
+    if sig == 1 and dropone:
+        return r"$10^{}$".format(ex)
+    return str(np.round_(sig, decimals=2)) + r"×$10^{}$".format(ex)
+
 def setFontSize(ax, fsize, heatmaplocs=[]):
     for i, subax in enumerate(ax):
         yticks = subax.get_yticks()
         xticks = subax.get_xticks()
         if i in (heatmaplocs):
-            xticks = ['{:.0e}'.format(item) for item in xticks]
-            yticks = ['{:.0e}'.format(item) for item in yticks]
+            xticks = [num2str(item) for item in xticks]
+            yticks = [num2str(item) for item in yticks]
         subax.set_xticklabels(xticks, fontsize=fsize)
         subax.set_yticklabels(yticks, fontsize=fsize)
         subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
