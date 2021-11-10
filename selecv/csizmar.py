@@ -130,15 +130,11 @@ def resids(x):
     return np.linalg.norm(X2 - Y2) + np.linalg.norm(X1 - Y1)
 
 
-def fitfunc(fitAff=True):
+def fitfunc():
     "Runs least squares fitting for various model parameters, and returns the minimizers"
     x0 = np.array([np.log(10 ** -12), 0.01, 0.01, np.log(Kav[0])[0], np.log(Kav[1])[0], np.log(3.8e6), 1, 2, 4, 8])  # KXSTAR, slopeC5, slopeB22, KA C5, KA, B22, receps MH-7
-    if fitAff:
-        bnds = ((np.log(10 ** -14), np.log(10 ** -10)), (None, None), (None, None), (None, None), (None, None),
-                (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1.01), (1, 2.01), (2, 4.01), (6, 8.01))
-    else:
-        bnds = ((np.log(10 ** -14), np.log(10 ** -10)), (None, None), (None, None), (np.log(Kav[0])[0], np.log(Kav[0])[0] * 1.0001), (np.log(Kav[1])[0],
-                np.log(Kav[1])[0] * 1.0001), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1.01), (1, 2.01), (2, 4.01), (6, 8.01))
+    bnds = ((np.log(10 ** -14), np.log(10 ** -10)), (None, None), (None, None), (np.log(Kav[0])[0], np.log(Kav[0])[0] * 1.0001), (np.log(Kav[1])[0],
+            np.log(Kav[1])[0] * 1.0001), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1.01), (1, 2.01), (2, 4.01), (6, 8.01))
 
     parampredicts = minimize(resids, x0, jac="3-point", bounds=bnds)
     assert parampredicts.success
