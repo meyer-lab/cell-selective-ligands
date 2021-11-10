@@ -9,19 +9,19 @@ from sklearn.linear_model import LinearRegression
 from valentbind import polyfc
 
 
-Kav = np.array([[5.88e7], [9.09e5], [0]])   # [C5, B22, NT]
+Kav = np.array([[5.88e7], [9.09e5], [0.1]])   # [C5, B22, NT]
 Recep = {"MDA": 5.2e4, "SK": 2.2e5, "LNCaP": 2.8e6, "MCF": 3.8e6}
 
 valDict = {1: 0, 2: 1, 4: 2, 8: 3}
 
 
-def model_predict(df, KxStarP, LigC, slopeP, Kav1, abund, valencies):
+def model_predict(df, KxStarP, LigC, slopeP, abund, valencies):
     "Gathers predicted and measured fluorescent intensities for a given population"
     predicted, measured = [], []
 
     for _, row in df.iterrows():
         val = valencies[valDict[row.valency]]
-        res = polyfc(row.monomer * 1e-9 / 8, KxStarP, val, abund, np.array(LigC) * row.valency / 8 + [0, 0, 1 - sum(np.array(LigC) * row.valency / 8)], Kav1)
+        res = polyfc(row.monomer * 1e-9 / 8, KxStarP, val, abund, np.array(LigC) * row.valency / 8 + [0, 0, 1 - sum(np.array(LigC) * row.valency / 8)], Kav)
 
         Lbound, _ = res[0] * slopeP, res[1]
         predicted.append(Lbound)
@@ -30,15 +30,15 @@ def model_predict(df, KxStarP, LigC, slopeP, Kav1, abund, valencies):
     return np.array(predicted), np.array(measured)
 
 
-def fit_slope(ax, KxStarF, slopeC5, slopeB22, Kav2, abund, valencies=False):
+def fit_slope(ax, KxStarF, slopeC5, slopeB22, abund, valencies):
     "Outputs predicted vs. Experimental fluorescent intensities for C5 and B22 binding"
     df1 = pd.read_csv("selecv/data/csizmar_s4a.csv")
-    X1, Y1 = model_predict(df1, KxStarF, [1, 0, 0], slopeC5, Kav2, abund, valencies)
+    X1, Y1 = model_predict(df1, KxStarF, [1, 0, 0], slopeC5, abund, valencies)
     df1["Predicted"] = X1
     df1["data"] = "C5"
 
     df2 = pd.read_csv("selecv/data/csizmar_s4b.csv")
-    X2, Y2 = model_predict(df2, KxStarF, [0, 1, 0], slopeB22, Kav2, abund, valencies)
+    X2, Y2 = model_predict(df2, KxStarF, [0, 1, 0], slopeB22, abund, valencies)
     df2["Predicted"] = X2
     df2["data"] = "B22"
     df = pd.concat([df1, df2])
@@ -70,17 +70,17 @@ slope_B22 = 0.012855332053729724
 ligandDict = {"[8, 0, 0]": "Octovalent C5", "[4, 0, 4]": "Tetravalent C5", "[0, 8, 0]": "Octovalent B22", "[0, 4, 4]": "Tetravalent B22"}
 
 
-def discrim2(ax, KxStarD, slopeC5, slopeB22, KavD, valencies):
+def discrim2(ax, KxStarD, slopeC5, slopeB22, valencies):
     "Returns predicted fluorescent values over a range of abundances with unique slopes for C5 and B22"
     df = pd.DataFrame(columns=["Ligand", "Receptor", "value"])
 
     for i, lig in enumerate([[8, 0, 0], [4, 0, 4]]):
         for rec in Recep.values():
-            res = polyfc(50 * 1e-9, KxStarD, valencies[i], [rec], lig, KavD)
+            res = polyfc(50 * 1e-9, KxStarD, valencies[i], [rec], lig, Kav)
             df = df.append({"Ligand": ligandDict[str(lig)], "Recep": rec, "value": res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
     for j, lig in enumerate([[0, 8, 0], [0, 4, 4]]):
         for rec in Recep.values():
-            res = polyfc(50 * 1e-9, KxStarD, valencies[j], [rec], lig, KavD)
+            res = polyfc(50 * 1e-9, KxStarD, valencies[j], [rec], lig, Kav)
             df = df.append({"Ligand": ligandDict[str(lig)], "Recep": rec, "value": res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
     sns.lineplot(x="Recep", y="value", hue="Ligand", style="Ligand", markers=True, data=df, ax=ax)
     ax.set(xlabel="Receptor Abundance", ylabel="Ligand Bound")
@@ -90,12 +90,12 @@ def discrim2(ax, KxStarD, slopeC5, slopeB22, KavD, valencies):
     return ax
 
 
-def xeno(ax, KxStarX, KavX, valencies):
+def xeno(ax, KxStarX, valencies):
     "Plots Xenograft targeting ratios"
     df = pd.DataFrame(columns=["Ligand", "ratio"])
     for i, lig in enumerate([[8, 0, 0], [4, 0, 4], [0, 8, 0], [0, 4, 4]]):
-        mcf = polyfc(50 * 1e-9, KxStarX, valencies[i], [Recep["MCF"]], lig, KavX)[0]
-        mda = polyfc(50 * 1e-9, KxStarX, valencies[i], [Recep["MDA"]], lig, KavX)[0]
+        mcf = polyfc(50 * 1e-9, KxStarX, valencies[i], [Recep["MCF"]], lig, Kav)[0]
+        mda = polyfc(50 * 1e-9, KxStarX, valencies[i], [Recep["MDA"]], lig, Kav)[0]
         df = df.append({"Ligand": ligandDict[str(lig)], "ratio": (mcf / mda)}, ignore_index=True)
     sns.barplot(x="Ligand", y="ratio", data=df, ax=ax)
     ax.set(xlabel="", ylabel="Binding Ratio")
@@ -109,9 +109,9 @@ def resids(x):
     valpack = np.array([x[6], x[7], x[8], x[9]])
 
     df1 = pd.read_csv("selecv/data/csizmar_s4a.csv")
-    X1, Y1 = model_predict(df1, np.exp(x[0]), [1, 0, 0], x[1], [[np.exp(x[3])], [np.exp(x[4])], [0.1]], np.exp(x[5]), valpack)
+    X1, Y1 = model_predict(df1, np.exp(x[0]), [1, 0, 0], x[1], np.exp(x[5]), valpack)
     df2 = pd.read_csv("selecv/data/csizmar_s4b.csv")
-    X2, Y2 = model_predict(df2, np.exp(x[0]), [0, 1, 0], x[2], [[np.exp(x[3])], [np.exp(x[4])], [0.1]], np.exp(x[5]), valpack)
+    X2, Y2 = model_predict(df2, np.exp(x[0]), [0, 1, 0], x[2], np.exp(x[5]), valpack)
     return np.linalg.norm(X2 - Y2) + np.linalg.norm(X1 - Y1)
 
 
