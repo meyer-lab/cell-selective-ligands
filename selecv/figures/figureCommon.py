@@ -49,11 +49,17 @@ def subplotLabel(axs, indices=False):
 
 def setFontSize(ax, fsize, xsci=[], ysci=[]):
     for i, subax in enumerate(ax):
-        subax.tick_params(axis="x", labelsize=fsize)
-        subax.tick_params(axis="y", labelsize=fsize)
+        subax.tick_params(axis="x", labelsize=fsize-1)
+        subax.tick_params(axis="y", labelsize=fsize-1)
         subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
         subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
         subax.set_title(subax.get_title(), fontsize=fsize)
+        if subax.get_legend() is not None:
+            subax.legend(prop={'size': fsize-1})
+        if i in xsci:
+            subax.set_xscale('log')
+        if i in ysci:
+            subax.set_yscale('log')
 
 
 def overlayCartoon(figFile, cartoonFile, x, y, scalee=1, scale_x=1, scale_y=1):
@@ -223,7 +229,7 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
 
-    contours = ax.contour(X, Y, logZ, levels=np.arange(-20, 20, 0.5), colors="black", linewidths=0.5)
+    contours = ax.contour(X, Y, logZ, levels=np.arange(-20, 20, 1), colors="black", linewidths=0.5)
     ax.set_xscale("log")
     ax.set_yscale("log")
 
