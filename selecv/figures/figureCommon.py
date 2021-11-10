@@ -57,6 +57,7 @@ def num2str(num, decimals=2, dropone=True):
 
 def setFontSize(ax, fsize, xsci=[], ysci=[]):
     for i, subax in enumerate(ax):
+        yticks = subax.get_yticks()
         xticks = subax.get_xticks()
         if i in xsci:
             xticks = [num2str(item) for item in xticks]
