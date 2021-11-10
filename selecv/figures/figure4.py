@@ -35,7 +35,7 @@ def makeFigure():
 
     ax[11].axis("off")
 
-    setFontSize(ax, 10, xsci=[2, 3, 4, 8, 9, 10], ysci=[2, 3, 4])
+    setFontSize(ax, 9.5, xsci=[2, 3, 4, 8, 9, 10], ysci=[2, 3, 4])
     return f
 
 
@@ -165,10 +165,13 @@ def valScanOpt(ax, targetPop, specPops=False):
 
     sns.lineplot(data=resultDF, x="Valency", y="Specificity", ax=ax[0], palette='k')
     ax[0].set(xlabel="Antagonist Valency", ylabel="Optimal Specificty", ylim=(0, 30))
+    ax[0].set_xticks(np.linspace(2, 8, num=4))
     sns.lineplot(data=AgDF, x="Valency", y="Affinity", hue="Receptor", ax=ax[1])
     ax[1].set(xlabel="Antagonist Valency", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Agonist Affinity", ylim=((-2, 8)))
+    ax[1].set_xticks(np.linspace(2, 8, num=4))
     sns.lineplot(data=AntagDF, x="Valency", y="Affinity", hue="Receptor", ax=ax[2])
     ax[2].set(xlabel="Antagonist Valency", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Antagonist Affinity", ylim=((-2, 8)))
+    ax[2].set_xticks(np.linspace(2, 8, num=4))
 
 
 def minSelecFuncDLMix(x, targPop, offTpops, antMix):
