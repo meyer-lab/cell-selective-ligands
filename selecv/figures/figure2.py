@@ -1,9 +1,9 @@
 """
-Figure S3. Exploration of Valency.
+Figure 2: Quick look into mostly valency
 """
 import numpy as np
 from .figureCommon import subplotLabel, setFontSize, getSetup, popCompare
-from .figureS3 import vieqPlot
+from .figureS2 import vieqPlot
 
 ligConc = np.array([1e-8])
 KxStarP = 1e-10
