@@ -54,7 +54,6 @@ def setFontSize(ax, fsize, xsci=[], ysci=[]):
         subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
         subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
         subax.set_title(subax.get_title(), fontsize=fsize)
-        subax.rc('legend', fontsize=fsize)
 
 
 def overlayCartoon(figFile, cartoonFile, x, y, scalee=1, scale_x=1, scale_y=1):
