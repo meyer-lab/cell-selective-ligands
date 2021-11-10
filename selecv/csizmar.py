@@ -106,20 +106,19 @@ def xeno(ax, KxStarX, valencies):
 
 def resids(x):
     "Least squares residual function"
-    valpack = np.array([x[6], x[7], x[8], x[9]])
+    valpack = np.array([x[4], x[5], x[6], x[7]])
 
     df1 = pd.read_csv("selecv/data/csizmar_s4a.csv")
-    X1, Y1 = model_predict(df1, np.exp(x[0]), [1, 0, 0], x[1], np.exp(x[5]), valpack)
+    X1, Y1 = model_predict(df1, np.exp(x[0]), [1, 0, 0], x[1], np.exp(x[3]), valpack)
     df2 = pd.read_csv("selecv/data/csizmar_s4b.csv")
-    X2, Y2 = model_predict(df2, np.exp(x[0]), [0, 1, 0], x[2], np.exp(x[5]), valpack)
+    X2, Y2 = model_predict(df2, np.exp(x[0]), [0, 1, 0], x[2], np.exp(x[3]), valpack)
     return np.linalg.norm(X2 - Y2) + np.linalg.norm(X1 - Y1)
 
 
 def fitfunc():
     "Runs least squares fitting for various model parameters, and returns the minimizers"
-    x0 = np.array([np.log(10 ** -15), 0.01, 0.01, np.log(Kav[0])[0], np.log(Kav[1])[0], np.log(3.8e6), 1, 2, 4, 8])  # KXSTAR, slopeC5, slopeB22, KA C5, KA, B22, receps MH-7
-    bnds = ((None, None), (None, None), (None, None), (np.log(Kav[0])[0], np.log(Kav[0])[0] * 1.0001), (np.log(Kav[1])[0],
-            np.log(Kav[1])[0] * 1.0001), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (0.5, 1.01), (1, 2.01), (0.5, 4.01), (0.5, 8.01))
+    x0 = np.array([np.log(10 ** -15), 0.01, 0.01, np.log(3.8e6), 1, 2, 4, 8])  # KXSTAR, slopeC5, slopeB22, KA C5, KA, B22, receps MH-7
+    bnds = ((None, None), (None, None), (None, None), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (0.5, 1.01), (1, 2.01), (0.5, 4.01), (0.5, 8.01))
 
     parampredicts = minimize(resids, x0, jac="3-point", bounds=bnds)
     assert parampredicts.success
