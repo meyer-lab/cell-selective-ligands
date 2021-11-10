@@ -21,7 +21,7 @@ def model_predict(df, KxStarP, LigC, slopeP, abund, valencies):
 
     for _, row in df.iterrows():
         val = valencies[valDict[row.valency]]
-        res = polyfc(row.monomer * 1e-9 / 8, KxStarP, val, abund, np.array(LigC) * row.valency / 8 + [0, 0, 1 - sum(np.array(LigC) * row.valency / 8)], Kav)
+        res = polyfc(row.monomer * 1e-9 / 8, KxStarP, 8, abund, np.array(LigC) * val / 8 + [0, 0, 1 - sum(np.array(LigC) * val / 8)], Kav)
 
         Lbound, _ = res[0] * slopeP, res[1]
         predicted.append(Lbound)
@@ -117,9 +117,9 @@ def resids(x):
 
 def fitfunc():
     "Runs least squares fitting for various model parameters, and returns the minimizers"
-    x0 = np.array([np.log(10 ** -12), 0.01, 0.01, np.log(Kav[0])[0], np.log(Kav[1])[0], np.log(3.8e6), 1, 2, 4, 8])  # KXSTAR, slopeC5, slopeB22, KA C5, KA, B22, receps MH-7
-    bnds = ((np.log(10 ** -14), np.log(10 ** -10)), (None, None), (None, None), (np.log(Kav[0])[0], np.log(Kav[0])[0] * 1.0001), (np.log(Kav[1])[0],
-            np.log(Kav[1])[0] * 1.0001), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (1, 1.01), (1, 2.01), (2, 4.01), (6, 8.01))
+    x0 = np.array([np.log(10 ** -15), 0.01, 0.01, np.log(Kav[0])[0], np.log(Kav[1])[0], np.log(3.8e6), 1, 2, 4, 8])  # KXSTAR, slopeC5, slopeB22, KA C5, KA, B22, receps MH-7
+    bnds = ((None, None), (None, None), (None, None), (np.log(Kav[0])[0], np.log(Kav[0])[0] * 1.0001), (np.log(Kav[1])[0],
+            np.log(Kav[1])[0] * 1.0001), (np.log(3.8e6) * 0.9999, np.log(3.8e6) * 1.0001), (0.5, 1.01), (1, 2.01), (0.5, 4.01), (0.5, 8.01))
 
     parampredicts = minimize(resids, x0, jac="3-point", bounds=bnds)
     assert parampredicts.success
