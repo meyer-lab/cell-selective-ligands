@@ -23,9 +23,9 @@ def makeFigure():
     valencyScan = np.linspace(1, 8, num=32)
     popCompare(ax[3], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
     popCompare(ax[4], [r"$R_1^{hi}R_2^{med}$", r"$R_1^{med}R_2^{med}$"], "Valency", Kav=[1e6, 1e7, 1e8], L0=[1e-8], f=valencyScan)
-    ratePlot(ax[5])
+    ratePlot(ax[5], fsize=9)
 
-    setFontSize(ax, 10, xsci=[0, 1, 2, 5], ysci=[0, 1, 2, 5])
+    setFontSize(ax, 10, xsci=[0, 1, 2, 5], ysci=[0, 1, 2, 5], nolegend=[5])
     return f
 
 
@@ -105,7 +105,7 @@ def vieqPlot(ax, recCount, val):
     ax.set(yscale="log", ylim=(0.1, 1e4), title="Binding Degrees Distribution, " + str(int(recCount)) + " receptors", ylabel="Ligand Bound", xlabel="Degree of Binding")
 
 
-def ratePlot(ax):
+def ratePlot(ax, fsize=6):
     "Plots rate of bivalent binding over dissocation rate for monovalently bound complexes"
     # kxstar * Ka, * val-1 * rec-1
     recScan = np.logspace(0, 6, 100)
@@ -127,7 +127,7 @@ def ratePlot(ax):
     point = Line2D([], [], color="black", marker=".", linestyle="None", markersize=6, label="$K_d$ nM = 1000")
     handles.append(line)
     handles.append(point)
-    ax.legend(handles=handles, prop={"size": 6})
+    ax.legend(handles=handles, prop={"size": fsize})
     ax.set_yscale("log")
     ax.set_ylim(1e-1, 1e3)
     ax.set_title("Reaction rate for second degree binding")
