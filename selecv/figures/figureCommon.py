@@ -54,6 +54,7 @@ def num2str(num, decimals=2, dropone=True):
         return r"$10^{{{}}}$".format(ex)
     return str(np.round_(sig, decimals=decimals)) + r"×$10^{{{}}}$".format(ex)
 
+
 def setFontSize(ax, fsize, xsci=[], ysci=[]):
     for i, subax in enumerate(ax):
         yticks = subax.get_yticks()
@@ -62,6 +63,7 @@ def setFontSize(ax, fsize, xsci=[], ysci=[]):
             xticks = [num2str(item) for item in xticks]
         if i in ysci:
             yticks = [num2str(item) for item in yticks]
+
         subax.set_xticklabels(xticks, fontsize=fsize)
         subax.set_yticklabels(yticks, fontsize=fsize)
         subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
@@ -240,7 +242,6 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
     ax.set_xscale("log")
     ax.set_yscale("log")
 
-    ax.xaxis.set_major_formatter(mticker.ScalarFormatter(useOffset=False, useMathText=True))
     ax.yaxis.set_major_formatter(mticker.ScalarFormatter(useOffset=False, useMathText=True))
 
     ax.set_title(title)
