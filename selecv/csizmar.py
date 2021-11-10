@@ -15,18 +15,13 @@ Recep = {"MDA": 5.2e4, "SK": 2.2e5, "LNCaP": 2.8e6, "MCF": 3.8e6}
 valDict = {1: 0, 2: 1, 4: 2, 8: 3}
 
 
-def model_predict(df, KxStarP, LigC, slopeP, Kav1, abund, valencies=False):
+def model_predict(df, KxStarP, LigC, slopeP, Kav1, abund, valencies):
     "Gathers predicted and measured fluorescent intensities for a given population"
     predicted, measured = [], []
 
     for _, row in df.iterrows():
-        if valencies is False:
-            res = polyfc(row.monomer * 1e-9 / 8, KxStarP, 8, abund, np.array(LigC) * row.valency / 8 + [0, 0, 1 - sum(np.array(LigC) * row.valency / 8)], Kav1)
-        else:
-            val = valencies[valDict[row.valency]]
-            res = polyfc(row.monomer * 1e-9 / 8, KxStarP, val, abund, np.array(LigC) * row.valency / 8 + [0, 0, 1 - sum(np.array(LigC) * row.valency / 8)], Kav1)
-            assert(np.array(np.array(LigC) * val / 8 + [0, 0, 1 - sum(np.array(LigC) * val / 8)]).all()
-                   == np.array(np.array(LigC) * row.valency / 8 + [0, 0, 1 - sum(np.array(LigC) * row.valency / 8)]).all())
+        val = valencies[valDict[row.valency]]
+        res = polyfc(row.monomer * 1e-9 / 8, KxStarP, val, abund, np.array(LigC) * row.valency / 8 + [0, 0, 1 - sum(np.array(LigC) * row.valency / 8)], Kav1)
 
         Lbound, _ = res[0] * slopeP, res[1]
         predicted.append(Lbound)
@@ -75,28 +70,18 @@ slope_B22 = 0.012855332053729724
 ligandDict = {"[8, 0, 0]": "Octovalent C5", "[4, 0, 4]": "Tetravalent C5", "[0, 8, 0]": "Octovalent B22", "[0, 4, 4]": "Tetravalent B22"}
 
 
-def discrim2(ax, KxStarD, slopeC5, slopeB22, KavD, valencies=False):
+def discrim2(ax, KxStarD, slopeC5, slopeB22, KavD, valencies):
     "Returns predicted fluorescent values over a range of abundances with unique slopes for C5 and B22"
     df = pd.DataFrame(columns=["Ligand", "Receptor", "value"])
-    if valencies is False:
-        for lig in [[8, 0, 0], [4, 0, 4]]:
-            for rec in Recep.values():
-                res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
-                df = df.append({"Ligand": ligandDict[str(lig)], "Recep": rec, "value": res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
-        for lig in [[0, 8, 0], [0, 4, 4]]:
-            for rec in Recep.values():
-                res = polyfc(50 * 1e-9, KxStarD, 8, [rec], lig, KavD)
-                df = df.append({"Ligand": ligandDict[str(lig)], "Recep": rec, "value": res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
 
-    else:
-        for i, lig in enumerate([[8, 0, 0], [4, 0, 4]]):
-            for rec in Recep.values():
-                res = polyfc(50 * 1e-9, KxStarD, valencies[i], [rec], lig, KavD)
-                df = df.append({"Ligand": ligandDict[str(lig)], "Recep": rec, "value": res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
-        for j, lig in enumerate([[0, 8, 0], [0, 4, 4]]):
-            for rec in Recep.values():
-                res = polyfc(50 * 1e-9, KxStarD, valencies[j], [rec], lig, KavD)
-                df = df.append({"Ligand": ligandDict[str(lig)], "Recep": rec, "value": res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
+    for i, lig in enumerate([[8, 0, 0], [4, 0, 4]]):
+        for rec in Recep.values():
+            res = polyfc(50 * 1e-9, KxStarD, valencies[i], [rec], lig, KavD)
+            df = df.append({"Ligand": ligandDict[str(lig)], "Recep": rec, "value": res[0] * slopeC5}, ignore_index=True)  # * (lig[0] + lig[1])
+    for j, lig in enumerate([[0, 8, 0], [0, 4, 4]]):
+        for rec in Recep.values():
+            res = polyfc(50 * 1e-9, KxStarD, valencies[j], [rec], lig, KavD)
+            df = df.append({"Ligand": ligandDict[str(lig)], "Recep": rec, "value": res[0] * slopeB22}, ignore_index=True)  # * (lig[0] + lig[1])
     sns.lineplot(x="Recep", y="value", hue="Ligand", style="Ligand", markers=True, data=df, ax=ax)
     ax.set(xlabel="Receptor Abundance", ylabel="Ligand Bound")
     ax.set_xscale("log")
