@@ -35,7 +35,7 @@ def makeFigure():
 
     ax[11].axis("off")
 
-    setFontSize(ax, 9.5, xsci=[2, 3, 4, 8, 9, 10], ysci=[2, 3, 4])
+    setFontSize(ax, 10.5, xsci=[2, 3, 4, 8, 9, 10], ysci=[2, 3, 4])
     return f
 
 
@@ -112,7 +112,7 @@ def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cb
 
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
-    contours = ax.contour(X, Y, logZ, levels=np.arange(-20, 20, 0.5), colors="black", linewidths=0.5)
+    contours = ax.contour(X, Y, logZ, levels=np.arange(-20, 20, 1.0), colors="black", linewidths=0.5)
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(title)
@@ -199,7 +199,7 @@ def mixScanOpt(ax, targetPop, specPops=False):
         targPops, offTargPops = targetPop, specPops
 
     bounds = (cBnd, (np.log(1e-15), np.log(1e-9)), (0.99, 1), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)), (np.log(1e2), np.log(1e10)))
-    xnot = np.array([np.log(1e-9), np.log(1e-9), 1, np.log(10e4), np.log(10e8), np.log(10e4), np.log(10e8)])
+    xnot = np.array([np.log(1e-9), np.log(1e-9), 1, np.log(1e4), np.log(1e8), np.log(1e4), np.log(1e8)])
 
     for ii, mix in enumerate(mixs):
         optimized = minimize(minSelecFuncDLMix, xnot, bounds=np.array(bounds), args=(targPops, offTargPops, mix))
@@ -215,11 +215,11 @@ def mixScanOpt(ax, targetPop, specPops=False):
         AntagDF = AntagDF.append(pd.DataFrame({"Agonist Mix": [mix], "Receptor": "R2 Affinity", "Affinity": optimArr[3]}))
 
     sns.lineplot(data=resultDF, x="Agonist Mix", y="Specificity", ax=ax[0], palette='k')
-    ax[0].set(xlabel="Antagonist Concentration (nM)", ylabel="Optimal Specificity", xlim=(1e-12, 1e-6), ylim=(0, 25), xscale="log")
-    ax[0].set_xticks(np.logspace(-12, -6, num=4))
+    ax[0].set(xlabel="Antagonist Concentration (nM)", ylabel="Optimal Specificity", xlim=(1e-3, 1e3), ylim=(0, 25), xscale="log")
+    ax[0].set_xticks(np.logspace(-3, 3, num=4))
     sns.lineplot(data=AgDF, x="Agonist Mix", y="Affinity", hue="Receptor", ax=ax[1])
-    ax[1].set(xlabel="Antagonist Concentration (nM)", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Agonist Affinity", xlim=(1e-12, 1e-6), ylim=((-2, 8)), xscale="log")
-    ax[1].set_xticks(np.logspace(-12, -6, num=4))
+    ax[1].set(xlabel="Antagonist Concentration (nM)", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Agonist Affinity", xlim=(1e-3, 1e3), ylim=((-2, 8)), xscale="log")
+    ax[1].set_xticks(np.logspace(-3, 3, num=4))
     sns.lineplot(data=AntagDF, x="Agonist Mix", y="Affinity", hue="Receptor", ax=ax[2])
-    ax[2].set(xlabel="Antagonist Concentration (nM)", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Antagonist Affinity", xlim=(1e-12, 1e-6), ylim=((-2, 8)), xscale="log")
-    ax[2].set_xticks(np.logspace(-12, -6, num=4))
+    ax[2].set(xlabel="Antagonist Concentration (nM)", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Antagonist Affinity", xlim=(1e-3, 1e3), ylim=((-2, 8)), xscale="log")
+    ax[2].set_xticks(np.logspace(-3, 3, num=4))
