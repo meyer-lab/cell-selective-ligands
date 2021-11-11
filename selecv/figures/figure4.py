@@ -220,9 +220,9 @@ def mixScanOpt(ax, targetPop, specPops=False):
     ax[0].set_xticks(np.logspace(-3, 3, num=4))
     sns.lineplot(data=AgDF, x="Agonist Mix", y="Affinity", hue="Receptor", ax=ax[1])
     ax[1].set(xlabel="Antagonist Concentration (nM)", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Agonist Optimal Affinity",
-              xlim=(1e-12, 1e-6), ylim=((-2, 8)), xscale="log")
-    ax[1].set_xticks(np.logspace(-12, -6, num=4))
+              xlim=(1e-3, 1e3), ylim=((-2, 8)), xscale="log")
+    ax[1].set_xticks(np.logspace(-3, 3, num=4))
     sns.lineplot(data=AntagDF, x="Agonist Mix", y="Affinity", hue="Receptor", ax=ax[2])
     ax[2].set(xlabel="Antagonist Concentration (nM)", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Antagonist Optimal Affinity",
-              xlim=(1e-12, 1e-6), ylim=((-2, 8)), xscale="log")
-    ax[2].set_xticks(np.logspace(-12, -6, num=4))
+              xlim=(1e-3, 1e3), ylim=((-2, 8)), xscale="log")
+    ax[2].set_xticks(np.logspace(-3, 3, num=4))
