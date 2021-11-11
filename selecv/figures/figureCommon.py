@@ -166,6 +166,8 @@ def MixPlot(ax, names, Kav, L0, KxStar, f, Title):
 
     ax.plot(mixRatio, sampMeans, color="royalblue")
     ax.fill_between(mixRatio, underDev, overDev, color="royalblue", alpha=0.1)
+    ax.set_xticks(np.linspace(0, 1, 5))
+    ax.set_xticklabels(["{}%".format(x) for x in np.linspace(0, 100, 5)])
     if len(names) == 2:
         ax.set(xlabel="Ligand 1 in Mixture", ylabel="Binding Ratio", ylim=(0, 96), xlim=(0, 1))  # , title=Title + " binding ratio")
         ax.set_title(Title, fontsize=8)

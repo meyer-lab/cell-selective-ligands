@@ -21,7 +21,7 @@ def makeFigure():
     popCompare(ax[4], [r"$R_1^{hi}R_2^{hi}$", r"$R_1^{hi}R_2^{lo}$", r"$R_1^{lo}R_2^{hi}$"], "Mix", Kav=np.array([[1e6, 1e5], [1e5, 1e6]]))
     ax[5].axis("off")
 
-    setFontSize(ax, 8, xsci=range(3), ysci=range(3))
+    setFontSize(ax, 10, xsci=range(3), ysci=range(3))
     return f
 
 

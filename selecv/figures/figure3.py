@@ -28,13 +28,13 @@ def makeFigure():
     heatmap(ax[3], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(2, 12), fully=False,
             title="Bispecific Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False, layover=1)
     heatmap(ax[4], L0 * 2, KxStar, Kav, [0.5, 0.5], f=1, vrange=(2, 12), fully=False,
-            title="Mixture of monovalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False, layover=1)
+            title="Monovalents mixture Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=False, layover=1)
     heatmap(ax[5], L0, KxStar, Kav, [0.5, 0.5], Cplx=[[2, 0], [0, 2]], vrange=(2, 12), fully=False,
-            title="Mixture of bivalents Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=True, layover=1)
+            title="Bivalents mixture Lbound, $K_x^*$={} cell·M".format(KxStar), cbar=True, layover=1)
 
     for i, KxStar in enumerate([1e-10, 1e-12, 1e-14]):
         heatmap(ax[i + 6], L0, KxStar, Kav, [1.0], Cplx=[[1, 1]], vrange=(2, 12), fully=True,
-                title="Bispecific log fully bound with $K_x^*$={} cell·M".format(KxStar), cbar=(i == 2), layover=1)
+                title="Bispecific log fully bound, $K_x^*$={} cell·M".format(KxStar), cbar=(i == 2), layover=1)
 
     for i in range(3, 9):
         ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
@@ -43,7 +43,7 @@ def makeFigure():
     KxStarVary(ax[10], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
     ax[11].axis("off")
 
-    setFontSize(ax, 8.5, xsci=[3, 4, 5, 6, 7, 8, 9, 10], ysci=[3, 4, 5, 6, 7, 8])
+    setFontSize(ax, 10.5, xsci=[3, 4, 5, 6, 7, 8, 9, 10], ysci=[3, 4, 5, 6, 7, 8])
     return f
 
 
@@ -133,10 +133,10 @@ def KxStarVary(ax, L0, Kav, ylim=(-7, 5), fully=True, compare=None):
     ax.set_xscale('log')
     if compare == "tether":
         ax.set_ylabel("Bispecific selectivity / Monovalent selectivity")
-        ax.set_title("Bispecific advantage over monovalent mixture")
+        ax.set_title("Bispecific advantage over monovalent mix")
     elif compare == "bisp":
         ax.set_ylabel("Bispecific selectivity / Bivalent selectivity")
-        ax.set_title("Bispecific advantage over homo-bivalent mixture")
+        ax.set_title("Bispecific advantage over homo-bivalent mix")
     elif compare == "fully":
         ax.set_ylabel("Ratio of selectivity")
         ax.set_title("Fully bound selectivity / Ligand bound selectivity")

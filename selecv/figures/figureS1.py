@@ -14,7 +14,7 @@ val = 1.0
 
 def makeFigure():
     # Get list of axis objects
-    ax, f = getSetup((12, 14), (5, 3))
+    ax, f = getSetup((11, 14), (5, 3))
     subplotLabel(ax, [0] + list(range(10, 14)))
     ax[14].axis("off")
     affinity(f, ax[0:9], 1e-9, 1e-10, [1.0], ff=1, vmin=-1, vmax=10)
