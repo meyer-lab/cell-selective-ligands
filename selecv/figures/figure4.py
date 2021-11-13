@@ -115,11 +115,11 @@ def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cb
     ax.set_yscale("log")
     ax.set_title(title)
     plt.clabel(contours, inline=True, fontsize=8)
-    ax.pcolor(X, Y, logZ, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
+    ax.pcolor(X, Y, logZ, cmap='viridis', vmin=vrange[0], vmax=vrange[1])
     norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
     ax.set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
     if cbar:
-        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax, aspect=40)
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='viridis'), ax=ax, aspect=40)
         cbar.set_label("Log Ligand Bound")
     overlapCellPopulation(ax, abundRange, data=cellPopulations, highlight=highlight, lowlight=lowlight)
 
