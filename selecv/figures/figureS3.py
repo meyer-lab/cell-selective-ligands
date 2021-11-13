@@ -12,8 +12,8 @@ val = 1.0
 
 def makeFigure():
     # Get list of axis objects
-    ax, f = getSetup((8, 6), (2, 3))
-    mixture(f, ax, 1e-9, 10 ** -10, ff=1, vmin=-2, vmax=3.5)
+    ax, f = getSetup((9, 6), (2, 3))
+    mixture(f, ax, 1e-9, 10 ** -10, ff=1, vmin=-2, vmax=7)
     subplotLabel(ax, [0, 3, 4])
     fsize = 10
 
