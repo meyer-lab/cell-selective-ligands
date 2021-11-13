@@ -17,9 +17,9 @@ def makeFigure():
     ax, f = getSetup((16, 8), (3, 6))
     subplotLabel(ax)
 
-    optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"], vrange=(1, 3))
-    optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(1, 3))
-    optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(1, 100))
+    optimizeDesign(ax[0:6], [r"$R_1^{lo}R_2^{hi}$"], vrange=(0, 3))
+    optimizeDesign(ax[6:12], [r"$R_1^{hi}R_2^{hi}$"], vrange=(0, 3))
+    optimizeDesign(ax[12:18], [r"$R_1^{med}R_2^{med}$"], vrange=(0, 100))
 
     setFontSize(ax, 9,
                 xsci=[1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17],
@@ -159,13 +159,16 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5), recFactor=1.0):
                         [[optParams[4], optParams[5]], [optParams[6], optParams[7]]],
                         [optParams[3], 1 - optParams[3]], f=optParams[2], vrange=vrange, cbar=True, layover=1,
                         highlight=targetPop[0], lineN=41, recFactor=recFactor)
-        ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$))", ylabel="Receptor 2 Abundance ($cell^{-1}$))")
+        ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$)", ylabel="Receptor 2 Abundance ($cell^{-1}$)")
 
     sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax[0])
     ax[0].set(title="Optimization of " + targetPop[0])
     ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=25, horizontalalignment='right')
     if recFactor == 1.0:
-        ax[0].set_ylim(0, 16)
+        if targetPop == [r"$R_1^{med}R_2^{med}$"]:
+            ax[0].set_ylim(0, 1)
+        else:
+            ax[0].set_ylim(0, 16)
     else:
         ax[0].set_ylim(0, 50)
 

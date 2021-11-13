@@ -38,12 +38,12 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
             cbar = True
         heatmap(axs[i], L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vrange=(vmin, vmax), cbar=cbar, layover=1)
         axs[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
-        plt.plot([4.3, 5.1], [2, 2], color="black", marker=2)
-        plt.text(5.0, 2.2, "b", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        plt.plot([4.3, 5.3], [4.4, 5.4], color="black", marker=2)
-        plt.text(5.0, 5.6, "c", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
-        plt.plot([4.5, 5.0], [4.0, 4.0], color="black", marker=1, markersize=4)
-        plt.text(5.0, 3.6, "d", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        #plt.plot([4.3, 5.1], [2, 2], color="black", marker=2)
+        #plt.text(5.0, 2.2, "b", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        #plt.plot([4.3, 5.3], [4.4, 5.4], color="black", marker=2)
+        #plt.text(5.0, 5.6, "c", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
+        #plt.plot([4.5, 5.0], [4.0, 4.0], color="black", marker=1, markersize=4)
+        #plt.text(5.0, 3.6, "d", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
         axs[i].set_title("Valency = {}".format(v))
 
     return fig

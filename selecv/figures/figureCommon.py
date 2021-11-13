@@ -49,13 +49,13 @@ def subplotLabel(axs, indices=False):
 
 def setFontSize(ax, fsize, xsci=[], ysci=[], nolegend=[]):
     for i, subax in enumerate(ax):
-        subax.tick_params(axis="x", labelsize=fsize-1)
-        subax.tick_params(axis="y", labelsize=fsize-1)
+        subax.tick_params(axis="x", labelsize=fsize - 1)
+        subax.tick_params(axis="y", labelsize=fsize - 1)
         subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
         subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
         subax.set_title(subax.get_title(), fontsize=fsize)
         if subax.get_legend() is not None and i not in nolegend:
-            subax.legend(prop={'size': fsize-1})
+            subax.legend(prop={'size': fsize - 1})
         if i in xsci:
             subax.set_xscale('log')
         if i in ysci:
@@ -238,11 +238,11 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
     ax.yaxis.set_major_formatter(mticker.ScalarFormatter(useOffset=False, useMathText=True))
 
     ax.set_title(title)
-    plt.clabel(contours, inline=True, fontsize=6)
-    ax.pcolor(X, Y, logZ, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
+    plt.clabel(contours, inline=True, fontsize=8)
+    ax.pcolor(X, Y, logZ, cmap='viridis', vmin=vrange[0], vmax=vrange[1])
     norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
     if cbar:
-        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='viridis'), ax=ax)
         cbar.set_label("Log Ligand Bound")
     # layover: 2 = with name; 1 = only pop w/o name; 0 = none
     if layover == 2:
@@ -270,11 +270,11 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(title)
-    plt.clabel(contours, inline=True, fontsize=6, fmt="%1.3f")
-    ax.pcolor(X, Y, Z, cmap='RdYlGn', vmin=vrange[0], vmax=vrange[1])
+    plt.clabel(contours, inline=True, fontsize=8, fmt="%1.3f")
+    ax.pcolor(X, Y, Z, cmap='viridis', vmin=vrange[0], vmax=vrange[1])
     norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
     if cbar:
-        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='RdYlGn'), ax=ax)
+        cbar = ax.figure.colorbar(cm.ScalarMappable(norm=norm, cmap='viridis'), ax=ax)
         cbar.set_label("Relative Ligand Bound")
     # layover: 2 = with name; 1 = only pop w/o name; 0 = none
     if layover == 2:
