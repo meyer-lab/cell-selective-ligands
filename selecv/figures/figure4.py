@@ -167,6 +167,7 @@ def valScanOpt(ax, targetPop, specPops=False):
     sns.lineplot(data=AffDF, x="Valency", y="Affinity", hue="Receptor", style="Ligand Type", ax=ax[1])
     ax[1].set(xlabel="Antagonist Valency", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Ligand Optimal Affinity", ylim=((-2, 8)))
     ax[1].set_xticks(np.linspace(2, 8, num=4))
+    plt.legend(fontsize='small', loc='upper right')
 
 
 def minSelecFuncDLMix(x, targPop, offTpops, antMix):
@@ -202,17 +203,18 @@ def mixScanOpt(ax, targetPop, specPops=False):
         optimArr = np.exp(optimized.x[3:7])
         optimArr = np.log10(optimArr)
         optimArr = optimArr * -1 + 9
-        resultDF = resultDF.append(pd.DataFrame({"Agonist Mix": [mix/1e-9], "Specificity": selec}))
-        AffDF = AffDF.append(pd.DataFrame({"Agonist Mix": [mix/1e-9], "Receptor": r"$R_{1}$", "Affinity": optimArr[0], "Ligand": "Agonist"}))
-        AffDF = AffDF.append(pd.DataFrame({"Agonist Mix": [mix/1e-9], "Receptor": r"$R_{2}$", "Affinity": optimArr[1], "Ligand": "Agonist"}))
-        AffDF = AffDF.append(pd.DataFrame({"Agonist Mix": [mix/1e-9], "Receptor": r"$R_{1}$", "Affinity": optimArr[2], "Ligand": "Antagonist"}))
-        AffDF = AffDF.append(pd.DataFrame({"Agonist Mix": [mix/1e-9], "Receptor": r"$R_{2}$", "Affinity": optimArr[3], "Ligand": "Antagonist"}))
+        resultDF = resultDF.append(pd.DataFrame({"Agonist Mix": [mix / 1e-9], "Specificity": selec}))
+        AffDF = AffDF.append(pd.DataFrame({"Agonist Mix": [mix / 1e-9], "Receptor": r"$R_{1}$", "Affinity": optimArr[0], "Ligand": "Agonist"}))
+        AffDF = AffDF.append(pd.DataFrame({"Agonist Mix": [mix / 1e-9], "Receptor": r"$R_{2}$", "Affinity": optimArr[1], "Ligand": "Agonist"}))
+        AffDF = AffDF.append(pd.DataFrame({"Agonist Mix": [mix / 1e-9], "Receptor": r"$R_{1}$", "Affinity": optimArr[2], "Ligand": "Antagonist"}))
+        AffDF = AffDF.append(pd.DataFrame({"Agonist Mix": [mix / 1e-9], "Receptor": r"$R_{2}$", "Affinity": optimArr[3], "Ligand": "Antagonist"}))
 
     sns.lineplot(data=resultDF, x="Agonist Mix", y="Specificity", ax=ax[0], palette='k')
     ax[0].set(xlabel="Antagonist Concentration (nM)", ylabel="Specificity", title="Optimal Specificity w/ diff. Mixtures",
-            xlim=(1e-3, 1e3), ylim=(0, 25), xscale="log")
+              xlim=(1e-3, 1e3), ylim=(0, 25), xscale="log")
     ax[0].set_xticks(np.logspace(-3, 3, num=4))
     sns.lineplot(data=AffDF, x="Agonist Mix", y="Affinity", hue="Receptor", style="Ligand", ax=ax[1])
     ax[1].set(xlabel="Antagonist Concentration (nM)", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Ligand Optimal Affinities",
               xlim=(1e-3, 1e3), ylim=((-2, 8)), xscale="log")
     ax[1].set_xticks(np.logspace(-3, 3, num=4))
+    ax[1].get_legend().remove()

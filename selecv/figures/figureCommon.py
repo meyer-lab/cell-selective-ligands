@@ -49,13 +49,13 @@ def subplotLabel(axs, indices=False):
 
 def setFontSize(ax, fsize, xsci=[], ysci=[], nolegend=[]):
     for i, subax in enumerate(ax):
-        subax.tick_params(axis="x", labelsize=fsize-1)
-        subax.tick_params(axis="y", labelsize=fsize-1)
+        subax.tick_params(axis="x", labelsize=fsize - 1)
+        subax.tick_params(axis="y", labelsize=fsize - 1)
         subax.set_xlabel(subax.get_xlabel(), fontsize=fsize)
         subax.set_ylabel(subax.get_ylabel(), fontsize=fsize)
         subax.set_title(subax.get_title(), fontsize=fsize)
         if subax.get_legend() is not None and i not in nolegend:
-            subax.legend(prop={'size': fsize-1})
+            subax.legend(prop={'size': fsize - 1})
         if i in xsci:
             subax.set_xscale('log')
         if i in ysci:
