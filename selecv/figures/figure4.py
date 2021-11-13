@@ -138,7 +138,7 @@ def valScanOpt(ax, targetPop, specPops=False):
     """Scans through antagonist valencies and finds best specificity and affinities"""
     vals = np.linspace(2, 8, num=7)
     resultDF = pd.DataFrame(columns=["Valency", "Specificity"])
-    AffDF = pd.DataFrame(columns=["Agonist Mix", "Receptor", "Affinity", "Ligand Type"])
+    AffDF = pd.DataFrame(columns=["Agonist Mix", "Receptor", "Affinity", "Ligand"])
 
     if not specPops:
         targPops, offTargPops = genOnevsAll(targetPop)
@@ -156,15 +156,15 @@ def valScanOpt(ax, targetPop, specPops=False):
         optimArr = np.log10(optimArr)
         optimArr = optimArr * -1 + 9
         resultDF = resultDF.append(pd.DataFrame({"Valency": [val], "Specificity": selec}))
-        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{1} Affinity$", "Affinity": optimArr[0], "Ligand Type": "Agonist"}))
-        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{2} Affinity$", "Affinity": optimArr[1], "Ligand Type": "Agonist"}))
-        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{1} Affinity$", "Affinity": optimArr[2], "Ligand Type": "Antagonist"}))
-        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{2} Affinity$", "Affinity": optimArr[3], "Ligand Type": "Antagonist"}))
+        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{1} Affinity$", "Affinity": optimArr[0], "Ligand": "Agonist"}))
+        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{2} Affinity$", "Affinity": optimArr[1], "Ligand": "Agonist"}))
+        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{1} Affinity$", "Affinity": optimArr[2], "Ligand": "Antagonist"}))
+        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{2} Affinity$", "Affinity": optimArr[3], "Ligand": "Antagonist"}))
 
     sns.lineplot(data=resultDF, x="Valency", y="Specificity", ax=ax[0], palette='k')
     ax[0].set(xlabel="Antagonist Valency", ylabel="Specificity", title="Optimal Specificity w/ diff. Valencies", ylim=(0, 30))
     ax[0].set_xticks(np.linspace(2, 8, num=4))
-    sns.lineplot(data=AffDF, x="Valency", y="Affinity", hue="Receptor", style="Ligand Type", ax=ax[1])
+    sns.lineplot(data=AffDF, x="Valency", y="Affinity", hue="Receptor", style="Ligand", ax=ax[1])
     ax[1].set(xlabel="Antagonist Valency", ylabel=r"$K_d$ ($log_{10}$(nM))", title="Ligand Optimal Affinity", ylim=((-2, 8)))
     ax[1].set_xticks(np.linspace(2, 8, num=4))
     plt.legend(fontsize='small', loc='upper right')
