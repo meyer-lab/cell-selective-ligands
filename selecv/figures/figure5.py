@@ -127,6 +127,7 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5), recFactor=1.0):
     optDF = pd.DataFrame(columns=["Strategy", "Selectivity"])
     strats = ["Unoptimized", "Affinity", "Mixture+Affinity", "Valency+Affinity", "All"]
     pmOpts = [[], [1, 4, 5], [1, 3], [1, 3], [1, 3, 4, 5]]
+    paramsArr = np.zeros((len(strats), 8))
 
     for i, strat in enumerate(strats):
         if strat == "Mixture+Affinity":
@@ -137,12 +138,20 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5), recFactor=1.0):
             optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 15, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
         else:
             optimized = optimize(pmOpts[i], targPops, offTargPops, 1e-9, 1e-12, 1, [1, 0], np.ones((2, 2)) * 1e6, bound=bndsDict[strat], recFactor=recFactor)
-        stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
 
-        optDF = optDF.append(stratRow, ignore_index=True)
         optParams = optimized.x
         optParams[0:2] = np.exp(optParams[0:2])
         optParams[4::] = np.exp(optParams[4::])
+        stratRow = pd.DataFrame({"Strategy": strat, "Selectivity": np.array([len(offTargMeans) / optimized.fun])})
+
+        if strat == "All" and stratRow.Selectivity.values < optDF.Selectivity.max():
+            bestStrat = optDF.loc[optDF.Selectivity == optDF.Selectivity.max()].Strategy.values[0]
+            bestStratInd = optDF.loc[optDF.Strategy == bestStrat].index
+            optParams = paramsArr[bestStratInd, :][0]
+            stratRow = pd.DataFrame({"Strategy": [strat], "Selectivity": optDF.Selectivity.max()})
+
+        optDF = optDF.append(stratRow, ignore_index=True)
+        paramsArr[i, :] = optParams
 
         if i <= 0:
             heatmapNorm(ax[i + 1], targMeans[0], optParams[0], optParams[1],
@@ -161,9 +170,9 @@ def optimizeDesign(ax, targetPop, vrange=(0, 5), recFactor=1.0):
                         highlight=targetPop[0], lineN=41, recFactor=recFactor)
         ax[i + 1].set(title=strat, xlabel="Receptor 1 Abundance ($cell^{-1}$)", ylabel="Receptor 2 Abundance ($cell^{-1}$)")
 
-    sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax[0])
+    sns.barplot(x="Strategy", y="Selectivity", data=optDF, ax=ax[0], color='k')
     ax[0].set(title="Optimization of " + targetPop[0])
-    ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=25, horizontalalignment='right')
+    ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=35, horizontalalignment='right')
     if recFactor == 1.0:
         if targetPop == [r"$R_1^{med}R_2^{med}$"]:
             ax[0].set_ylim(0, 1)
