@@ -43,7 +43,7 @@ def makeFigure():
     KxStarVary(ax[10], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)
     ax[11].axis("off")
 
-    setFontSize(ax, 10.5, xsci=[3, 4, 5, 6, 7, 8, 9, 10], ysci=[3, 4, 5, 6, 7, 8])
+    setFontSize(ax, 9.4, xsci=[3, 4, 5, 6, 7, 8, 9, 10], ysci=[3, 4, 5, 6, 7, 8])
     return f
 
 

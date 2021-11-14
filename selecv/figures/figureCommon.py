@@ -131,7 +131,8 @@ def affHeatMap(ax, names, Kav, L0, KxStar, f, Title, Cbar=True):
     if ratioDF.max().max() < 15:
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=10, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
     else:
-        sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
+        max = np.round(np.ceil(ratioDF.max().max() / 10) * 10, -1)
+        sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=max, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
     ax.set(xlabel="Rec 1 Affinity ($K_d$, in nM)", ylabel="Rec 2 Affinity ($K_d$, in nM)")
     ax.set_title(Title, fontsize=10)
 
