@@ -156,10 +156,10 @@ def valScanOpt(ax, targetPop, specPops=False):
         optimArr = np.log10(optimArr)
         optimArr = optimArr * -1 + 9
         resultDF = resultDF.append(pd.DataFrame({"Valency": [val], "Specificity": selec}))
-        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{1} Affinity$", "Affinity": optimArr[0], "Ligand": "Agonist"}))
-        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{2} Affinity$", "Affinity": optimArr[1], "Ligand": "Agonist"}))
-        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{1} Affinity$", "Affinity": optimArr[2], "Ligand": "Antagonist"}))
-        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{2} Affinity$", "Affinity": optimArr[3], "Ligand": "Antagonist"}))
+        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{1}$", "Affinity": optimArr[0], "Ligand": "Agonist"}))
+        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{2}$", "Affinity": optimArr[1], "Ligand": "Agonist"}))
+        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{1}$", "Affinity": optimArr[2], "Ligand": "Antagonist"}))
+        AffDF = AffDF.append(pd.DataFrame({"Valency": [val], "Receptor": r"$R_{2}$", "Affinity": optimArr[3], "Ligand": "Antagonist"}))
 
     sns.lineplot(data=resultDF, x="Valency", y="Specificity", ax=ax[0], palette='k')
     ax[0].set(xlabel="Antagonist Valency", ylabel="Specificity", title="Optimal Specificity w/ diff. Valencies", ylim=(0, 30))
