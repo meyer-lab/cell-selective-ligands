@@ -133,7 +133,7 @@ def affHeatMap(ax, names, Kav, L0, KxStar, f, Title, Cbar=True):
     else:
         max = np.round(np.ceil(ratioDF.max().max() / 10) * 10, -1)
         sns.heatmap(ratioDF, ax=ax, xticklabels=ticks, yticklabels=np.flip(ticks), vmin=0, vmax=max, cbar=Cbar, cbar_kws={'label': 'Binding Ratio'}, annot=True)
-    ax.set(xlabel="Rec 1 Affinity ($K_d$, in nM)", ylabel="Rec 2 Affinity ($K_d$, in nM)")
+    ax.set(xlabel="Rec 1 Affinity ($K_d$ [nM])", ylabel="Rec 2 Affinity ($K_d$ [nM])")
     ax.set_title(Title, fontsize=10)
 
 
@@ -189,17 +189,18 @@ def overlapCellPopulation(ax, scale, data=cellPopulations, highlight=[], lowligh
     ax_new.set_ylim(scale)
     for label, item in data.items():
         if not lowlight or label in [highlight[0], lowlight[0]]:
-            color = "blue"
+            color = "dimgray"
             if label in highlight:
                 color = "red"
             ax_new.add_patch(Ellipse(xy=(item[0] + recFactor, item[1] + recFactor),
                                      width=item[2],
                                      height=item[3],
                                      angle=item[4],
+                                     edgecolor=None,
                                      facecolor=color,
                                      fill=True,
-                                     alpha=0.8,
-                                     linewidth=1))
+                                     alpha=0.9,
+                                     linewidth=0.0))
             if pname:
                 ax_new.text(item[0] + recFactor, item[1] + recFactor, label,
                             horizontalalignment='center',
@@ -232,14 +233,17 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
 
-    contours = ax.contour(X, Y, logZ, levels=np.arange(-20, 20, 1), colors="black", linewidths=0.5)
+    vmed = int((vrange[0]+vrange[1])/2)
+    contours0 = ax.contour(X, Y, logZ, levels=np.arange(-20, vmed, 1), colors="white", linewidths=0.5)
+    contours1 = ax.contour(X, Y, logZ, levels=np.arange(vmed, 20, 1), colors="black", linewidths=0.5)
     ax.set_xscale("log")
     ax.set_yscale("log")
 
     ax.yaxis.set_major_formatter(mticker.ScalarFormatter(useOffset=False, useMathText=True))
 
     ax.set_title(title)
-    plt.clabel(contours, inline=True, fontsize=8)
+    plt.clabel(contours0, inline=True, fontsize=8)
+    plt.clabel(contours1, inline=True, fontsize=8)
     ax.pcolor(X, Y, logZ, cmap='viridis', vmin=vrange[0], vmax=vrange[1])
     norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
     if cbar:
@@ -267,11 +271,13 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
     X, Y = np.meshgrid(abundScan, abundScan)
     Z = func(X, Y) / func0
 
-    contours = ax.contour(X, Y, Z, levels=np.logspace(-10, 10, lineN), colors="black", linewidths=0.5)
+    contours1 = ax.contour(X, Y, Z, levels=np.logspace(0, 10, (lineN-1)//2+1)[1:], colors="black", linewidths=0.5)
+    contours0 = ax.contour(X, Y, Z, levels=np.logspace(-10, 0, (lineN-1)//2+1), colors="white", linewidths=0.5)
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(title)
-    plt.clabel(contours, inline=True, fontsize=8, fmt=fmt)
+    plt.clabel(contours1, inline=True, fontsize=8, fmt=fmt)
+    plt.clabel(contours0, inline=True, fontsize=8, fmt=fmt)
     ax.pcolor(X, Y, Z, cmap='viridis', vmin=vrange[0], vmax=vrange[1])
     norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
     if cbar:
