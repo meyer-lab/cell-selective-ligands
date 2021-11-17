@@ -252,7 +252,7 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
         overlapCellPopulation(ax, abundRange, highlight=highlight, pname=False)
 
 
-def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=2, highlight=[], lineN=101, recFactor=1.0):
+def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5), title="", cbar=False, layover=2, highlight=[], lineN=101, recFactor=1.0, fmt="%1.3f"):
     assert bool(f is None) != bool(Cplx is None)
     nAbdPts = 70
     abundRange = (LR + np.log10(recFactor), HR + np.log10(recFactor))
@@ -271,7 +271,7 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(title)
-    plt.clabel(contours, inline=True, fontsize=8, fmt="%1.3f")
+    plt.clabel(contours, inline=True, fontsize=8, fmt=fmt)
     ax.pcolor(X, Y, Z, cmap='viridis', vmin=vrange[0], vmax=vrange[1])
     norm = plt.Normalize(vmin=vrange[0], vmax=vrange[1])
     if cbar:
