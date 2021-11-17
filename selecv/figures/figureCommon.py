@@ -276,6 +276,7 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(title)
+    fmt = "%3.1g"
     plt.clabel(contours1, inline=True, fontsize=8, fmt=fmt)
     plt.clabel(contours0, inline=True, fontsize=8, fmt=fmt)
     ax.pcolor(X, Y, Z, cmap='viridis', vmin=vrange[0], vmax=vrange[1])

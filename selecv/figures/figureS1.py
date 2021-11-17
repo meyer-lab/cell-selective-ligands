@@ -39,7 +39,7 @@ def affinity(fig, axs, L0, KxStar, Comp, ff=None, Cplx=None, vmin=-2, vmax=4):
             if i2 * nAffPts + i1 in [2, 5, 8]:
                 cbar = True
             heatmap(axs[i2 * nAffPts + i1], L0, KxStar, [[aff1, aff2]], Comp, f=ff, Cplx=Cplx, vrange=(vmin, vmax), cbar=cbar, layover=1)
-            axs[i2 * nAffPts + i1].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
+            axs[i2 * nAffPts + i1].set(xlabel="Receptor 1 Abundance [#/cell]", ylabel='Receptor 2 Abundance [#/cell]')
             axs[i2 * nAffPts + i1].set_title(r"$K_{d1}$" + " = {:d}".format(int(1e9 * (1 / aff1))) + " nM, " + r"$K_{d2}$" + " = {:d}".format(int(1e9 * (1 / aff2))) + " nM")
     return fig
 
