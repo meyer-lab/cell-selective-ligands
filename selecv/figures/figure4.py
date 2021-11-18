@@ -182,7 +182,7 @@ def minSelecFuncDLMix(x, targPop, offTpops, antMix):
         targetBound += sum(sigmaPopC(tPop, totC, np.exp(x[1]), [[4, 0], [0, x[2]]], mix, np.array([[np.exp(x[5]), np.exp(x[6])], [np.exp(x[3]), np.exp(x[4])]]), quantity=0))
     for offTPop in offTpops:
         offTargetBound += sum(sigmaPopC(offTPop, totC, np.exp(x[1]), [[4, 0], [0, x[2]]], mix,
-                              np.array([[np.exp(x[5]), np.exp(x[6])], [np.exp(x[3]), np.exp(x[4])]]), quantity=0))
+                                        np.array([[np.exp(x[5]), np.exp(x[6])], [np.exp(x[3]), np.exp(x[4])]]), quantity=0))
     return offTargetBound / targetBound
 
 
