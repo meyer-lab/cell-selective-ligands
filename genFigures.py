@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     exec('from selecv.figures import ' + nameOut)
     ff = eval(nameOut + '.makeFigure()')
-    ff.savefig(fdir + nameOut + '.pdf', dpi=ff.dpi, bbox_inches='tight', pad_inches=0)
+    ff.savefig(fdir + nameOut + '.svg', dpi=ff.dpi, bbox_inches='tight', pad_inches=0)
 
     if sys.argv[1] == '1':
         # Overlay Figure 1 cartoon
