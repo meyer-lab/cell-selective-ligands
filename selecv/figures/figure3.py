@@ -37,7 +37,7 @@ def makeFigure():
                 title="Bispecific log fully bound, $K_x^*$={} cell·M".format(KxStar), cbar=(i == 2), layover=1)
 
     for i in range(3, 9):
-        ax[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
+        ax[i].set(xlabel="Receptor 1 Abundance [#/cell]", ylabel='Receptor 2 Abundance [#/cell]')
 
     KxStarVary(ax[9], L0, Kav, ylim=(-9, 9), compare="tether")
     KxStarVary(ax[10], L0, Kav, ylim=(-9, 9), compare="bisp", fully=True)

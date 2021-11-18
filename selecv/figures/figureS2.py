@@ -37,7 +37,7 @@ def valency(fig, axs, L0, KxStar, Comp, Kav=[[1e6, 1e5], [1e5, 1e6]], Cplx=None,
         if i in [2]:
             cbar = True
         heatmap(axs[i], L0, KxStar, Kav, Comp, f=v, Cplx=Cplx, vrange=(vmin, vmax), cbar=cbar, layover=1)
-        axs[i].set(xlabel="Receptor 1 Abundance (#/cell)", ylabel='Receptor 2 Abundance (#/cell)')
+        axs[i].set(xlabel="Receptor 1 Abundance [#/cell]", ylabel='Receptor 2 Abundance [#/cell]')
         #plt.plot([4.3, 5.1], [2, 2], color="black", marker=2)
         #plt.text(5.0, 2.2, "b", size='large', color='black', weight='semibold', horizontalalignment='center', verticalalignment='center')
         #plt.plot([4.3, 5.3], [4.4, 5.4], color="black", marker=2)
@@ -123,8 +123,8 @@ def ratePlot(ax, fsize=6):
     ax.set(xlim=(1, 1000000), xlabel="Receptor Abundance", ylabel="Forward/Reverse Rate", xscale="log", ylim=(0.1, 5))  # ylim=(0, 1),
     handles, _ = ax.get_legend_handles_labels()
     handles = handles[0:3]
-    line = Line2D([], [], color="black", marker="_", linestyle="None", markersize=6, label="$K_d$ nM = 10")
-    point = Line2D([], [], color="black", marker=".", linestyle="None", markersize=6, label="$K_d$ nM = 1000")
+    line = Line2D([], [], color="black", marker="_", linestyle="None", markersize=6, label="$K_d$ = 10 nM")
+    point = Line2D([], [], color="black", marker=".", linestyle="None", markersize=6, label="$K_d$ = 1000 nM")
     handles.append(line)
     handles.append(point)
     ax.legend(handles=handles, prop={"size": fsize})
