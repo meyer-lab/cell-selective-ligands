@@ -1,6 +1,9 @@
 """
 Contains utilities and functions that are commonly used in the figure creation files.
 """
+import sys
+from logging import basicConfig, INFO, info
+from time import time
 from string import ascii_lowercase
 from matplotlib import gridspec, pyplot as plt
 from matplotlib.patches import Ellipse
@@ -14,6 +17,10 @@ import numpy as np
 import svgutils.transform as st
 from ..sampling import sampleSpec, cellPopulations
 from valentbind import polyc, polyfc
+import matplotlib
+matplotlib.use('AGG')
+
+fdir = './output/'
 
 rcParams['pcolor.shading'] = 'auto'
 rcParams['svg.fonttype'] = 'none'
@@ -73,6 +80,34 @@ def overlayCartoon(figFile, cartoonFile, x, y, scalee=1, scale_x=1, scale_y=1):
 
     template.append(cartoon)
     template.save(figFile)
+
+
+def genFigure():
+    basicConfig(format='%(levelname)s:%(message)s', level=INFO)
+    start = time()
+    nameOut = 'figure' + sys.argv[1]
+
+    exec('from .' + nameOut + ' import makeFigure', globals())
+    ff = makeFigure()
+    ff.savefig(fdir + nameOut + '.svg', dpi=ff.dpi, bbox_inches='tight', pad_inches=0)
+
+    if sys.argv[1] == '1':
+        # Overlay Figure 1 cartoon
+        overlayCartoon(fdir + 'figure1.svg',
+                       './selecv/graphics/figure_1a.svg', 10, 15, scalee=0.02, scale_x=0.45, scale_y=0.45)
+        overlayCartoon(fdir + 'figure1.svg',
+                       './selecv/graphics/figure_1b.svg', 0, 280, scalee=0.24, scale_x=1, scale_y=1)
+    if sys.argv[1] == '2':
+        overlayCartoon(fdir + 'figure2.svg',
+                       './selecv/graphics/figure_2a.svg', 10, 0, scalee=0.18, scale_x=1, scale_y=1)
+    if sys.argv[1] == '3':
+        overlayCartoon(fdir + 'figure3.svg',
+                       './selecv/graphics/figure_3a.svg', 30, 0, scalee=0.22, scale_x=1, scale_y=1)
+    if sys.argv[1] == '4':
+        overlayCartoon(fdir + 'figure4.svg',
+                       './selecv/graphics/figure_4a.svg', 10, 0, scalee=0.18, scale_x=1, scale_y=1)
+
+    info('%s is done after %s seconds.', nameOut, time() - start)
 
 
 def sampleReceptors(df, nsample=100):
