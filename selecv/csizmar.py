@@ -53,7 +53,7 @@ def fit_slope(ax, KxStarF, slopeC5, slopeB22, abund, valencies):
     B22_score = lr.score(X22, Y22)
     print(lr.score(np.append(X11, X22).reshape(-1, 1), np.append(Y11, Y22)))
 
-    sns.lineplot(x="Predicted", y="Measured Fluorescent Intensity", hue="Clone", style="Valency", markers=True, data=df, ax=ax)
+    sns.scatterplot(x="Predicted", y="Measured Fluorescent Intensity", hue="Clone", style="Valency", markers=True, data=df, ax=ax)
 
     return C5_score, B22_score
 

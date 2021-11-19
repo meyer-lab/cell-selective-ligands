@@ -420,7 +420,7 @@ resolved_reference = "7884ef5af2881794de8f8b6133ea14c2b6e4d8c3"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<3.10"
-content-hash = "513fa0aa4bda6a7d7ecda3c1a9d01db31e66d0c3b5cab659517919b8399a51a7"
+content-hash = "7e2a983036ba2e8f498590667b6a7dcc6fdb811269cd516e1e375f61c617d35a"
 
 [metadata.files]
 atomicwrites = [
