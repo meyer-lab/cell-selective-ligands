@@ -268,7 +268,7 @@ def heatmap(ax, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(-2, 4), title=
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
 
-    vmed = int((vrange[0]+vrange[1])/2)
+    vmed = int((vrange[0] + vrange[1]) / 2)
     contours0 = ax.contour(X, Y, logZ, levels=np.arange(-20, vmed, 1), colors="white", linewidths=0.5)
     contours1 = ax.contour(X, Y, logZ, levels=np.arange(vmed, 20, 1), colors="black", linewidths=0.5)
     ax.set_xscale("log")
@@ -306,8 +306,8 @@ def heatmapNorm(ax, R0, L0, KxStar, Kav, Comp, f=None, Cplx=None, vrange=(0, 5),
     X, Y = np.meshgrid(abundScan, abundScan)
     Z = func(X, Y) / func0
 
-    contours1 = ax.contour(X, Y, Z, levels=np.logspace(0, 10, (lineN-1)//2+1)[1:], colors="black", linewidths=0.5)
-    contours0 = ax.contour(X, Y, Z, levels=np.logspace(-10, 0, (lineN-1)//2+1), colors="white", linewidths=0.5)
+    contours1 = ax.contour(X, Y, Z, levels=np.logspace(0, 10, (lineN - 1) // 2 + 1)[1:], colors="black", linewidths=0.5)
+    contours0 = ax.contour(X, Y, Z, levels=np.logspace(-10, 0, (lineN - 1) // 2 + 1), colors="white", linewidths=0.5)
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(title)

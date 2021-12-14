@@ -110,7 +110,7 @@ def heatmapDL(ax, L0, KxStar, Kav, Comp, Cplx=None, vrange=(-2, 4), title="", cb
 
     X, Y = np.meshgrid(abundScan, abundScan)
     logZ = np.log(func(X, Y))
-    vmed = int((vrange[0]+vrange[1])/2)
+    vmed = int((vrange[0] + vrange[1]) / 2)
     contours0 = ax.contour(X, Y, logZ, levels=np.arange(-20, vmed, 1.0), colors="white", linewidths=0.5)
     contours1 = ax.contour(X, Y, logZ, levels=np.arange(vmed, 20, 1.0), colors="black", linewidths=0.5)
     ax.set_xscale("log")
